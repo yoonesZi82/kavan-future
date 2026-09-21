@@ -48,6 +48,53 @@ export function parseMarketStats(
   return markets.sort((a, b) => a.symbol.localeCompare(b.symbol))
 }
 
+export function mergeMarketStatsLive(
+  current: MarketPair[] | undefined,
+  patch: Record<string, Record<string, string | boolean | null>>
+): MarketPair[] {
+  if (!current?.length) return parseMarketStats(patch)
+  const byId = new Map(current.map((market) => [market.id, market]))
+  for (const [id, row] of Object.entries(patch)) {
+    const existing = byId.get(id)
+    if (existing) {
+      byId.set(id, {
+        ...existing,
+        latest: toNumber(row.latest),
+        dayChange: toNumber(row.dayChange),
+        dayHigh: toNumber(row.dayHigh),
+        dayLow: toNumber(row.dayLow),
+        dayOpen: toNumber(row.dayOpen),
+        dayClose: toNumber(row.dayClose),
+        bestBuy: toNumber(row.bestBuy),
+        bestSell: toNumber(row.bestSell),
+        isClosed: row.isClosed === true,
+      })
+      continue
+    }
+    const [src, dst] = id.split("-")
+    if (!src || !dst) continue
+    byId.set(id, {
+      id,
+      src,
+      dst,
+      symbol: toDisplaySymbol(src, dst),
+      ohlcSymbol: toOhlcSymbol(src, dst),
+      latest: toNumber(row.latest),
+      dayChange: toNumber(row.dayChange),
+      dayHigh: toNumber(row.dayHigh),
+      dayLow: toNumber(row.dayLow),
+      dayOpen: toNumber(row.dayOpen),
+      dayClose: toNumber(row.dayClose),
+      bestBuy: toNumber(row.bestBuy),
+      bestSell: toNumber(row.bestSell),
+      isClosed: row.isClosed === true,
+    })
+  }
+  return Array.from(byId.values()).sort((a, b) =>
+    a.symbol.localeCompare(b.symbol)
+  )
+}
+
 type HistoryArrays = {
   t?: number[]
   o?: number[]

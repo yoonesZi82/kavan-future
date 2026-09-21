@@ -8,11 +8,16 @@ import { ChartFooter } from "@/features/market-pulse/chart-footer"
 import { ChartOhlc } from "@/features/market-pulse/chart-ohlc"
 import { ChartToolbar } from "@/features/market-pulse/chart-toolbar"
 import { useChartQuery } from "@/features/market-pulse/hooks"
-import { useChartControls } from "@/features/market-pulse/use-chart-controls"
+import type { useChartControls } from "@/features/market-pulse/use-chart-controls"
 import type { CandlePoint } from "@/features/market-pulse/types"
 
-export function ChartPanel() {
-  const controls = useChartControls()
+export type ChartControls = ReturnType<typeof useChartControls>
+
+type ChartPanelProps = {
+  controls: ChartControls
+}
+
+export function ChartPanel({ controls }: ChartPanelProps) {
   const { data, isLoading } = useChartQuery(
     controls.market?.ohlcSymbol ?? null,
     controls.timeframe
@@ -56,11 +61,9 @@ export function ChartPanel() {
   return (
     <Card
       ref={rootRef}
-      className="flex flex-col gap-0 overflow-hidden py-0"
+      className="flex h-full flex-col gap-0 overflow-hidden py-0"
     >
       <ChartToolbar
-        marketId={controls.marketId}
-        onMarketChange={controls.selectMarket}
         timeframe={controls.timeframe}
         onTimeframeChange={controls.setTimeframe}
         chartType={controls.chartType}
@@ -81,7 +84,7 @@ export function ChartPanel() {
         liveChange={controls.market?.dayChange ?? null}
         livePrice={controls.market?.latest ?? null}
       />
-      <div className="relative flex min-h-[360px] flex-1">
+      <div className="relative flex min-h-0 flex-1">
         <ChartDrawingTools
           activeTool={controls.drawingTool}
           isMagnet={controls.isMagnet}

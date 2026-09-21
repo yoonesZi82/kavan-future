@@ -181,27 +181,3 @@
   }
 }
 
-/* Market pulse masonry — natural item heights, no stretch */
-.market-pulse-masonry {
-  display: flex;
-  width: auto;
-  margin-inline-start: -1rem;
-}
-.market-pulse-masonry-column {
-  padding-inline-start: 1rem;
-  background-clip: padding-box;
-}
-.market-pulse-masonry-item {
-  margin-bottom: 1rem;
-}
-@media (min-width: 768px) {
-  .market-pulse-masonry {
-    margin-inline-start: -1.25rem;
-  }
-  .market-pulse-masonry-column {
-    padding-inline-start: 1.25rem;
-  }
-  .market-pulse-masonry-item {
-    margin-bottom: 1.25rem;
-  }
-}

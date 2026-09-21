@@ -7,17 +7,19 @@ import {
   fetchMarketFlow,
   fetchMarkets,
 } from "@/features/market-pulse/api"
+import { useMarketsLive } from "@/features/market-pulse/use-markets-live"
 import type { ChartTimeframe } from "@/features/market-pulse/types"
 import { queryKeys } from "@/lib/api/query-keys"
 
-const LIVE_MS = 15_000
+const BACKUP_MS = 60_000
 
 export function useMarketsQuery() {
+  useMarketsLive()
   return useQuery({
     queryKey: queryKeys.marketPulse.markets(),
     queryFn: () => fetchMarkets(),
-    refetchInterval: LIVE_MS,
-    staleTime: LIVE_MS,
+    refetchInterval: BACKUP_MS,
+    staleTime: BACKUP_MS,
   })
 }
 
@@ -43,6 +45,6 @@ export function useChartQuery(
     queryKey: queryKeys.marketPulse.chart(ohlcSymbol ?? "", timeframe),
     queryFn: () => fetchChart(ohlcSymbol!, timeframe),
     enabled: Boolean(ohlcSymbol),
-    refetchInterval: LIVE_MS,
+    refetchInterval: BACKUP_MS,
   })
 }

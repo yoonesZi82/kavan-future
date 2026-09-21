@@ -14,9 +14,11 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@workspace/ui/components/sidebar"
-import { navItems } from "@/components/dashboard/nav-items"
-import { SidebarNavItem } from "@/components/dashboard/sidebar-nav-item"
 import { DASHBOARD_HEADER_HEIGHT_CLASS } from "@/components/dashboard/chrome"
+import { navItems } from "@/components/dashboard/nav-items"
+import { SidebarLiveClock } from "@/components/dashboard/sidebar-live-clock"
+import { SidebarNavItem } from "@/components/dashboard/sidebar-nav-item"
+import { SidebarSearch } from "@/components/dashboard/sidebar-search"
 
 export function AppSidebar() {
   const pathname = usePathname()
@@ -38,10 +40,12 @@ export function AppSidebar() {
             <p className="truncate text-xs font-medium text-sidebar-foreground">
               محمد رضایی
             </p>
-            <p className="truncate text-[10px] text-muted-foreground">
+            <SidebarLiveClock className="md:hidden" />
+            <p className="hidden truncate text-[10px] text-muted-foreground md:block">
               تحلیلگر حرفه‌ای
             </p>
           </div>
+          <SidebarSearch />
         </div>
       </SidebarHeader>
       <SidebarContent>

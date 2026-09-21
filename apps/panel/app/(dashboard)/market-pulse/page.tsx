@@ -1,5 +1,5 @@
 import { createMetadata } from "@/lib/seo/create-metadata"
-import { MarketPulseMasonry } from "@/features/market-pulse/market-pulse-masonry"
+import { MarketPulseGrid } from "@/features/market-pulse/market-pulse-grid"
 
 export const metadata = createMetadata({
   title: "نبض بازار",
@@ -10,5 +10,5 @@ export const metadata = createMetadata({
 })
 
 export default function MarketPulsePage() {
-  return <MarketPulseMasonry />
+  return <MarketPulseGrid />
 }

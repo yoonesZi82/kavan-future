@@ -32,19 +32,19 @@ export function AppHeader() {
   return (
     <header className="sticky top-0 z-20 w-full border-b border-border bg-background/90 backdrop-blur">
       <div
-        className={`flex w-full items-center justify-between gap-3 px-4 md:gap-4 md:px-6 ${DASHBOARD_HEADER_HEIGHT_CLASS}`}
+        className={`flex w-full items-center justify-between gap-2 px-3 sm:gap-3 sm:px-4 md:gap-4 md:px-6 ${DASHBOARD_HEADER_HEIGHT_CLASS}`}
       >
-        <div className="flex shrink-0 items-center gap-2">
+        <div className="flex min-w-0 shrink-0 items-center gap-2">
           <SidebarTrigger />
-          <div className="leading-tight">
-            <p className="text-sm font-semibold">آینده‌کاوان</p>
-            <p className="min-h-[14px] text-[11px] text-muted-foreground">
+          <div className="min-w-0 leading-tight">
+            <p className="truncate text-sm font-semibold">آینده‌کاوان</p>
+            <p className="hidden min-h-[14px] text-[11px] text-muted-foreground md:block">
               {nowLabel}
             </p>
           </div>
         </div>
 
-        <div className="relative min-w-0 flex-1 md:max-w-2xl">
+        <div className="relative hidden min-w-0 flex-1 md:block md:max-w-2xl">
           <SearchIcon className="pointer-events-none absolute top-1/2 right-3 size-4 -translate-y-1/2 text-muted-foreground" />
           <Input
             className="h-8 w-full pr-9"
@@ -53,9 +53,14 @@ export function AppHeader() {
           />
         </div>
 
-        <div className="flex shrink-0 items-center gap-2">
+        <div className="flex shrink-0 items-center gap-1 sm:gap-2">
           <MarketStatus />
-          <Button variant="ghost" size="icon-sm" aria-label="تمام‌صفحه">
+          <Button
+            variant="ghost"
+            size="icon-sm"
+            aria-label="تمام‌صفحه"
+            className="hidden md:inline-flex"
+          >
             <MaximizeIcon />
           </Button>
           <ThemeToggle />
