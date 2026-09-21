@@ -91,7 +91,7 @@ export function MajorIndicesPanel({
             <Skeleton className="h-12 w-full" />
           </div>
         ) : (
-          <div ref={listRef} className="h-full overflow-y-auto px-2">
+          <div ref={listRef} className="scrollbar-brand h-full overflow-y-auto px-2">
             <ul className="divide-y divide-border">
               {rows.map((row) => {
                 const isGain = row.dayChange >= 0

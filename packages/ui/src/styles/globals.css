@@ -181,3 +181,43 @@
   }
 }
 
+/* Brand gradient scrollbar — thin rail for dense lists */
+.scrollbar-brand {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in oklab, var(--primary) 70%, var(--gain))
+    transparent;
+}
+
+.scrollbar-brand::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.scrollbar-brand::-webkit-scrollbar-track {
+  margin-block: 4px;
+  background: transparent;
+}
+
+.scrollbar-brand::-webkit-scrollbar-thumb {
+  border-radius: 9999px;
+  background: linear-gradient(
+    180deg,
+    color-mix(in oklab, var(--primary) 85%, white),
+    var(--primary) 40%,
+    var(--gain)
+  );
+  box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--primary) 35%, transparent);
+}
+
+.scrollbar-brand::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(
+    180deg,
+    var(--primary),
+    color-mix(in oklab, var(--gain) 80%, var(--primary))
+  );
+}
+
+.scrollbar-brand::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
