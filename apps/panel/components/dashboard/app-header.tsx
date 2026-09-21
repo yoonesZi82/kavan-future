@@ -1,5 +1,6 @@
 "use client"
 
+import { useEffect, useState } from "react"
 import { BellIcon, MaximizeIcon, SearchIcon } from "lucide-react"
 import { Badge } from "@workspace/ui/components/badge"
 import { Button } from "@workspace/ui/components/button"
@@ -9,15 +10,24 @@ import { DASHBOARD_HEADER_HEIGHT_CLASS } from "@/components/dashboard/chrome"
 import { MarketStatus } from "@/components/dashboard/market-status"
 import { ThemeToggle } from "@/components/dashboard/theme-toggle"
 
+const dateFormatter = new Intl.DateTimeFormat("fa-IR", {
+  weekday: "long",
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+  hour: "2-digit",
+  minute: "2-digit",
+})
+
 export function AppHeader() {
-  const nowLabel = new Intl.DateTimeFormat("fa-IR", {
-    weekday: "long",
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  }).format(new Date())
+  const [nowLabel, setNowLabel] = useState("")
+
+  useEffect(() => {
+    const tick = () => setNowLabel(dateFormatter.format(new Date()))
+    tick()
+    const id = window.setInterval(tick, 60_000)
+    return () => window.clearInterval(id)
+  }, [])
 
   return (
     <header className="sticky top-0 z-20 w-full border-b border-border bg-background/90 backdrop-blur">
@@ -28,7 +38,9 @@ export function AppHeader() {
           <SidebarTrigger />
           <div className="leading-tight">
             <p className="text-sm font-semibold">آینده‌کاوان</p>
-            <p className="text-[11px] text-muted-foreground">{nowLabel}</p>
+            <p className="min-h-[14px] text-[11px] text-muted-foreground">
+              {nowLabel}
+            </p>
           </div>
         </div>
 
