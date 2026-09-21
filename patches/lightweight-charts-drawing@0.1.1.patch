@@ -1,0 +1,48 @@
+diff --git a/dist/lightweight-charts-drawing.es.js b/dist/lightweight-charts-drawing.es.js
+index f956d4205e869986bb751cd4a03020d2b7a1e8b1..7e6f999d037458f6e0e7072865265f11362eca50 100644
+--- a/dist/lightweight-charts-drawing.es.js
++++ b/dist/lightweight-charts-drawing.es.js
+@@ -2680,7 +2680,7 @@ class ws {
+       f.max.toFixed(2),
+       { x: n.width - 10, y: c },
+       {
+-        font: "11px sans-serif",
++        font: this._drawing.style.labelFont || "14px sans-serif",
+         textColor: "#ffffff",
+         backgroundColor: this._drawing.style.lineColor + "AA",
+         padding: 3,
+@@ -2692,7 +2692,7 @@ class ws {
+       f.min.toFixed(2),
+       { x: n.width - 10, y: l },
+       {
+-        font: "11px sans-serif",
++        font: this._drawing.style.labelFont || "14px sans-serif",
+         textColor: "#ffffff",
+         backgroundColor: this._drawing.style.lineColor + "AA",
+         padding: 3,
+@@ -4284,10 +4284,10 @@ class Bs {
+         m.join(" - "),
+         { x: _ - 5, y: P },
+         {
+-          font: "11px sans-serif",
++          font: this._drawing.style.labelFont || "14px sans-serif",
+           textColor: "#ffffff",
+           backgroundColor: O + "CC",
+-          padding: 3,
++          padding: 5,
+           borderRadius: 2
+         },
+         e
+@@ -4434,10 +4434,10 @@ class $s {
+         T.join(" - "),
+         { x: n.width - 5, y: P },
+         {
+-          font: "11px sans-serif",
++          font: this._drawing.style.labelFont || "14px sans-serif",
+           textColor: "#ffffff",
+           backgroundColor: O + "CC",
+-          padding: 3,
++          padding: 5,
+           borderRadius: 2
+         },
+         e

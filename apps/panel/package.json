@@ -1,5 +1,5 @@
 {
-  "name": "web",
+  "name": "panel",
   "version": "0.0.1",
   "type": "module",
   "private": true,
@@ -12,12 +12,19 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@tanstack/react-query": "^5.103.1",
+    "@tanstack/react-query-devtools": "^5.103.1",
     "@workspace/ui": "workspace:*",
+    "axios": "^1.20.0",
+    "framer-motion": "^13.4.0",
+    "lightweight-charts": "^5.2.1",
+    "lightweight-charts-drawing": "0.1.1",
     "lucide-react": "^1.47.0",
     "next": "16.3.3",
     "next-themes": "^0.4.6",
     "react": "19.2.4",
-    "react-dom": "19.2.4"
+    "react-dom": "19.2.4",
+    "react-masonry-css": "^1.0.16"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
