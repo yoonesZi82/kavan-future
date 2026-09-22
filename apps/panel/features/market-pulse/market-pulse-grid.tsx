@@ -20,10 +20,10 @@ export function MarketPulseGrid() {
   return (
     <div className="flex w-full min-w-0 flex-col gap-4 overflow-x-hidden md:gap-5">
       <div className="flex w-full min-w-0 flex-col gap-4 lg:hidden">
-        <div className={`min-h-0 w-full min-w-0 ${HERO_HEIGHT}`}>
+        <div className={`min-h-0 w-full min-w-0 p-px ${HERO_HEIGHT}`}>
           <ChartPanel controls={controls} />
         </div>
-        <div className={`min-h-0 w-full min-w-0 ${HERO_HEIGHT}`}>
+        <div className={`min-h-0 w-full min-w-0 p-px ${HERO_HEIGHT}`}>
           <MajorIndicesPanel
             selectedId={controls.marketId}
             onSelect={controls.selectMarket}
@@ -32,14 +32,14 @@ export function MarketPulseGrid() {
       </div>
 
       <div
-        className={`hidden w-full min-w-0 overflow-hidden lg:block ${HERO_HEIGHT}`}
+        className={`hidden w-full min-w-0 lg:block ${HERO_HEIGHT}`}
       >
         <ResizablePanelGroup
           orientation="horizontal"
-          className="h-full w-full min-w-0"
+          className="h-full w-full min-w-0 gap-0"
         >
           <ResizablePanel defaultSize="74%" minSize="58%" maxSize="80%">
-            <div className="h-full min-w-0 overflow-hidden pe-2">
+            <div className="box-border h-full min-w-0 overflow-hidden p-px pe-2">
               <ChartPanel controls={controls} />
             </div>
           </ResizablePanel>
@@ -48,7 +48,7 @@ export function MarketPulseGrid() {
             className="w-1.5 rounded-full bg-border/80 transition-colors hover:bg-primary/50 data-[separator]:bg-border"
           />
           <ResizablePanel defaultSize="26%" minSize="20%" maxSize="42%">
-            <div className="h-full min-w-0 overflow-hidden ps-2">
+            <div className="box-border h-full min-w-0 overflow-hidden p-px ps-2">
               <MajorIndicesPanel
                 selectedId={controls.marketId}
                 onSelect={controls.selectMarket}

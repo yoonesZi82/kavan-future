@@ -16,7 +16,6 @@
     "@tanstack/react-query-devtools": "^5.103.1",
     "@workspace/ui": "workspace:*",
     "axios": "^1.20.0",
-    "centrifuge": "^5.7.4",
     "framer-motion": "^13.4.0",
     "lightweight-charts": "^5.2.1",
     "lightweight-charts-drawing": "0.1.1",

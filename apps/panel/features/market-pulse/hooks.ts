@@ -7,19 +7,21 @@ import {
   fetchMarketFlow,
   fetchMarkets,
 } from "@/features/market-pulse/api"
-import { useMarketsLive } from "@/features/market-pulse/use-markets-live"
+import { useBitycleLive } from "@/features/market-pulse/use-bitycle-live"
 import type { ChartTimeframe } from "@/features/market-pulse/types"
 import { queryKeys } from "@/lib/api/query-keys"
 
+/** Backup poll; live prices/candles come from Bitycle WS. */
 const BACKUP_MS = 60_000
+const TSE_POLL_MS = 15_000
 
 export function useMarketsQuery() {
-  useMarketsLive()
+  useBitycleLive()
   return useQuery({
     queryKey: queryKeys.marketPulse.markets(),
-    queryFn: () => fetchMarkets(),
-    refetchInterval: BACKUP_MS,
-    staleTime: BACKUP_MS,
+    queryFn: fetchMarkets,
+    refetchInterval: TSE_POLL_MS,
+    staleTime: TSE_POLL_MS,
   })
 }
 
@@ -41,10 +43,15 @@ export function useChartQuery(
   ohlcSymbol: string | null,
   timeframe: ChartTimeframe
 ) {
+  useBitycleLive(
+    ohlcSymbol ? { ohlcSymbol, timeframe } : undefined
+  )
   return useQuery({
     queryKey: queryKeys.marketPulse.chart(ohlcSymbol ?? "", timeframe),
     queryFn: () => fetchChart(ohlcSymbol!, timeframe),
-    enabled: Boolean(ohlcSymbol),
+    enabled:
+      Boolean(ohlcSymbol) &&
+      (ohlcSymbol?.toUpperCase() ?? "") !== "TSEINDEX",
     refetchInterval: BACKUP_MS,
   })
 }

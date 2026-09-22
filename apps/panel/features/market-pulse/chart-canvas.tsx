@@ -80,6 +80,7 @@ export function ChartCanvas(props: ChartCanvasProps) {
     series: ISeriesApi<SeriesType>
     kind: ChartType
   } | null>(null)
+  const [mounted, setMounted] = useState(false)
 
   useChartDrawing({
     chart,
@@ -98,6 +99,10 @@ export function ChartCanvas(props: ChartCanvasProps) {
     data,
     onHoverCandle,
   })
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   useEffect(() => {
     const el = containerRef.current
@@ -189,7 +194,7 @@ export function ChartCanvas(props: ChartCanvasProps) {
 
   return (
     <div className="relative min-h-0 flex-1">
-      {isLoading ? (
+      {mounted && isLoading ? (
         <div className="absolute inset-0 z-10 animate-pulse bg-muted/40" />
       ) : null}
       <div ref={containerRef} className="size-full min-h-[320px]" />

@@ -61,10 +61,11 @@ export function ChartPanel({ controls }: ChartPanelProps) {
   return (
     <Card
       ref={rootRef}
-      className="flex h-full flex-col gap-0 overflow-hidden py-0"
+      className="flex h-full flex-col gap-0 overflow-hidden py-0 ring-inset"
     >
       <ChartToolbar
         timeframe={controls.timeframe}
+        timeframeOptions={controls.timeframeOptions}
         onTimeframeChange={controls.setTimeframe}
         chartType={controls.chartType}
         onCycleChartType={controls.cycleChartType}

@@ -54,4 +54,5 @@ export type MarketPair = {
   bestBuy: number
   bestSell: number
   isClosed: boolean
+  provider: "bitycle" | "tsetmc" | "ime"
 }

@@ -8,10 +8,12 @@ import type {
   RangeKey,
   ScaleMode,
 } from "@/features/market-pulse/chart-options"
+import { getMarketChartTimeframes } from "@/features/market-pulse/bitycle-markets"
 import { useMarketsQuery } from "@/features/market-pulse/hooks"
 import type { ChartTimeframe, MarketPair } from "@/features/market-pulse/types"
 
-const DEFAULT_MARKET_ID = "btc-rls"
+const DEFAULT_MARKET_ID = "btc-usdt"
+const DEFAULT_OHLC = "BTCUSDT"
 
 export function useChartControls() {
   const marketsQuery = useMarketsQuery()
@@ -34,6 +36,10 @@ export function useChartControls() {
     return marketsQuery.data?.find((item) => item.id === marketId) ?? null
   }, [marketsQuery.data, marketId])
 
+  const timeframeOptions = useMemo(() => {
+    return getMarketChartTimeframes(market?.ohlcSymbol ?? DEFAULT_OHLC)
+  }, [market?.ohlcSymbol])
+
   useEffect(() => {
     if (market || !marketsQuery.data?.length) return
     const fallback =
@@ -41,6 +47,12 @@ export function useChartControls() {
       marketsQuery.data[0]
     if (fallback) setMarketId(fallback.id)
   }, [market, marketsQuery.data])
+
+  useEffect(() => {
+    if (timeframeOptions.includes(timeframe)) return
+    const next = timeframeOptions[0]
+    if (next) setTimeframe(next)
+  }, [timeframe, timeframeOptions])
 
   const selectMarket = useCallback((next: MarketPair) => {
     setMarketId(next.id)
@@ -131,6 +143,7 @@ export function useChartControls() {
       selectMarket,
       compareSymbol,
       timeframe,
+      timeframeOptions,
       setTimeframe,
       range,
       setRange,
@@ -159,6 +172,7 @@ export function useChartControls() {
       selectMarket,
       compareSymbol,
       timeframe,
+      timeframeOptions,
       range,
       scaleMode,
       chartType,

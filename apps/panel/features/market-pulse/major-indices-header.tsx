@@ -1,5 +1,6 @@
 "use client"
 
+import { useEffect, useState } from "react"
 import { ActivityIcon, SearchIcon } from "lucide-react"
 import { CardTitle } from "@workspace/ui/components/card"
 import { Input } from "@workspace/ui/components/input"
@@ -17,8 +18,14 @@ export function MajorIndicesHeader({
   totalCount,
   visibleCount,
 }: MajorIndicesHeaderProps) {
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
   const countLabel =
-    totalCount > 0
+    mounted && totalCount > 0
       ? `${visibleCount.toLocaleString("fa-IR")} از ${totalCount.toLocaleString("fa-IR")}`
       : "—"
 
@@ -33,8 +40,8 @@ export function MajorIndicesHeader({
           aria-hidden
           className="pointer-events-none absolute -top-8 left-1/2 size-28 -translate-x-1/2 rounded-full bg-primary/10 blur-2xl"
         />
-        <div className="relative flex items-start gap-2.5">
-          <span className="mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-lg bg-primary/15 text-primary ring-1 ring-primary/25">
+        <div className="relative flex items-center gap-2.5">
+          <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-primary/15 text-primary ring-1 ring-primary/25">
             <ActivityIcon className="size-4" />
           </span>
           <div className="min-w-0 flex-1">
@@ -46,9 +53,6 @@ export function MajorIndicesHeader({
                 {countLabel}
               </span>
             </div>
-            <p className="mt-0.5 text-[11px] text-muted-foreground">
-              قیمت لحظه‌ای · انتخاب برای چارت
-            </p>
           </div>
         </div>
         <label className="relative mt-2.5 block">

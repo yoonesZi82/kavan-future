@@ -76,7 +76,7 @@ export function MajorIndicesPanel({
   }, [filtered.length, hasMore, rows.length])
 
   return (
-    <Card className="flex h-full flex-col overflow-hidden py-0">
+    <Card className="flex h-full flex-col overflow-hidden py-0 ring-inset">
       <MajorIndicesHeader
         query={query}
         onQueryChange={setQuery}
@@ -91,19 +91,24 @@ export function MajorIndicesPanel({
             <Skeleton className="h-12 w-full" />
           </div>
         ) : (
-          <div ref={listRef} className="scrollbar-brand h-full overflow-y-auto px-2">
-            <ul className="divide-y divide-border">
+          <div ref={listRef} className="scrollbar-brand h-full overflow-y-auto px-2 py-1">
+            <ul className="flex flex-col gap-1">
               {rows.map((row) => {
                 const isGain = row.dayChange >= 0
                 const isActive = row.id === selectedId
                 return (
-                  <li key={row.id}>
+                  <li
+                    key={row.id}
+                    className="border-b border-dashed border-border/70 pb-1 last:border-b-0 last:pb-0"
+                  >
                     <button
                       type="button"
                       onClick={() => onSelect(row)}
                       className={cn(
-                        "flex w-full items-center gap-2 px-2 py-2.5 text-start transition-colors",
-                        isActive ? "bg-muted" : "hover:bg-muted/60"
+                        "flex w-full cursor-pointer items-center gap-2 rounded-lg px-2 py-2.5 text-start transition-colors",
+                        isActive
+                          ? "bg-primary/10 ring-1 ring-primary/30 ring-inset"
+                          : "hover:bg-muted/70"
                       )}
                     >
                       <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary/10 text-[10px] font-bold text-primary">
