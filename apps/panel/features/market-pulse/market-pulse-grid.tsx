@@ -11,7 +11,7 @@ import {
   ResizablePanelGroup,
 } from "@workspace/ui/components/resizable"
 
-const HERO_HEIGHT = "h-[480px] md:h-[560px]"
+const HERO_HEIGHT = "h-[400px] md:h-[460px]"
 const FIT_CELL = "min-h-0 w-full self-start"
 
 export function MarketPulseGrid() {
@@ -58,7 +58,8 @@ export function MarketPulseGrid() {
         </ResizablePanelGroup>
       </div>
 
-      <div className="grid w-full min-w-0 grid-cols-1 gap-4 md:grid-cols-2 md:gap-5">
+      {/* * Same 74/26 split as hero chart | markets panels */}
+      <div className="grid w-full min-w-0 grid-cols-1 gap-4 md:gap-5 lg:grid-cols-[minmax(0,74fr)_minmax(0,26fr)]">
         <div className={FIT_CELL}>
           <MarketFlowPanel />
         </div>
