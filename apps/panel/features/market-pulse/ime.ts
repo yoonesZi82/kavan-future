@@ -9,6 +9,7 @@ const IME_SILVER_MARKET: MarketPair = {
   id: "ime-silver-cdc",
   src: "silver",
   dst: "rls",
+  nameFa: "شمش نقره",
   symbol: "شمش‌نقره",
   ohlcSymbol: "IMESILVER",
   latest: 0,

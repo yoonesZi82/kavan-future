@@ -1,20 +1,15 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { ActivityIcon, SearchIcon } from "lucide-react"
+import { ActivityIcon } from "lucide-react"
 import { CardTitle } from "@workspace/ui/components/card"
-import { Input } from "@workspace/ui/components/input"
 
 type MajorIndicesHeaderProps = {
-  query: string
-  onQueryChange: (value: string) => void
   totalCount: number
   visibleCount: number
 }
 
 export function MajorIndicesHeader({
-  query,
-  onQueryChange,
   totalCount,
   visibleCount,
 }: MajorIndicesHeaderProps) {
@@ -47,7 +42,7 @@ export function MajorIndicesHeader({
           <div className="min-w-0 flex-1">
             <div className="flex items-center justify-between gap-2">
               <CardTitle className="text-sm font-semibold tracking-tight">
-                بازارهای اصلی
+                واچ لیست
               </CardTitle>
               <span className="rounded-md bg-muted px-1.5 py-0.5 text-[10px] tabular-nums text-muted-foreground">
                 {countLabel}
@@ -55,16 +50,6 @@ export function MajorIndicesHeader({
             </div>
           </div>
         </div>
-        <label className="relative mt-2.5 block">
-          <SearchIcon className="pointer-events-none absolute top-1/2 right-2.5 size-3.5 -translate-y-1/2 text-muted-foreground" />
-          <Input
-            value={query}
-            onValueChange={onQueryChange}
-            placeholder="جستجوی نماد یا ارز…"
-            aria-label="جستجوی بازار"
-            className="h-8 border-border/70 bg-muted/40 pr-8 text-xs shadow-none placeholder:text-muted-foreground/70 focus-visible:bg-background"
-          />
-        </label>
       </div>
     </div>
   )

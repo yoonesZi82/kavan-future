@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useMemo, useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { Badge } from "@workspace/ui/components/badge"
 import { Card, CardContent } from "@workspace/ui/components/card"
 import { Skeleton } from "@workspace/ui/components/skeleton"
@@ -25,8 +25,8 @@ function formatPrice(value: number): string {
   return value.toLocaleString("fa-IR", { maximumFractionDigits: 2 })
 }
 
-function marketInitials(symbol: string): string {
-  return symbol.split("/")[0]?.slice(0, 3).toUpperCase() ?? "?"
+function marketInitials(nameFa: string): string {
+  return nameFa.slice(0, 2)
 }
 
 export function MajorIndicesPanel({
@@ -34,29 +34,13 @@ export function MajorIndicesPanel({
   onSelect,
 }: MajorIndicesPanelProps) {
   const { data, isLoading } = useMarketsQuery()
-  const [query, setQuery] = useState("")
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE)
   const listRef = useRef<HTMLDivElement | null>(null)
   const sentinelRef = useRef<HTMLLIElement | null>(null)
 
-  const filtered = useMemo(() => {
-    if (!data) return []
-    const q = query.trim().toLowerCase()
-    if (!q) return data
-    return data.filter(
-      (item) =>
-        item.symbol.toLowerCase().includes(q) ||
-        item.src.toLowerCase().includes(q) ||
-        item.dst.toLowerCase().includes(q)
-    )
-  }, [data, query])
-
-  const rows = filtered.slice(0, visibleCount)
-  const hasMore = visibleCount < filtered.length
-
-  useEffect(() => {
-    setVisibleCount(PAGE_SIZE)
-  }, [query])
+  const rows = (data ?? []).slice(0, visibleCount)
+  const totalCount = data?.length ?? 0
+  const hasMore = visibleCount < totalCount
 
   useEffect(() => {
     const root = listRef.current
@@ -65,22 +49,18 @@ export function MajorIndicesPanel({
     const observer = new IntersectionObserver(
       (entries) => {
         if (!entries[0]?.isIntersecting) return
-        setVisibleCount((count) =>
-          Math.min(count + PAGE_SIZE, filtered.length)
-        )
+        setVisibleCount((count) => Math.min(count + PAGE_SIZE, totalCount))
       },
       { root, rootMargin: "120px" }
     )
     observer.observe(sentinel)
     return () => observer.disconnect()
-  }, [filtered.length, hasMore, rows.length])
+  }, [hasMore, rows.length, totalCount])
 
   return (
     <Card className="flex h-full flex-col overflow-hidden py-0 ring-inset">
       <MajorIndicesHeader
-        query={query}
-        onQueryChange={setQuery}
-        totalCount={filtered.length}
+        totalCount={totalCount}
         visibleCount={rows.length}
       />
       <CardContent className="min-h-0 flex-1 px-0 py-0">
@@ -112,11 +92,11 @@ export function MajorIndicesPanel({
                       )}
                     >
                       <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary/10 text-[10px] font-bold text-primary">
-                        {marketInitials(row.symbol)}
+                        {marketInitials(row.nameFa)}
                       </span>
                       <span className="min-w-0 flex-1">
                         <span className="block truncate text-sm font-medium">
-                          {row.symbol.split("/")[0]}
+                          {row.nameFa}
                         </span>
                         <span
                           className="mt-0.5 inline-block rounded bg-muted px-1.5 py-0.5 text-[10px] text-muted-foreground"
@@ -153,7 +133,7 @@ export function MajorIndicesPanel({
                   در حال بارگذاری…
                 </li>
               ) : null}
-              {!hasMore && filtered.length === 0 ? (
+              {!hasMore && totalCount === 0 ? (
                 <li className="px-2 py-6 text-center text-xs text-muted-foreground">
                   نتیجه‌ای پیدا نشد
                 </li>

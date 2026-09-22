@@ -9,6 +9,7 @@ import { SidebarTrigger } from "@workspace/ui/components/sidebar"
 import { DASHBOARD_HEADER_HEIGHT_CLASS } from "@/components/dashboard/chrome"
 import { MarketStatus } from "@/components/dashboard/market-status"
 import { ThemeToggle } from "@/components/dashboard/theme-toggle"
+import { useGlobalSearch } from "@/components/dashboard/global-search-context"
 
 const dateFormatter = new Intl.DateTimeFormat("fa-IR", {
   weekday: "long",
@@ -21,6 +22,7 @@ const dateFormatter = new Intl.DateTimeFormat("fa-IR", {
 
 export function AppHeader() {
   const [nowLabel, setNowLabel] = useState("")
+  const { openSearch } = useGlobalSearch()
 
   useEffect(() => {
     const tick = () => setNowLabel(dateFormatter.format(new Date()))
@@ -44,12 +46,19 @@ export function AppHeader() {
           </div>
         </div>
 
+        {/* * Opens shared GlobalSearchDialog — does not filter the watchlist */}
         <div className="relative hidden min-w-0 flex-1 md:block md:max-w-2xl">
-          <SearchIcon className="pointer-events-none absolute top-1/2 right-3 size-4 -translate-y-1/2 text-muted-foreground" />
+          <SearchIcon className="pointer-events-none absolute top-1/2 right-3 z-10 size-4 -translate-y-1/2 text-muted-foreground" />
           <Input
-            className="h-8 w-full pr-9"
+            className="h-8 w-full cursor-pointer pr-9"
+            readOnly
             placeholder="جستجوی دارایی، شاخص، نماد..."
             aria-label="جستجو"
+            onFocus={(event) => {
+              event.currentTarget.blur()
+              openSearch()
+            }}
+            onClick={openSearch}
           />
         </div>
 

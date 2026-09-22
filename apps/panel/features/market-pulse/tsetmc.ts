@@ -5,6 +5,7 @@ const TSE_INDEX_MARKET: MarketPair = {
   id: "tse-index",
   src: "tse",
   dst: "index",
+  nameFa: "شاخص کل",
   symbol: "شاخص‌کل",
   ohlcSymbol: "TSEINDEX",
   latest: 0,

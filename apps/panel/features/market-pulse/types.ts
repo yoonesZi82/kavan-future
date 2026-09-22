@@ -43,6 +43,8 @@ export type MarketPair = {
   id: string
   src: string
   dst: string
+  /** Full Persian display name (e.g. طلا ۱۸ عیار). */
+  nameFa: string
   symbol: string
   ohlcSymbol: string
   latest: number

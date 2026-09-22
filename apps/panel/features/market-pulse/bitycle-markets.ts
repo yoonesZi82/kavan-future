@@ -4,6 +4,7 @@ export type BitycleMarketConfig = {
   id: string
   src: string
   dst: string
+  nameFa: string
   symbol: string
   ohlcSymbol: string
   /** History `source` query param for widget_data. */
@@ -19,6 +20,7 @@ export const BITYCLE_MARKETS: readonly BitycleMarketConfig[] = [
     id: "btc-usdt",
     src: "btc",
     dst: "usdt",
+    nameFa: "بیت‌کوین",
     symbol: "BTC/USDT",
     ohlcSymbol: "BTCUSDT",
     source: "binance_spot",
@@ -30,6 +32,7 @@ export const BITYCLE_MARKETS: readonly BitycleMarketConfig[] = [
     id: "eth-usdt",
     src: "eth",
     dst: "usdt",
+    nameFa: "اتریوم",
     symbol: "ETH/USDT",
     ohlcSymbol: "ETHUSDT",
     source: "binance_spot",
@@ -41,6 +44,7 @@ export const BITYCLE_MARKETS: readonly BitycleMarketConfig[] = [
     id: "gold18-irt",
     src: "gold18",
     dst: "rls",
+    nameFa: "طلا ۱۸ عیار",
     symbol: "طلا۱۸/IRT",
     ohlcSymbol: "GOLD18IRT",
     source: "brs",
@@ -52,6 +56,7 @@ export const BITYCLE_MARKETS: readonly BitycleMarketConfig[] = [
     id: "xau-usd",
     src: "xau",
     dst: "usdt",
+    nameFa: "انس طلا",
     symbol: "انس‌طلا/USD",
     ohlcSymbol: "XAUUSD",
     source: "alpari",
@@ -63,6 +68,7 @@ export const BITYCLE_MARKETS: readonly BitycleMarketConfig[] = [
     id: "xag-usd",
     src: "xag",
     dst: "usdt",
+    nameFa: "انس نقره",
     symbol: "انس‌نقره/USD",
     ohlcSymbol: "XAGUSD",
     source: "alpari",
@@ -74,6 +80,7 @@ export const BITYCLE_MARKETS: readonly BitycleMarketConfig[] = [
     id: "usdt-rls",
     src: "usdt",
     dst: "rls",
+    nameFa: "تتر",
     symbol: "USDT/IRT",
     ohlcSymbol: "USDTIRT",
     source: "nobitex_spot",
@@ -149,6 +156,7 @@ export function emptyMarketPair(config: BitycleMarketConfig): MarketPair {
     id: config.id,
     src: config.src,
     dst: config.dst,
+    nameFa: config.nameFa,
     symbol: config.symbol,
     ohlcSymbol: config.ohlcSymbol,
     latest: 0,
