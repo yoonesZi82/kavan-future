@@ -1,6 +1,6 @@
 "use client"
 
-import { BellIcon } from "lucide-react"
+import { BellIcon, Info } from "lucide-react"
 import { Badge } from "@workspace/ui/components/badge"
 import { Button } from "@workspace/ui/components/button"
 import {
@@ -17,8 +17,11 @@ export function AlertsPanel() {
 
   return (
     <Card className="h-fit overflow-hidden">
-      <CardHeader className="pb-2">
-        <CardTitle className="text-base">هشدارهای فعال من</CardTitle>
+      <CardHeader className="border-b border-border pb-2">
+        <div className="flex items-center justify-between">
+          <CardTitle className="text-base">هشدارهای فعال بازار</CardTitle>
+          <Badge variant="outline">{data?.length} مورد</Badge>
+        </div>
       </CardHeader>
       <CardContent>
         {isLoading ? (
@@ -43,13 +46,15 @@ export function AlertsPanel() {
                     }
                   />
                   <span className="text-sm">{alert.title}</span>
-                  <Badge variant={alert.isActive ? "secondary" : "outline"}>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Badge variant={alert.isActive ? "success" : "destructive"}>
                     {alert.isActive ? "فعال" : "غیرفعال"}
                   </Badge>
+                  <Button variant="secondary" size="icon">
+                    <Info />
+                  </Button>
                 </div>
-                <Button variant="link" size="sm" className="h-auto p-0 text-xs">
-                  مشاهده جزئیات
-                </Button>
               </li>
             ))}
           </ul>

@@ -14,7 +14,8 @@ import {
   fetchImeSilverMarket,
 } from "@/features/market-pulse/ime"
 import { fetchTseIndexMarket } from "@/features/market-pulse/tsetmc"
-import { mockAlerts, mockMarketFlow } from "@/features/market-pulse/mock-data"
+import { mockAlerts } from "@/features/market-pulse/mock-data"
+import { fetchTradersArenaSymbols } from "@/features/market-pulse/tradersarena"
 
 export async function fetchMarkets(): Promise<MarketPair[]> {
   const [bitycle, tse, silver] = await Promise.all([
@@ -40,7 +41,7 @@ export async function fetchChart(
 }
 
 export async function fetchMarketFlow(): Promise<MarketFlowItem[]> {
-  return mockMarketFlow
+  return fetchTradersArenaSymbols()
 }
 
 export async function fetchAlerts(): Promise<AlertItem[]> {

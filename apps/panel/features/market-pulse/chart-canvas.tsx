@@ -26,6 +26,8 @@ import type { CandlePoint } from "@/features/market-pulse/types"
 
 type ChartCanvasProps = {
   data: CandlePoint[] | undefined
+  /** Changes when market or timeframe switches — triggers range fit. */
+  dataKey: string
   isLoading: boolean
   chartType: ChartType
   scaleMode: ScaleMode
@@ -58,6 +60,7 @@ const EMPTY_EXTRAS: ExtraSeries = {
 export function ChartCanvas(props: ChartCanvasProps) {
   const {
     data,
+    dataKey,
     isLoading,
     chartType,
     scaleMode,
@@ -74,6 +77,7 @@ export function ChartCanvas(props: ChartCanvasProps) {
   } = props
   const containerRef = useRef<HTMLDivElement | null>(null)
   const extrasRef = useRef<ExtraSeries>(EMPTY_EXTRAS)
+  const lastFitKeyRef = useRef<string>("")
   const [container, setContainer] = useState<HTMLElement | null>(null)
   const [chart, setChart] = useState<IChartApi | null>(null)
   const [main, setMain] = useState<{
@@ -180,6 +184,10 @@ export function ChartCanvas(props: ChartCanvasProps) {
 
   useEffect(() => {
     if (!chart || !main || !data) return
+    // ! Only re-fit on market/tf/range/chartType — live candle ticks keep user zoom
+    const fitKey = `${dataKey}:${range}:${main.kind}`
+    const resetVisibleRange = lastFitKeyRef.current !== fitKey
+    lastFitKeyRef.current = fitKey
     extrasRef.current = applyChartData({
       chart,
       mainSeries: main.series,
@@ -188,9 +196,10 @@ export function ChartCanvas(props: ChartCanvasProps) {
       indicators,
       compareSymbol,
       range,
+      resetVisibleRange,
       extras: extrasRef.current,
     })
-  }, [chart, main, data, indicators, compareSymbol, range])
+  }, [chart, main, data, dataKey, indicators, compareSymbol, range])
 
   return (
     <div className="relative min-h-0 flex-1">

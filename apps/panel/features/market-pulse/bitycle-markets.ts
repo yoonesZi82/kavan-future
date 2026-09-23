@@ -1,4 +1,4 @@
-import type { ChartTimeframe, MarketPair } from "@/features/market-pulse/types"
+import type { MarketPair } from "@/features/market-pulse/types"
 
 export type BitycleMarketConfig = {
   id: string
@@ -88,67 +88,76 @@ export const BITYCLE_MARKETS: readonly BitycleMarketConfig[] = [
     timeframes: ["1m", "5m", "15m", "1h", "4h", "1d", "1w"],
     fallbackTimeframe: "1h",
   },
+  {
+    id: "sekke-emami",
+    src: "emami",
+    dst: "rls",
+    nameFa: "سکه امامی",
+    symbol: "سکه‌امامی/IRT",
+    ohlcSymbol: "IRCOINEMIRT",
+    source: "bst",
+    liveSource: "bst",
+    timeframes: ["1m", "5m", "15m", "1h", "4h", "1d", "1w"],
+    fallbackTimeframe: "1d",
+  },
+  {
+    id: "rob-sekke",
+    src: "rob",
+    dst: "rls",
+    nameFa: "ربع سکه",
+    symbol: "ربع‌سکه/IRT",
+    ohlcSymbol: "IRCOINROBIRT",
+    source: "bst",
+    liveSource: "bst",
+    timeframes: ["1m", "5m", "15m", "1h", "4h", "1d", "1w"],
+    fallbackTimeframe: "1d",
+  },
+  {
+    id: "trx-usdt",
+    src: "trx",
+    dst: "usdt",
+    nameFa: "ترون",
+    symbol: "TRX/USDT",
+    ohlcSymbol: "TRXUSDT",
+    source: "binance_spot",
+    liveSource: "binance_spot",
+    timeframes: ["1m", "5m", "15m", "1h", "4h", "1d", "1w"],
+    fallbackTimeframe: "1d",
+  },
+  {
+    id: "nim-sekke",
+    src: "nim",
+    dst: "rls",
+    nameFa: "نیم سکه",
+    symbol: "نیم‌سکه/IRT",
+    ohlcSymbol: "IRCOINNIMIRT",
+    source: "bst",
+    liveSource: "bst",
+    timeframes: ["1m", "5m", "15m", "1h", "4h", "1d", "1w"],
+    fallbackTimeframe: "1d",
+  },
+  {
+    id: "gold24-irt",
+    src: "gold24",
+    dst: "rls",
+    nameFa: "طلا ۲۴ عیار",
+    symbol: "طلا۲۴/IRT",
+    ohlcSymbol: "GOLD24IRT",
+    source: "brs",
+    liveSource: "tehran_cgf",
+    timeframes: ["1m", "5m", "15m", "1h", "4h", "1d", "1w"],
+    fallbackTimeframe: "1d",
+  },
 ]
 
 const BY_OHLC = new Map(
   BITYCLE_MARKETS.map((market) => [market.ohlcSymbol, market])
 )
 
-const TF_TO_BITYCLE: Record<ChartTimeframe, string> = {
-  "1m": "1m",
-  "5m": "5m",
-  "15m": "15m",
-  "1h": "1h",
-  "4h": "4h",
-  "1D": "1d",
-  "1W": "1w",
-  All: "1w",
-}
-
-const BITYCLE_TO_CHART: Record<string, ChartTimeframe> = {
-  "1m": "1m",
-  "5m": "5m",
-  "15m": "15m",
-  "1h": "1h",
-  "4h": "4h",
-  "1d": "1D",
-  "1w": "1W",
-}
-
 export function getBitycleMarket(
   ohlcSymbol: string
 ): BitycleMarketConfig | undefined {
   return BY_OHLC.get(ohlcSymbol.toUpperCase())
-}
-
-export function resolveBitycleTimeframe(
-  config: BitycleMarketConfig,
-  timeframe: ChartTimeframe
-): string {
-  const mapped = TF_TO_BITYCLE[timeframe]
-  if (config.timeframes.includes(mapped)) return mapped
-  return config.fallbackTimeframe
-}
-
-export function chartTimeframeToBitycle(timeframe: ChartTimeframe): string {
-  return TF_TO_BITYCLE[timeframe]
-}
-
-export function getMarketChartTimeframes(
-  ohlcSymbol: string
-): ChartTimeframe[] {
-  const upper = ohlcSymbol.toUpperCase()
-  if (upper === "TSEINDEX") return []
-  if (upper === "IMESILVER") return ["1D"]
-  const config = getBitycleMarket(ohlcSymbol)
-  if (!config) return ["1h"]
-  const values = config.timeframes
-    .map((tf) => BITYCLE_TO_CHART[tf])
-    .filter((tf): tf is ChartTimeframe => Boolean(tf))
-  if (config.timeframes.includes("1w") && !values.includes("All")) {
-    values.push("All")
-  }
-  return values
 }
 
 export function emptyMarketPair(config: BitycleMarketConfig): MarketPair {

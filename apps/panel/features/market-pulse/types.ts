@@ -8,10 +8,14 @@ export type WatchlistItem = {
 
 export type MarketFlowItem = {
   id: string
-  group: string
+  symbol: string
   volume: string
   tradeValue: string
   moneyInflow: number
+  moneyInflowLabel: string
+  buyPerCapita: string
+  sellPerCapita: string
+  buyPower: number
 }
 
 export type AlertItem = {

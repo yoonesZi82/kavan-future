@@ -8,7 +8,7 @@ import type {
   RangeKey,
   ScaleMode,
 } from "@/features/market-pulse/chart-options"
-import { getMarketChartTimeframes } from "@/features/market-pulse/bitycle-markets"
+import { getMarketChartTimeframes } from "@/features/market-pulse/bitycle-timeframes"
 import { useMarketsQuery } from "@/features/market-pulse/hooks"
 import type { ChartTimeframe, MarketPair } from "@/features/market-pulse/types"
 

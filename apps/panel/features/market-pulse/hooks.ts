@@ -12,7 +12,8 @@ import type { ChartTimeframe } from "@/features/market-pulse/types"
 import { queryKeys } from "@/lib/api/query-keys"
 
 /** Backup poll; live prices/candles come from Bitycle WS. */
-const BACKUP_MS = 60_000
+export const MARKET_FLOW_REFETCH_MS = 60_000
+const BACKUP_MS = MARKET_FLOW_REFETCH_MS
 const TSE_POLL_MS = 15_000
 
 export function useMarketsQuery() {
@@ -29,6 +30,9 @@ export function useMarketFlowQuery() {
   return useQuery({
     queryKey: queryKeys.marketPulse.marketFlow(),
     queryFn: fetchMarketFlow,
+    refetchInterval: MARKET_FLOW_REFETCH_MS,
+    // * Keep stale so interval refetch always hits the network and bumps dataUpdatedAt
+    staleTime: 0,
   })
 }
 

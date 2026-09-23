@@ -96,6 +96,7 @@ export function ChartPanel({ controls }: ChartPanelProps) {
         <div className="relative flex min-w-0 flex-1 flex-col">
           <ChartCanvas
             data={data}
+            dataKey={`${controls.market?.ohlcSymbol ?? ""}:${controls.timeframe}`}
             isLoading={isLoading}
             chartType={controls.chartType}
             scaleMode={controls.scaleMode}

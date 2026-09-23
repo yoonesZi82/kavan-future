@@ -35,6 +35,8 @@ type ApplyChartDataArgs = {
   indicators: IndicatorId[]
   compareSymbol: string | null
   range: RangeKey
+  /** When false, keep the user's current zoom/scroll after setData. */
+  resetVisibleRange: boolean
   extras: SeriesBag
 }
 
@@ -90,6 +92,7 @@ export function applyChartData({
   indicators,
   compareSymbol,
   range,
+  resetVisibleRange,
   extras,
 }: ApplyChartDataArgs): SeriesBag {
   const candles = sanitizeCandles(data)
@@ -97,6 +100,11 @@ export function applyChartData({
     mainSeries.setData([])
     return extras
   }
+
+  const timeScale = chart.timeScale()
+  const preserved = resetVisibleRange
+    ? null
+    : timeScale.getVisibleLogicalRange()
 
   if (chartType === "candle") {
     const points: CandlestickData<Time>[] = candles.map((item) => ({
@@ -177,11 +185,16 @@ export function applyChartData({
     compare = null
   }
 
-  const logical = getVisibleLogicalRange(candles, range)
-  if (logical) {
-    chart.timeScale().setVisibleLogicalRange(logical)
-  } else {
-    chart.timeScale().fitContent()
+  if (resetVisibleRange) {
+    const logical = getVisibleLogicalRange(candles, range)
+    if (logical) {
+      timeScale.setVisibleLogicalRange(logical)
+    } else {
+      timeScale.fitContent()
+    }
+  } else if (preserved) {
+    // * Live ticks must not snap zoom back to the footer range preset
+    timeScale.setVisibleLogicalRange(preserved)
   }
 
   return { volume, sma20, sma50, compare }

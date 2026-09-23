@@ -4,9 +4,9 @@ import { useEffect } from "react"
 import { useQueryClient, type QueryClient } from "@tanstack/react-query"
 import {
   BITYCLE_MARKETS,
-  chartTimeframeToBitycle,
   getBitycleMarket,
 } from "@/features/market-pulse/bitycle-markets"
+import { chartTimeframeToBitycle } from "@/features/market-pulse/bitycle-timeframes"
 import {
   candleFromTuple,
   isMdMessage,
