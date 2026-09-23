@@ -7,7 +7,7 @@ import {
   RANGE_OPTIONS,
   type RangeKey,
   type ScaleMode,
-} from "@/features/market-pulse/chart-options"
+} from "@/features/market-pulse/chart/chart-options"
 
 type ChartFooterProps = {
   range: RangeKey

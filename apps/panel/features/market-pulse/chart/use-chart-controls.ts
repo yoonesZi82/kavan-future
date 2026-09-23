@@ -7,9 +7,9 @@ import type {
   IndicatorId,
   RangeKey,
   ScaleMode,
-} from "@/features/market-pulse/chart-options"
-import { getMarketChartTimeframes } from "@/features/market-pulse/bitycle-timeframes"
-import { useMarketsQuery } from "@/features/market-pulse/hooks"
+} from "@/features/market-pulse/chart/chart-options"
+import { getMarketChartTimeframes } from "@/features/market-pulse/data/bitycle-timeframes"
+import { useMarketsQuery } from "@/features/market-pulse/data/hooks"
 import type { ChartTimeframe, MarketPair } from "@/features/market-pulse/types"
 
 const DEFAULT_MARKET_ID = "btc-usdt"

@@ -4,8 +4,8 @@ import {
   emptyMarketPair,
   getBitycleMarket,
   type BitycleMarketConfig,
-} from "@/features/market-pulse/bitycle-markets"
-import { resolveBitycleTimeframe } from "@/features/market-pulse/bitycle-timeframes"
+} from "@/features/market-pulse/data/bitycle-markets"
+import { resolveBitycleTimeframe } from "@/features/market-pulse/data/bitycle-timeframes"
 import type {
   CandlePoint,
   ChartTimeframe,

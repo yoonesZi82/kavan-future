@@ -20,7 +20,7 @@ import {
   TooltipTrigger,
 } from "@workspace/ui/components/tooltip"
 import { cn } from "@workspace/ui/lib/utils"
-import type { DrawingToolId } from "@/features/market-pulse/chart-options"
+import type { DrawingToolId } from "@/features/market-pulse/chart/chart-options"
 
 const TOOLS: {
   id: DrawingToolId

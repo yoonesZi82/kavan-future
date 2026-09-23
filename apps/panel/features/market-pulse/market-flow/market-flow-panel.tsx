@@ -21,15 +21,17 @@ import { cn } from "@workspace/ui/lib/utils"
 import {
   MARKET_FLOW_REFETCH_MS,
   useMarketFlowQuery,
-} from "@/features/market-pulse/hooks"
+} from "@/features/market-pulse/data/hooks"
 import {
   formatCountdown,
+  countdownUrgencyStyle,
   useRefetchCountdown,
-} from "@/features/market-pulse/use-refetch-countdown"
+} from "@/features/market-pulse/market-flow/use-refetch-countdown"
 
 const HEAD =
   "px-2 text-center text-[11px] font-medium whitespace-nowrap text-muted-foreground"
 const CELL = "px-2 text-center text-sm tabular-nums whitespace-nowrap"
+const TOTAL_SECONDS = Math.ceil(MARKET_FLOW_REFETCH_MS / 1000)
 
 function formatBuyPower(value: number): string {
   return value.toLocaleString("en-US", {
@@ -45,6 +47,7 @@ export function MarketFlowPanel() {
     MARKET_FLOW_REFETCH_MS,
     isFetching
   )
+  const urgency = countdownUrgencyStyle(secondsLeft, TOTAL_SECONDS)
 
   return (
     <Card className="flex max-h-[400px] flex-col ring-inset md:max-h-[460px]">
@@ -56,9 +59,10 @@ export function MarketFlowPanel() {
           <Badge
             variant="outline"
             className={cn(
-              "min-w-14 justify-center font-mono text-[11px] tabular-nums",
+              "min-w-14 justify-center border font-mono text-[11px] tabular-nums transition-[color,background-color,border-color] duration-500",
               isFetching && "animate-pulse"
             )}
+            style={isFetching ? undefined : urgency}
             title="زمان تا بروزرسانی بعدی"
           >
             {isFetching ? "…" : formatCountdown(secondsLeft)}
@@ -71,13 +75,13 @@ export function MarketFlowPanel() {
         ) : (
           <Table className="table-fixed">
             <colgroup>
-              <col className="w-[14%]" />
+              <col className="w-[22%]" />
               <col className="w-[12%]" />
-              <col className="w-[16%]" />
-              <col className="w-[16%]" />
               <col className="w-[14%]" />
               <col className="w-[14%]" />
-              <col className="w-[14%]" />
+              <col className="w-[13%]" />
+              <col className="w-[13%]" />
+              <col className="w-[12%]" />
             </colgroup>
             <TableHeader className="sticky top-0 z-10 bg-card [&_tr]:border-b">
               <TableRow className="hover:bg-transparent">
@@ -95,7 +99,7 @@ export function MarketFlowPanel() {
                 const isIn = row.moneyInflow > 0
                 return (
                   <TableRow key={row.id}>
-                    <TableCell className="px-2 text-center font-medium whitespace-nowrap">
+                    <TableCell className="px-2 text-start text-xs font-medium whitespace-normal sm:text-sm">
                       {row.symbol}
                     </TableCell>
                     <TableCell className={CELL}>{row.volume}</TableCell>

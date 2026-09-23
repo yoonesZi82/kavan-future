@@ -8,11 +8,11 @@ import {
   type Anchor,
   type IDrawing,
 } from "lightweight-charts-drawing"
-import type { DrawingToolId } from "@/features/market-pulse/chart-options"
+import type { DrawingToolId } from "@/features/market-pulse/chart/chart-options"
 import {
   DRAWING_TOOL_TYPE,
   getDrawingStyle,
-} from "@/features/market-pulse/chart-drawing-map"
+} from "@/features/market-pulse/chart/chart-drawing-map"
 
 const PREVIEW_ID = "__preview__"
 

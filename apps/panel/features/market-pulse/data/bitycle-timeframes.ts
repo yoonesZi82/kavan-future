@@ -1,7 +1,7 @@
 import {
   getBitycleMarket,
   type BitycleMarketConfig,
-} from "@/features/market-pulse/bitycle-markets"
+} from "@/features/market-pulse/data/bitycle-markets"
 import type { ChartTimeframe } from "@/features/market-pulse/types"
 
 const TF_TO_BITYCLE: Record<ChartTimeframe, string> = {

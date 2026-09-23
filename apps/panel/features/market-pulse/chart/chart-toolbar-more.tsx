@@ -25,7 +25,7 @@ import {
   INDICATOR_OPTIONS,
   type ChartType,
   type IndicatorId,
-} from "@/features/market-pulse/chart-options"
+} from "@/features/market-pulse/chart/chart-options"
 
 const CHART_TYPE_LABEL: Record<ChartType, string> = {
   candle: "کندل",

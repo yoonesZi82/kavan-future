@@ -10,7 +10,7 @@ import {
   CardTitle,
 } from "@workspace/ui/components/card"
 import { Skeleton } from "@workspace/ui/components/skeleton"
-import { useAlertsQuery } from "@/features/market-pulse/hooks"
+import { useAlertsQuery } from "@/features/market-pulse/data/hooks"
 
 export function AlertsPanel() {
   const { data, isLoading } = useAlertsQuery()

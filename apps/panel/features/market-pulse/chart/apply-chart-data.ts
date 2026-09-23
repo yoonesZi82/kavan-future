@@ -12,12 +12,12 @@ import type {
   ChartType,
   IndicatorId,
   RangeKey,
-} from "@/features/market-pulse/chart-options"
+} from "@/features/market-pulse/chart/chart-options"
 import {
   computeSma,
   getVisibleLogicalRange,
   shiftSeries,
-} from "@/features/market-pulse/chart-helpers"
+} from "@/features/market-pulse/chart/chart-helpers"
 import type { CandlePoint } from "@/features/market-pulse/types"
 
 type SeriesBag = {

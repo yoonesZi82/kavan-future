@@ -6,8 +6,8 @@ import {
   fetchChart,
   fetchMarketFlow,
   fetchMarkets,
-} from "@/features/market-pulse/api"
-import { useBitycleLive } from "@/features/market-pulse/use-bitycle-live"
+} from "@/features/market-pulse/data/api"
+import { useBitycleLive } from "@/features/market-pulse/data/use-bitycle-live"
 import type { ChartTimeframe } from "@/features/market-pulse/types"
 import { queryKeys } from "@/lib/api/query-keys"
 

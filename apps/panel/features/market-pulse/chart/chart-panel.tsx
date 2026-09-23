@@ -2,13 +2,13 @@
 
 import { useCallback, useEffect, useRef, useState } from "react"
 import { Card } from "@workspace/ui/components/card"
-import { ChartCanvas } from "@/features/market-pulse/chart-canvas"
-import { ChartDrawingTools } from "@/features/market-pulse/chart-drawing-tools"
-import { ChartFooter } from "@/features/market-pulse/chart-footer"
-import { ChartOhlc } from "@/features/market-pulse/chart-ohlc"
-import { ChartToolbar } from "@/features/market-pulse/chart-toolbar"
-import { useChartQuery } from "@/features/market-pulse/hooks"
-import type { useChartControls } from "@/features/market-pulse/use-chart-controls"
+import { ChartCanvas } from "@/features/market-pulse/chart/chart-canvas"
+import { ChartDrawingTools } from "@/features/market-pulse/chart/chart-drawing-tools"
+import { ChartFooter } from "@/features/market-pulse/chart/chart-footer"
+import { ChartOhlc } from "@/features/market-pulse/chart/chart-ohlc"
+import { ChartToolbar } from "@/features/market-pulse/chart/chart-toolbar"
+import { useChartQuery } from "@/features/market-pulse/data/hooks"
+import type { useChartControls } from "@/features/market-pulse/chart/use-chart-controls"
 import type { CandlePoint } from "@/features/market-pulse/types"
 
 export type ChartControls = ReturnType<typeof useChartControls>

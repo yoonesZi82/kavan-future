@@ -1,5 +1,5 @@
 import type { DrawingStyle } from "lightweight-charts-drawing"
-import type { DrawingToolId } from "@/features/market-pulse/chart-options"
+import type { DrawingToolId } from "@/features/market-pulse/chart/chart-options"
 
 /** Maps toolbar tools to lightweight-charts-drawing registry types. */
 export const DRAWING_TOOL_TYPE: Partial<Record<DrawingToolId, string>> = {

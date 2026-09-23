@@ -5,13 +5,13 @@ import { Badge } from "@workspace/ui/components/badge"
 import { Card, CardContent } from "@workspace/ui/components/card"
 import { Skeleton } from "@workspace/ui/components/skeleton"
 import { cn } from "@workspace/ui/lib/utils"
-import { useMarketsQuery } from "@/features/market-pulse/hooks"
-import { MajorIndicesHeader } from "@/features/market-pulse/major-indices-header"
+import { useMarketsQuery } from "@/features/market-pulse/data/hooks"
+import { MajorIndicesHeader } from "@/features/market-pulse/watchlist/major-indices-header"
 import {
   WATCHLIST_COL,
   WATCHLIST_DIVIDER,
   WATCHLIST_GRID,
-} from "@/features/market-pulse/watchlist-layout"
+} from "@/features/market-pulse/watchlist/watchlist-layout"
 import type { MarketPair } from "@/features/market-pulse/types"
 
 type MajorIndicesPanelProps = {

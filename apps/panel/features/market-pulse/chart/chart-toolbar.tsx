@@ -15,8 +15,8 @@ import {
   TIMEFRAME_OPTIONS,
   type ChartType,
   type IndicatorId,
-} from "@/features/market-pulse/chart-options"
-import { ChartToolbarMore } from "@/features/market-pulse/chart-toolbar-more"
+} from "@/features/market-pulse/chart/chart-options"
+import { ChartToolbarMore } from "@/features/market-pulse/chart/chart-toolbar-more"
 import type { ChartTimeframe } from "@/features/market-pulse/types"
 
 type ChartToolbarProps = {

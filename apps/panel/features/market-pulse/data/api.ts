@@ -8,14 +8,14 @@ import type {
 import {
   fetchBitycleChart,
   fetchBitycleMarkets,
-} from "@/features/market-pulse/bitycle"
+} from "@/features/market-pulse/data/bitycle"
 import {
   fetchImeSilverChart,
   fetchImeSilverMarket,
-} from "@/features/market-pulse/ime"
-import { fetchTseIndexMarket } from "@/features/market-pulse/tsetmc"
-import { mockAlerts } from "@/features/market-pulse/mock-data"
-import { fetchTradersArenaSymbols } from "@/features/market-pulse/tradersarena"
+} from "@/features/market-pulse/data/ime"
+import { fetchTseIndexMarket } from "@/features/market-pulse/data/tsetmc"
+import { mockAlerts } from "@/features/market-pulse/data/mock-data"
+import { fetchTradersArenaMarket0 } from "@/features/market-pulse/data/tradersarena"
 
 export async function fetchMarkets(): Promise<MarketPair[]> {
   const [bitycle, tse, silver] = await Promise.all([
@@ -41,7 +41,7 @@ export async function fetchChart(
 }
 
 export async function fetchMarketFlow(): Promise<MarketFlowItem[]> {
-  return fetchTradersArenaSymbols()
+  return fetchTradersArenaMarket0()
 }
 
 export async function fetchAlerts(): Promise<AlertItem[]> {

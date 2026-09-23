@@ -7,7 +7,7 @@ import {
   type IChartApi,
   type Time,
 } from "lightweight-charts"
-import type { ScaleMode } from "@/features/market-pulse/chart-options"
+import type { ScaleMode } from "@/features/market-pulse/chart/chart-options"
 import type { CandlePoint } from "@/features/market-pulse/types"
 
 type UseChartViewArgs = {

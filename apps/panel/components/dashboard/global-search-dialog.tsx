@@ -16,7 +16,7 @@ import {
 import { cn } from "@workspace/ui/lib/utils"
 import { useGlobalSearch } from "@/components/dashboard/global-search-context"
 import { navItems } from "@/components/dashboard/nav-items"
-import { useMarketsQuery } from "@/features/market-pulse/hooks"
+import { useMarketsQuery } from "@/features/market-pulse/data/hooks"
 import type { MarketPair } from "@/features/market-pulse/types"
 
 type SectionId = "pages" | "markets"

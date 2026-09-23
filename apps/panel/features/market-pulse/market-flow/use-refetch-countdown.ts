@@ -48,3 +48,18 @@ export function formatCountdown(seconds: number): string {
   const secs = safe % 60
   return `${mins}:${secs.toString().padStart(2, "0")}`
 }
+
+/** Soft green → yellow → red as remaining time approaches 0. */
+export function countdownUrgencyStyle(
+  secondsLeft: number,
+  totalSeconds: number
+): { color: string; borderColor: string; backgroundColor: string } {
+  const t = Math.min(1, Math.max(0, secondsLeft / Math.max(1, totalSeconds)))
+  const hue = Math.round(t * 145)
+  return {
+    color: `hsl(${hue} 72% 36%)`,
+    borderColor: `hsl(${hue} 55% 42% / 0.45)`,
+    backgroundColor: `hsl(${hue} 70% 48% / 0.14)`,
+  }
+}
+
