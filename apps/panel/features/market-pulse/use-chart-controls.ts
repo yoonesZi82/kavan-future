@@ -15,11 +15,18 @@ import type { ChartTimeframe, MarketPair } from "@/features/market-pulse/types"
 const DEFAULT_MARKET_ID = "btc-usdt"
 const DEFAULT_OHLC = "BTCUSDT"
 
-export function useChartControls() {
+type UseChartControlsOptions = {
+  /** When set, only these timeframes appear (intersected with market support). */
+  allowedTimeframes?: readonly ChartTimeframe[]
+  defaultTimeframe?: ChartTimeframe
+}
+
+export function useChartControls(options: UseChartControlsOptions = {}) {
+  const { allowedTimeframes, defaultTimeframe = "15m" } = options
   const marketsQuery = useMarketsQuery()
   const [marketId, setMarketId] = useState(DEFAULT_MARKET_ID)
   const [compareSymbol, setCompareSymbol] = useState<string | null>(null)
-  const [timeframe, setTimeframe] = useState<ChartTimeframe>("15m")
+  const [timeframe, setTimeframe] = useState<ChartTimeframe>(defaultTimeframe)
   const [range, setRange] = useState<RangeKey>("1D")
   const [scaleMode, setScaleMode] = useState<ScaleMode>("normal")
   const [chartType, setChartType] = useState<ChartType>("candle")
@@ -37,8 +44,12 @@ export function useChartControls() {
   }, [marketsQuery.data, marketId])
 
   const timeframeOptions = useMemo(() => {
-    return getMarketChartTimeframes(market?.ohlcSymbol ?? DEFAULT_OHLC)
-  }, [market?.ohlcSymbol])
+    const available = getMarketChartTimeframes(
+      market?.ohlcSymbol ?? DEFAULT_OHLC
+    )
+    if (!allowedTimeframes?.length) return available
+    return allowedTimeframes.filter((tf) => available.includes(tf))
+  }, [allowedTimeframes, market?.ohlcSymbol])
 
   useEffect(() => {
     if (market || !marketsQuery.data?.length) return

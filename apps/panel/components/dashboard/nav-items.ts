@@ -18,7 +18,12 @@ export type NavItem = {
 
 export const navItems: NavItem[] = [
   { title: "نبض بازار", href: "/market-pulse", icon: Activity, enabled: true },
-  { title: "تحلیل بازار", href: "#", icon: LineChart, enabled: false },
+  {
+    title: "تحلیل بازار",
+    href: "/market-analysis",
+    icon: LineChart,
+    enabled: true,
+  },
   { title: "سناریوها", href: "#", icon: Network, enabled: false },
   { title: "سبد ریسک", href: "#", icon: Shield, enabled: false },
   { title: "سبد من", href: "#", icon: Briefcase, enabled: false },

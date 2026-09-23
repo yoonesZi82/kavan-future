@@ -40,6 +40,14 @@ export const TIMEFRAME_OPTIONS: { value: ChartTimeframe; label: string }[] = [
   { value: "All", label: "همه" },
 ]
 
+/** Panel charts: 1h / 4h / 1D / 1W only */
+export const PANEL_CHART_TIMEFRAMES: readonly ChartTimeframe[] = [
+  "1h",
+  "4h",
+  "1D",
+  "1W",
+]
+
 export const RANGE_OPTIONS: { value: RangeKey; label: string }[] = [
   { value: "1D", label: "۱روز" },
   { value: "5D", label: "۵روز" },

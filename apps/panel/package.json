@@ -16,6 +16,7 @@
     "@tanstack/react-query-devtools": "^5.103.1",
     "@workspace/ui": "workspace:*",
     "axios": "^1.20.0",
+    "chart.js": "^4.5.1",
     "framer-motion": "^13.4.0",
     "lightweight-charts": "^5.2.1",
     "lightweight-charts-drawing": "0.1.1",
@@ -23,6 +24,7 @@
     "next": "16.3.3",
     "next-themes": "^0.4.6",
     "react": "19.2.4",
+    "react-chartjs-2": "^5.3.1",
     "react-dom": "19.2.4"
   },
   "devDependencies": {

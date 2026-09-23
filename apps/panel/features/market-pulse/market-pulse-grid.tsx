@@ -2,6 +2,7 @@
 
 import { AlertsPanel } from "@/features/market-pulse/alerts-panel"
 import { ChartPanel } from "@/features/market-pulse/chart-panel"
+import { PANEL_CHART_TIMEFRAMES } from "@/features/market-pulse/chart-options"
 import { MajorIndicesPanel } from "@/features/market-pulse/major-indices-panel"
 import { MarketFlowPanel } from "@/features/market-pulse/market-flow-panel"
 import { useChartControls } from "@/features/market-pulse/use-chart-controls"
@@ -15,7 +16,10 @@ const HERO_HEIGHT = "h-[400px] md:h-[460px]"
 const FIT_CELL = "min-h-0 w-full self-start"
 
 export function MarketPulseGrid() {
-  const controls = useChartControls()
+  const controls = useChartControls({
+    allowedTimeframes: PANEL_CHART_TIMEFRAMES,
+    defaultTimeframe: "1h",
+  })
 
   return (
     <div className="flex w-full min-w-0 flex-col gap-4 overflow-x-hidden md:gap-5">
