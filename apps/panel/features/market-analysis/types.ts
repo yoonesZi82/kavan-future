@@ -1,4 +1,4 @@
-export type DecisionAlertTone = "danger" | "success"
+export type DecisionAlertTone = "danger" | "warning" | "success"
 
 export type DecisionAlert = {
   id: string

@@ -2,8 +2,7 @@ import { Vazirmatn } from "next/font/google"
 import "@workspace/ui/globals.css"
 import { createRootMetadata } from "@/lib/seo/create-metadata"
 import { cn } from "@workspace/ui/lib/utils"
-import { SiteHeader } from "@/components/layout/site-header"
-import { SiteFooter } from "@/components/layout/site-footer"
+import { SiteChrome } from "@/components/layout/site-chrome"
 import { AppProviders } from "@/components/providers/app-providers"
 
 const vazirmatn = Vazirmatn({
@@ -13,7 +12,7 @@ const vazirmatn = Vazirmatn({
 
 export const metadata = createRootMetadata()
 
-// * Root chrome: header + footer once for all marketing routes
+// * Root chrome: marketing header/footer; auth routes go full-bleed
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -28,11 +27,7 @@ export default function RootLayout({
     >
       <body>
         <AppProviders>
-          <div className="flex min-h-svh flex-col bg-background">
-            <SiteHeader />
-            <div className="flex flex-1 flex-col">{children}</div>
-            <SiteFooter />
-          </div>
+          <SiteChrome>{children}</SiteChrome>
         </AppProviders>
       </body>
     </html>

@@ -73,7 +73,7 @@ export function HeroSection() {
             height={1000}
             sizes="(max-width: 1024px) 100vw, 50vw"
             priority
-            className="h-auto w-full"
+            className="h-auto w-full rounded-xl"
           />
         </div>
       </div>

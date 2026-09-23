@@ -1,6 +1,7 @@
 "use client"
 
-import { ArrowUpRight, TriangleAlert } from "lucide-react"
+import { useState } from "react"
+import { ChevronDown } from "lucide-react"
 import {
   Card,
   CardContent,
@@ -9,7 +10,10 @@ import {
 } from "@workspace/ui/components/card"
 import { cn } from "@workspace/ui/lib/utils"
 import { DECISION_ALERTS } from "@/features/market-analysis/mock-data"
-import type { DecisionAlert } from "@/features/market-analysis/types"
+import type {
+  DecisionAlert,
+  DecisionAlertTone,
+} from "@/features/market-analysis/types"
 
 const VALUE_TONE: Record<
   NonNullable<DecisionAlert["rows"][number]["valueTone"]>,
@@ -20,43 +24,93 @@ const VALUE_TONE: Record<
   muted: "text-foreground",
 }
 
-function DecisionAlertCard({ alert }: { alert: DecisionAlert }) {
-  const isDanger = alert.tone === "danger"
+const TONE_DOT: Record<DecisionAlertTone, string> = {
+  danger: "bg-loss",
+  warning: "bg-amber-500",
+  success: "bg-gain",
+}
+
+const TONE_TEXT: Record<DecisionAlertTone, string> = {
+  danger: "text-loss",
+  warning: "text-amber-600 dark:text-amber-400",
+  success: "text-gain",
+}
+
+const TONE_CARD: Record<DecisionAlertTone, string> = {
+  danger: "border-loss/30 bg-loss/5",
+  warning: "border-amber-500/30 bg-amber-500/5",
+  success: "border-gain/30 bg-gain/5",
+}
+
+function StatusPulse({ tone }: { tone: DecisionAlertTone }) {
+  const color = TONE_DOT[tone]
+  return (
+    <span className="relative flex size-2 shrink-0" aria-hidden>
+      <span
+        className={cn(
+          "absolute inline-flex size-full animate-ping rounded-full opacity-75",
+          color
+        )}
+      />
+      <span className={cn("relative inline-flex size-2 rounded-full", color)} />
+    </span>
+  )
+}
+
+function DecisionAlertCard({
+  alert,
+  defaultOpen,
+}: {
+  alert: DecisionAlert
+  defaultOpen: boolean
+}) {
+  const [isOpen, setIsOpen] = useState(defaultOpen)
+
   return (
     <article
-      className={cn(
-        "rounded-lg border px-3 py-2.5",
-        isDanger
-          ? "border-loss/30 bg-loss/5"
-          : "border-gain/30 bg-gain/5"
-      )}
+      className={cn("overflow-hidden rounded-lg border", TONE_CARD[alert.tone])}
     >
-      <div className="mb-2 flex items-center gap-2">
-        {isDanger ? (
-          <TriangleAlert className="size-4 shrink-0 text-loss" aria-hidden />
-        ) : (
-          <ArrowUpRight className="size-4 shrink-0 text-gain" aria-hidden />
+      <button
+        type="button"
+        aria-expanded={isOpen}
+        onClick={() => setIsOpen((value) => !value)}
+        className={cn(
+          "flex w-full cursor-pointer items-center gap-2 px-3 py-2.5 text-start",
+          isOpen && "border-b border-border/80"
         )}
+      >
+        <StatusPulse tone={alert.tone} />
         <h3
           className={cn(
-            "text-sm font-medium",
-            isDanger ? "text-loss" : "text-gain"
+            "min-w-0 flex-1 text-sm font-medium",
+            TONE_TEXT[alert.tone]
           )}
         >
           {alert.title}
         </h3>
-      </div>
-      <dl className="space-y-1.5">
-        {alert.rows.map((row) => (
-          <div
-            key={row.label}
-            className="flex items-center justify-between gap-2 text-xs"
-          >
-            <dt className="text-muted-foreground">{row.label}</dt>
-            <dd className={VALUE_TONE[row.valueTone ?? "muted"]}>{row.value}</dd>
-          </div>
-        ))}
-      </dl>
+        <ChevronDown
+          className={cn(
+            "ms-auto size-4 shrink-0 text-muted-foreground transition-transform duration-200",
+            isOpen && "rotate-180"
+          )}
+          aria-hidden
+        />
+      </button>
+      {isOpen ? (
+        <dl className="flex flex-col px-3 py-1">
+          {alert.rows.map((row) => (
+            <div
+              key={row.label}
+              className="flex items-center justify-between gap-2 border-b border-dashed border-border/70 py-2 text-xs last:border-b-0"
+            >
+              <dt className="text-muted-foreground">{row.label}</dt>
+              <dd className={VALUE_TONE[row.valueTone ?? "muted"]}>
+                {row.value}
+              </dd>
+            </div>
+          ))}
+        </dl>
+      ) : null}
     </article>
   )
 }
@@ -69,9 +123,13 @@ export function DecisionAlertsPanel() {
           هشدارهای تصمیم‌گیری (پلار)
         </CardTitle>
       </CardHeader>
-      <CardContent className="min-h-0 flex-1 space-y-2.5 overflow-y-auto px-3 py-3">
-        {DECISION_ALERTS.map((alert) => (
-          <DecisionAlertCard key={alert.id} alert={alert} />
+      <CardContent className="flex min-h-0 flex-1 flex-col gap-2.5 overflow-y-auto px-3 py-3">
+        {DECISION_ALERTS.map((alert, index) => (
+          <DecisionAlertCard
+            key={alert.id}
+            alert={alert}
+            defaultOpen={index === 0}
+          />
         ))}
       </CardContent>
     </Card>

@@ -8,8 +8,8 @@ import { Input } from "@workspace/ui/components/input"
 import { SidebarTrigger } from "@workspace/ui/components/sidebar"
 import { DASHBOARD_HEADER_HEIGHT_CLASS } from "@/components/dashboard/chrome"
 import { MarketStatus } from "@/components/dashboard/market-status"
-import { ThemeToggle } from "@/components/dashboard/theme-toggle"
 import { useGlobalSearch } from "@/components/dashboard/global-search-context"
+import { AnimatedThemeToggler } from "@workspace/ui/components/animated-theme-toggler"
 
 const dateFormatter = new Intl.DateTimeFormat("fa-IR", {
   weekday: "long",
@@ -32,7 +32,7 @@ export function AppHeader() {
   }, [])
 
   return (
-    <header className="sticky top-0 z-20 w-full border-b border-border bg-background/90 backdrop-blur">
+    <header className="sticky top-0 z-30 w-full border-b border-border bg-background/90 backdrop-blur supports-backdrop-filter:bg-background/80">
       <div
         className={`flex w-full items-center justify-between gap-2 px-3 sm:gap-3 sm:px-4 md:gap-4 md:px-6 ${DASHBOARD_HEADER_HEIGHT_CLASS}`}
       >
@@ -72,7 +72,7 @@ export function AppHeader() {
           >
             <MaximizeIcon />
           </Button>
-          <ThemeToggle />
+          <AnimatedThemeToggler />
           <Button
             variant="ghost"
             size="icon-sm"

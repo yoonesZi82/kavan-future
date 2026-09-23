@@ -1,18 +1,20 @@
-import { PlaceholderLayout } from "@/components/placeholder-layout"
 import { createMetadata } from "@/lib/seo/create-metadata"
+import { AuthShell } from "@/components/auth/auth-shell"
+import { RegisterForm } from "@/components/auth/register-form"
 
+// * Register demo UI — no real auth yet; full-bleed via SiteChrome
 export const metadata = createMetadata({
   title: "ثبت‌نام",
-  description: "ساخت حساب کاربری در آگاه پرداز پارس.",
+  description:
+    "ساخت حساب رایگان در آگاه پرداز پارس و دسترسی به داشبورد تحلیل و هشدارهای تصمیم‌گیری.",
   path: "/register",
   noIndex: true,
 })
 
 export default function RegisterPage() {
   return (
-    <PlaceholderLayout
-      title="صفحه ثبت‌نام"
-      description="به‌زودی می‌توانید به‌صورت رایگان در پلتفرم آگاه پرداز پارس ثبت‌نام کنید و از امکانات آن استفاده نمایید."
-    />
+    <AuthShell mode="register">
+      <RegisterForm />
+    </AuthShell>
   )
 }

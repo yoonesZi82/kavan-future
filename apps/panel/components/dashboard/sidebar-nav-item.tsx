@@ -2,6 +2,7 @@
 
 import Link from "next/link"
 import { motion } from "framer-motion"
+import { useSidebar } from "@workspace/ui/components/sidebar"
 import { cn } from "@workspace/ui/lib/utils"
 import type { NavItem } from "@/components/dashboard/nav-items"
 
@@ -13,6 +14,8 @@ type SidebarNavItemProps = {
 const ACTIVE_SPRING = { type: "spring" as const, stiffness: 380, damping: 30 }
 
 export function SidebarNavItem({ item, isActive }: SidebarNavItemProps) {
+  const { isMobile, setOpenMobile } = useSidebar()
+
   const content = (
     <>
       {isActive ? (
@@ -37,7 +40,7 @@ export function SidebarNavItem({ item, isActive }: SidebarNavItemProps) {
   )
 
   const className = cn(
-    "relative flex h-9 w-full items-center gap-2 overflow-hidden rounded-md px-2 text-sm transition-colors",
+    "relative flex h-9 w-full cursor-pointer items-center gap-2 overflow-hidden rounded-md px-2 text-sm transition-colors",
     "group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:gap-0 group-data-[collapsible=icon]:p-0!",
     isActive
       ? "font-medium text-sidebar-primary"
@@ -54,6 +57,9 @@ export function SidebarNavItem({ item, isActive }: SidebarNavItemProps) {
       href={item.href}
       className={className}
       aria-current={isActive ? "page" : undefined}
+      onClick={() => {
+        if (isMobile) setOpenMobile(false)
+      }}
     >
       {content}
     </Link>
