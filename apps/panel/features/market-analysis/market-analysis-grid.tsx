@@ -1,46 +1,94 @@
 "use client"
 
-import { AssetAnalysisPanel } from "@/features/market-analysis/asset/asset-analysis"
-import { DecisionAlertsPanel } from "@/features/market-analysis/alerts/decision-alerts"
-import { MyAlertsPanel } from "@/features/market-analysis/alerts/my-alerts"
+import { useEffect, useState } from "react"
+import { ActiveAlertsPanel } from "@/features/market-analysis/alerts/active-alerts"
+import { pickMarketForCategory } from "@/features/market-analysis/category-markets"
+import { CategoryTabs } from "@/features/market-analysis/category-tabs"
+import { AnalysisDetailsPanel } from "@/features/market-analysis/details/analysis-details"
+import { SelectedIndicatorChart } from "@/features/market-analysis/details/selected-indicator-chart"
+import { ANALYSIS_INDICATORS } from "@/features/market-analysis/mock-data"
 import { ReturnsChart } from "@/features/market-analysis/returns/returns-chart"
+import { AnalysisSidebar } from "@/features/market-analysis/signal/analysis-sidebar"
+import { CrisisBreakoutPanel } from "@/features/market-analysis/signal/crisis-panel"
+import type { MarketCategory } from "@/features/market-analysis/types"
 import { ChartPanel } from "@/features/market-pulse/chart/chart-panel"
 import { PANEL_CHART_TIMEFRAMES } from "@/features/market-pulse/chart/chart-options"
 import { useChartControls } from "@/features/market-pulse/chart/use-chart-controls"
+import { useMarketsQuery } from "@/features/market-pulse/data/hooks"
 
-const HERO = "h-[400px] md:h-[460px]"
-const BOTTOM = "min-h-[280px] md:min-h-[320px]"
+const CELL = "min-h-[280px] w-full min-w-0 p-px md:min-h-[320px]"
 
 export function MarketAnalysisGrid() {
+  const [category, setCategory] = useState<MarketCategory>("all")
+  const [selectedIndicatorId, setSelectedIndicatorId] = useState(
+    ANALYSIS_INDICATORS[0]?.id ?? ""
+  )
+  const marketsQuery = useMarketsQuery()
   const controls = useChartControls({
     allowedTimeframes: PANEL_CHART_TIMEFRAMES,
-    defaultTimeframe: "1D",
+    defaultTimeframe: "1h",
   })
+
+  // * Tab → chart: pick a market in that category (real OHLC when API has it)
+  useEffect(() => {
+    const markets = marketsQuery.data
+    if (!markets?.length) return
+    const next = pickMarketForCategory(markets, category)
+    if (!next || next.id === controls.marketId) return
+    controls.selectMarket(next)
+  }, [category, marketsQuery.data, controls.marketId, controls.selectMarket])
 
   return (
     <div className="flex w-full min-w-0 flex-col gap-4 overflow-x-hidden md:gap-5">
-      {/* * Market analysis: TV chart + Chart.js returns + Polar decision alerts */}
+      {/* * Market analysis layout — chart+signals, then returns/alerts/crisis, then details */}
+      <CategoryTabs value={category} onChange={setCategory} />
+
       <div
         className={[
           "grid w-full min-w-0 grid-cols-1 gap-4 md:gap-5",
-          "xl:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)_minmax(240px,0.72fr)]",
-          "xl:grid-rows-[minmax(400px,460px)_minmax(280px,auto)]",
+          "xl:grid-cols-[minmax(0,1.7fr)_minmax(280px,0.85fr)]",
         ].join(" ")}
       >
-        <div className={`min-h-0 w-full min-w-0 p-px ${HERO} xl:h-full xl:min-h-0`}>
+        {/* * xl: row height from sidebar; chart stretches to match */}
+        <div className="h-[300px] min-h-0 w-full min-w-0 p-px md:h-[320px] xl:h-full">
           <ChartPanel controls={controls} />
         </div>
-        <div className={`min-h-0 w-full min-w-0 p-px ${HERO} xl:h-full xl:min-h-0`}>
+        <div className="w-full min-w-0 p-px xl:h-full">
+          <AnalysisSidebar />
+        </div>
+      </div>
+
+      <div
+        className={[
+          "grid w-full min-w-0 grid-cols-1 gap-4 md:gap-5",
+          "xl:grid-cols-3",
+        ].join(" ")}
+      >
+        <div className={CELL}>
           <ReturnsChart />
         </div>
-        <div className={`min-h-0 w-full min-w-0 p-px ${HERO} xl:row-span-2 xl:h-full xl:min-h-0`}>
-          <DecisionAlertsPanel />
+        <div className={CELL}>
+          <ActiveAlertsPanel />
         </div>
-        <div className={`min-h-0 w-full min-w-0 p-px ${BOTTOM} xl:h-full xl:min-h-0`}>
-          <MyAlertsPanel />
+        <div className={CELL}>
+          <CrisisBreakoutPanel />
         </div>
-        <div className={`min-h-0 w-full min-w-0 p-px ${BOTTOM} xl:h-full xl:min-h-0`}>
-          <AssetAnalysisPanel />
+      </div>
+
+      <div
+        className={[
+          "grid w-full min-w-0 grid-cols-1 gap-4 md:gap-5",
+          "xl:grid-cols-2",
+        ].join(" ")}
+      >
+        <div className={CELL}>
+          <AnalysisDetailsPanel
+            selectedId={selectedIndicatorId}
+            onSelect={setSelectedIndicatorId}
+          />
+        </div>
+        <div className={CELL}>
+          <SelectedIndicatorChart selectedId={selectedIndicatorId} />
         </div>
       </div>
     </div>

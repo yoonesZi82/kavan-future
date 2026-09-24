@@ -91,6 +91,7 @@ export function ChartPanel({ controls }: ChartPanelProps) {
           isMagnet={controls.isMagnet}
           isLocked={controls.isLocked}
           drawingsVisible={controls.drawingsVisible}
+          canUndo={controls.canUndo}
           onSelect={controls.handleDrawingTool}
         />
         <div className="relative flex min-w-0 flex-1 flex-col">
@@ -103,13 +104,18 @@ export function ChartPanel({ controls }: ChartPanelProps) {
             range={controls.range}
             indicators={controls.indicators}
             compareSymbol={controls.compareSymbol}
-            activeTool={controls.drawingTool}
+            drawingType={controls.drawingType}
+            drawingPayload={controls.drawingPayload}
+            drawingAsIcon={controls.drawingAsIcon}
             drawingsVisible={controls.drawingsVisible}
             drawingsVersion={controls.drawingsVersion}
+            undoVersion={controls.undoVersion}
             isMagnet={controls.isMagnet}
             isLocked={controls.isLocked}
             showGrid={controls.showSettings}
             onHoverCandle={setHoverCandle}
+            onCanUndoChange={controls.setCanUndo}
+            onStatus={controls.flashStatus}
           />
         </div>
       </div>

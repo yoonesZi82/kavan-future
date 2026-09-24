@@ -5,7 +5,6 @@ import {
   CategoryScale,
   Chart as ChartJS,
   Filler,
-  Legend,
   LinearScale,
   LineElement,
   PointElement,
@@ -14,7 +13,7 @@ import {
   type ChartOptions,
 } from "chart.js"
 import { Line } from "react-chartjs-2"
-import { Info, Search } from "lucide-react"
+import { Crosshair } from "lucide-react"
 import { Button } from "@workspace/ui/components/button"
 import {
   Card,
@@ -22,7 +21,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@workspace/ui/components/card"
-import { Input } from "@workspace/ui/components/input"
 import { cn } from "@workspace/ui/lib/utils"
 import {
   RETURNS_LABELS,
@@ -37,7 +35,6 @@ ChartJS.register(
   PointElement,
   LineElement,
   Tooltip,
-  Legend,
   Filler
 )
 
@@ -45,27 +42,16 @@ const RANGE_LABELS: Record<ReturnsRange, string> = {
   "1M": "۱ماه",
   "3M": "۳ماه",
   "6M": "۶ماه",
-  YTD: "از اول سال",
   "1Y": "۱سال",
-  ALL: "همه",
 }
 
 export function ReturnsChart() {
   const [range, setRange] = useState<ReturnsRange>("1M")
-  const [query, setQuery] = useState("")
-
-  const series = useMemo(() => {
-    const q = query.trim().toLowerCase()
-    if (!q) return RETURNS_SERIES
-    return RETURNS_SERIES.filter((item) =>
-      item.label.toLowerCase().includes(q)
-    )
-  }, [query])
 
   const data: ChartData<"line"> = useMemo(
     () => ({
       labels: RETURNS_LABELS,
-      datasets: series.map((item) => ({
+      datasets: RETURNS_SERIES.map((item) => ({
         label: item.label,
         data: item.data,
         borderColor: item.color,
@@ -77,7 +63,7 @@ export function ReturnsChart() {
         fill: false,
       })),
     }),
-    [series]
+    []
   )
 
   const options: ChartOptions<"line"> = useMemo(
@@ -101,14 +87,12 @@ export function ReturnsChart() {
       },
       scales: {
         x: {
-          grid: { color: "rgba(0,0,0,0.04)" },
+          grid: { color: "rgba(128,128,128,0.08)" },
           ticks: { color: "#94a3b8", font: { size: 10 } },
           border: { display: false },
         },
         y: {
-          min: -12,
-          max: 12,
-          grid: { color: "rgba(0,0,0,0.06)" },
+          grid: { color: "rgba(128,128,128,0.1)" },
           ticks: {
             color: "#94a3b8",
             font: { size: 10 },
@@ -123,59 +107,45 @@ export function ReturnsChart() {
 
   return (
     <Card className="flex h-full flex-col gap-0 overflow-hidden py-0 ring-inset">
-      <CardHeader className="gap-3 border-b border-border px-3 py-3">
+      <CardHeader className="gap-2 border-b border-border px-3 py-3">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <div className="flex items-center gap-1.5">
-            <CardTitle className="text-sm md:text-base">
-              بازدهی ماهانه دارایی‌ها
-            </CardTitle>
-            <Info className="size-3.5 text-muted-foreground" aria-hidden />
+            <Crosshair className="size-3.5 text-muted-foreground" aria-hidden />
+            <CardTitle className="text-sm md:text-base">بازدهی دارایی‌ها</CardTitle>
           </div>
-          <div className="relative w-full max-w-[200px] sm:w-48">
-            <Search className="pointer-events-none absolute start-2.5 top-1/2 size-3.5 -translate-y-1/2 text-muted-foreground" />
-            <Input
-              value={query}
-              onValueChange={setQuery}
-              placeholder="جستجو در دارایی‌ها..."
-              className="h-8 ps-8 text-xs"
-              aria-label="جستجو در دارایی‌ها"
-            />
+          <div className="flex flex-wrap items-center gap-1">
+            {RETURNS_RANGES.map((key) => (
+              <Button
+                key={key}
+                type="button"
+                size="sm"
+                variant={range === key ? "secondary" : "ghost"}
+                className={cn("h-7 px-2 text-[11px]", range === key && "font-medium")}
+                onClick={() => setRange(key)}
+              >
+                {RANGE_LABELS[key]}
+              </Button>
+            ))}
           </div>
         </div>
-        <ul className="flex flex-wrap items-center gap-x-3 gap-y-1">
-          {RETURNS_SERIES.map((item) => (
-            <li key={item.id} className="flex items-center gap-1.5 text-[11px]">
-              <span
-                className="size-2 shrink-0 rounded-full"
-                style={{ backgroundColor: item.color }}
-              />
-              <span className="text-muted-foreground">{item.label}</span>
-            </li>
-          ))}
-        </ul>
       </CardHeader>
       <CardContent className="min-h-0 flex-1 px-3 py-2">
-        <div className="h-full min-h-[220px]">
+        <div className="h-full min-h-[180px]">
           <Line data={data} options={options} />
         </div>
       </CardContent>
-      <div className="flex flex-wrap items-center gap-1 border-t border-border px-2 py-2">
-        {RETURNS_RANGES.map((key) => (
-          <Button
-            key={key}
-            type="button"
-            size="sm"
-            variant={range === key ? "secondary" : "ghost"}
-            className={cn(
-              "h-7 px-2 text-[11px]",
-              range === key && "font-medium"
-            )}
-            onClick={() => setRange(key)}
-          >
-            {RANGE_LABELS[key]}
-          </Button>
+      <ul className="flex flex-wrap items-center gap-x-3 gap-y-1 border-t border-border px-3 py-2">
+        {RETURNS_SERIES.map((item) => (
+          <li key={item.id} className="flex items-center gap-1.5 text-[11px]">
+            <span
+              className="size-2 shrink-0 rounded-full"
+              style={{ backgroundColor: item.color }}
+            />
+            <span className="text-muted-foreground">{item.label}</span>
+            <span className="font-medium text-gain tabular-nums">{item.change}</span>
+          </li>
         ))}
-      </div>
+      </ul>
     </Card>
   )
 }

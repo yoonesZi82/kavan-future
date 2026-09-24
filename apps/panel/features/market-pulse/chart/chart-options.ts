@@ -27,6 +27,7 @@ export type DrawingToolId =
   | "magnet"
   | "lock"
   | "hide"
+  | "undo"
   | "trash"
 
 export const TIMEFRAME_OPTIONS: { value: ChartTimeframe; label: string }[] = [

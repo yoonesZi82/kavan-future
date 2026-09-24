@@ -37,7 +37,7 @@ export function AppHeader() {
         className={`flex w-full items-center justify-between gap-2 px-3 sm:gap-3 sm:px-4 md:gap-4 md:px-6 ${DASHBOARD_HEADER_HEIGHT_CLASS}`}
       >
         <div className="flex min-w-0 shrink-0 items-center gap-2">
-          <SidebarTrigger />
+          <SidebarTrigger className="hidden md:inline-flex" />
           <div className="min-w-0 leading-tight">
             <p className="truncate text-sm font-semibold">آینده‌کاوان</p>
             <p className="hidden min-h-[14px] text-[11px] text-muted-foreground md:block">

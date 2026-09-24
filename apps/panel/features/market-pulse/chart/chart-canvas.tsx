@@ -14,7 +14,6 @@ import {
 } from "lightweight-charts"
 import type {
   ChartType,
-  DrawingToolId,
   IndicatorId,
   RangeKey,
   ScaleMode,
@@ -34,13 +33,18 @@ type ChartCanvasProps = {
   range: RangeKey
   indicators: IndicatorId[]
   compareSymbol: string | null
-  activeTool: DrawingToolId
+  drawingType: string | null
+  drawingPayload: string | null
+  drawingAsIcon: boolean
   drawingsVisible: boolean
   drawingsVersion: number
+  undoVersion: number
   isMagnet: boolean
   isLocked: boolean
   showGrid: boolean
   onHoverCandle: (candle: CandlePoint | null) => void
+  onCanUndoChange: (canUndo: boolean) => void
+  onStatus?: (message: string) => void
 }
 
 type ExtraSeries = {
@@ -67,13 +71,18 @@ export function ChartCanvas(props: ChartCanvasProps) {
     range,
     indicators,
     compareSymbol,
-    activeTool,
+    drawingType,
+    drawingPayload,
+    drawingAsIcon,
     drawingsVisible,
     drawingsVersion,
+    undoVersion,
     isMagnet,
     isLocked,
     showGrid,
     onHoverCandle,
+    onCanUndoChange,
+    onStatus,
   } = props
   const containerRef = useRef<HTMLDivElement | null>(null)
   const extrasRef = useRef<ExtraSeries>(EMPTY_EXTRAS)
@@ -90,10 +99,17 @@ export function ChartCanvas(props: ChartCanvasProps) {
     chart,
     series: main?.series ?? null,
     container,
-    activeTool,
+    drawingType,
+    drawingPayload,
+    drawingAsIcon,
     isLocked,
+    isMagnet,
     drawingsVisible,
     drawingsVersion,
+    undoVersion,
+    candles: data,
+    onCanUndoChange,
+    onStatus,
   })
   useChartView({
     chart,

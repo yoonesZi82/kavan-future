@@ -13,6 +13,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from "@workspace/ui/components/sidebar"
 import { DASHBOARD_HEADER_HEIGHT_CLASS } from "@/components/dashboard/chrome"
 import { navItems } from "@/components/dashboard/nav-items"
@@ -22,6 +23,10 @@ import { SidebarSearch } from "@/components/dashboard/sidebar-search"
 
 export function AppSidebar() {
   const pathname = usePathname()
+  const { isMobile } = useSidebar()
+
+  // * Mobile uses floating dock instead of Sheet sidebar
+  if (isMobile) return null
 
   return (
     <Sidebar

@@ -4,90 +4,121 @@ import { useEffect, useRef } from "react"
 import type { IChartApi, ISeriesApi, SeriesType } from "lightweight-charts"
 import {
   DrawingManager,
-  getToolRegistry,
   type Anchor,
   type IDrawing,
 } from "lightweight-charts-drawing"
-import type { DrawingToolId } from "@/features/market-pulse/chart/chart-options"
+import { bindDrawingPointers } from "@/features/market-pulse/chart/chart-drawing-pointers"
 import {
-  DRAWING_TOOL_TYPE,
-  getDrawingStyle,
-} from "@/features/market-pulse/chart/chart-drawing-map"
-
-const PREVIEW_ID = "__preview__"
+  applySlopeLineColor,
+  handleDrawingHotkey,
+  PREVIEW_ID,
+  removePreviewDrawing,
+} from "@/features/market-pulse/chart/chart-drawing-session"
+import { createDrawingUndoStack } from "@/features/market-pulse/chart/chart-drawing-undo"
+import type { CandlePoint } from "@/features/market-pulse/types"
 
 type UseChartDrawingArgs = {
   chart: IChartApi | null
   series: ISeriesApi<SeriesType> | null
   container: HTMLElement | null
-  activeTool: DrawingToolId
+  drawingType: string | null
+  drawingPayload: string | null
+  drawingAsIcon: boolean
   isLocked: boolean
+  isMagnet: boolean
   drawingsVisible: boolean
   drawingsVersion: number
+  undoVersion: number
+  candles: CandlePoint[] | undefined
+  onCanUndoChange: (canUndo: boolean) => void
+  onStatus?: (message: string) => void
 }
 
-function pointToAnchor(
-  chart: IChartApi,
-  series: ISeriesApi<SeriesType>,
-  container: HTMLElement,
-  clientX: number,
-  clientY: number
-): Anchor | null {
-  const rect = container.getBoundingClientRect()
-  const x = clientX - rect.left
-  const y = clientY - rect.top
-  const time = chart.timeScale().coordinateToTime(x)
-  const price = series.coordinateToPrice(y)
-  if (time === null || price === null) return null
-  return { time, price }
-}
-
-export function useChartDrawing({
-  chart,
-  series,
-  container,
-  activeTool,
-  isLocked,
-  drawingsVisible,
-  drawingsVersion,
-}: UseChartDrawingArgs): void {
+export function useChartDrawing(args: UseChartDrawingArgs): void {
+  const {
+    chart,
+    series,
+    container,
+    drawingType,
+    drawingPayload,
+    drawingAsIcon,
+    isLocked,
+    isMagnet,
+    drawingsVisible,
+    drawingsVersion,
+    undoVersion,
+    candles,
+    onCanUndoChange,
+    onStatus,
+  } = args
   const managerRef = useRef<DrawingManager | null>(null)
   const pendingRef = useRef<Anchor[]>([])
   const previewRef = useRef<IDrawing | null>(null)
   const idCounterRef = useRef(0)
-  const toolType = DRAWING_TOOL_TYPE[activeTool] ?? null
+  const liveRef = useRef({
+    drawingType,
+    drawingPayload,
+    drawingAsIcon,
+    isLocked,
+    isMagnet,
+    drawingsVisible,
+    candles,
+    onCanUndoChange,
+    onStatus,
+  })
+  Object.assign(liveRef.current, {
+    drawingType,
+    drawingPayload,
+    drawingAsIcon,
+    isLocked,
+    isMagnet,
+    drawingsVisible,
+    candles,
+    onCanUndoChange,
+    onStatus,
+  })
+  const undoStack = useRef(
+    createDrawingUndoStack((canUndo) => liveRef.current.onCanUndoChange(canUndo))
+  ).current
+
+  const performUndo = (): boolean => {
+    const manager = managerRef.current
+    const drawingId = undoStack.pop()
+    if (!manager || !drawingId) return false
+    manager.removeDrawing(drawingId)
+    return true
+  }
 
   useEffect(() => {
     if (!chart || !series || !container) return
     const manager = new DrawingManager()
     manager.attach(chart, series, container)
     managerRef.current = manager
+    undoStack.clear()
+    const unsubUpdated = manager.on("drawing:updated", (event) => {
+      const drawing = event.drawing
+      if (!drawing || drawing.id === PREVIEW_ID) return
+      applySlopeLineColor(drawing, drawing.type)
+    })
     return () => {
+      unsubUpdated()
       manager.clearAll()
       manager.detach()
       managerRef.current = null
       pendingRef.current = []
       previewRef.current = null
+      undoStack.clear()
     }
-  }, [chart, series, container])
+  }, [chart, series, container, undoStack])
 
   useEffect(() => {
     const manager = managerRef.current
     if (!manager) return
     for (const drawing of manager.getAllDrawings()) {
       if (drawing.id === PREVIEW_ID) continue
-      drawing.updateOptions({ locked: isLocked })
+      drawing.updateOptions({ locked: isLocked, visible: drawingsVisible })
     }
-  }, [isLocked])
-
-  useEffect(() => {
-    const manager = managerRef.current
-    if (!manager) return
-    for (const drawing of manager.getAllDrawings()) {
-      if (drawing.id === PREVIEW_ID) continue
-      drawing.updateOptions({ visible: drawingsVisible })
-    }
-  }, [drawingsVisible])
+  }, [isLocked, drawingsVisible])
 
   useEffect(() => {
     const manager = managerRef.current
@@ -95,105 +126,68 @@ export function useChartDrawing({
     manager.clearAll()
     pendingRef.current = []
     previewRef.current = null
-  }, [drawingsVersion])
+    undoStack.clear()
+  }, [drawingsVersion, undoStack])
+
+  useEffect(() => {
+    if (undoVersion === 0) return
+    performUndo()
+  }, [undoVersion])
 
   useEffect(() => {
     pendingRef.current = []
     const manager = managerRef.current
-    if (manager && previewRef.current) {
-      manager.removeDrawing(PREVIEW_ID)
-      previewRef.current = null
+    if (manager) {
+      previewRef.current = removePreviewDrawing(manager, previewRef.current)
     }
-    manager?.setActiveTool(toolType)
-  }, [toolType])
+    manager?.setActiveTool(drawingType)
+    if (container) container.style.cursor = drawingType ? "crosshair" : ""
+  }, [drawingType, container])
 
   useEffect(() => {
-    if (!chart || !series || !container || !toolType) return
+    if (!chart || !series || !drawingType) return
     const manager = managerRef.current
     if (!manager) return
-    const registry = getToolRegistry()
-
-    const removePreview = () => {
-      if (!previewRef.current) return
-      manager.removeDrawing(PREVIEW_ID)
-      previewRef.current = null
-    }
-
-    const syncPreview = (anchors: Anchor[]) => {
-      const required = registry.get(toolType)?.requiredAnchors ?? 2
-      const previewAnchors = [...anchors]
-      while (previewAnchors.length < required) {
-        const last = previewAnchors[previewAnchors.length - 1]
-        if (!last) break
-        previewAnchors.push({ ...last })
-      }
-      removePreview()
-      const drawing = registry.createDrawing(
-        toolType,
-        PREVIEW_ID,
-        previewAnchors,
-        getDrawingStyle(toolType)
-      )
-      if (!drawing) return
-      manager.addDrawing(drawing)
-      previewRef.current = drawing
-    }
-
-    const onClick = (event: MouseEvent) => {
-      if (isLocked) return
-      const anchor = pointToAnchor(chart, series, container, event.clientX, event.clientY)
-      if (!anchor) return
-      pendingRef.current = [...pendingRef.current, anchor]
-      const required = registry.get(toolType)?.requiredAnchors ?? 2
-      if (pendingRef.current.length >= required) {
-        removePreview()
-        idCounterRef.current += 1
-        const drawing = registry.createDrawing(
-          toolType,
-          `drawing-${idCounterRef.current}`,
-          pendingRef.current,
-          getDrawingStyle(toolType),
-          { locked: isLocked, visible: drawingsVisible }
-        )
-        pendingRef.current = []
-        if (drawing) {
-          manager.addDrawing(drawing)
-          manager.selectDrawing(drawing.id)
-        }
-        return
-      }
-      syncPreview(pendingRef.current)
-    }
-
-    const onMove = (event: MouseEvent) => {
-      if (!previewRef.current || pendingRef.current.length === 0) return
-      const anchor = pointToAnchor(chart, series, container, event.clientX, event.clientY)
-      if (!anchor) return
-      previewRef.current.updateAnchor(pendingRef.current.length, anchor)
-    }
-
-    const onKey = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        removePreview()
-        pendingRef.current = []
-        return
-      }
-      if (event.key !== "Delete" && event.key !== "Backspace") return
-      if (isLocked) return
-      const selected = manager.getSelectedDrawing()
-      if (!selected || selected.id === PREVIEW_ID) return
-      manager.removeDrawing(selected.id)
-    }
-
-    container.addEventListener("click", onClick)
-    container.addEventListener("mousemove", onMove)
-    window.addEventListener("keydown", onKey)
+    const unbind = bindDrawingPointers({
+      chart,
+      series,
+      manager,
+      drawingType,
+      pendingRef,
+      previewRef,
+      idCounterRef,
+      undoStack,
+      getLive: () => liveRef.current,
+    })
     return () => {
-      container.removeEventListener("click", onClick)
-      container.removeEventListener("mousemove", onMove)
-      window.removeEventListener("keydown", onKey)
-      removePreview()
+      unbind()
+      previewRef.current = removePreviewDrawing(manager, previewRef.current)
       pendingRef.current = []
     }
-  }, [chart, series, container, toolType, isLocked, drawingsVisible])
+  }, [chart, series, drawingType, undoStack])
+
+  useEffect(() => {
+    if (!chart) return
+    const onKey = (event: KeyboardEvent) => {
+      const manager = managerRef.current
+      if (!manager) return
+      handleDrawingHotkey(
+        event,
+        manager,
+        liveRef.current.isLocked,
+        () => {
+          previewRef.current = removePreviewDrawing(manager, previewRef.current)
+          pendingRef.current = []
+        },
+        () => {
+          if (performUndo()) {
+            liveRef.current.onStatus?.("آخرین رسم برگشت خورد")
+          }
+        },
+        (drawingId) => undoStack.forget(drawingId)
+      )
+    }
+    window.addEventListener("keydown", onKey)
+    return () => window.removeEventListener("keydown", onKey)
+  }, [chart, undoStack])
 }

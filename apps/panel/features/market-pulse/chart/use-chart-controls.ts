@@ -1,6 +1,6 @@
 "use client"
 
-import { useCallback, useEffect, useMemo, useState } from "react"
+import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import type {
   ChartType,
   DrawingToolId,
@@ -8,6 +8,7 @@ import type {
   RangeKey,
   ScaleMode,
 } from "@/features/market-pulse/chart/chart-options"
+import { createDrawingToolHandler } from "@/features/market-pulse/chart/create-drawing-tool-handler"
 import { getMarketChartTimeframes } from "@/features/market-pulse/data/bitycle-timeframes"
 import { useMarketsQuery } from "@/features/market-pulse/data/hooks"
 import type { ChartTimeframe, MarketPair } from "@/features/market-pulse/types"
@@ -32,12 +33,25 @@ export function useChartControls(options: UseChartControlsOptions = {}) {
   const [chartType, setChartType] = useState<ChartType>("candle")
   const [indicators, setIndicators] = useState<IndicatorId[]>(["volume"])
   const [drawingTool, setDrawingTool] = useState<DrawingToolId>("crosshair")
+  const [drawingType, setDrawingType] = useState<string | null>(null)
+  const [drawingPayload, setDrawingPayload] = useState<string | null>(null)
+  const [drawingAsIcon, setDrawingAsIcon] = useState(false)
   const [isMagnet, setIsMagnet] = useState(false)
   const [isLocked, setIsLocked] = useState(false)
   const [drawingsVisible, setDrawingsVisible] = useState(true)
   const [drawingsVersion, setDrawingsVersion] = useState(0)
+  const [undoVersion, setUndoVersion] = useState(0)
+  const [canUndo, setCanUndo] = useState(false)
+  const canUndoRef = useRef(false)
   const [showSettings, setShowSettings] = useState(true)
   const [statusMessage, setStatusMessage] = useState<string | null>(null)
+
+  canUndoRef.current = canUndo
+
+  const setCanUndoSafe = useCallback((value: boolean) => {
+    canUndoRef.current = value
+    setCanUndo(value)
+  }, [])
 
   const market = useMemo(() => {
     return marketsQuery.data?.find((item) => item.id === marketId) ?? null
@@ -87,43 +101,23 @@ export function useChartControls(options: UseChartControlsOptions = {}) {
     )
   }, [])
 
-  const handleDrawingTool = useCallback((id: DrawingToolId) => {
-    if (id === "magnet") {
-      setIsMagnet((value) => !value)
-      setDrawingTool("crosshair")
-      return
-    }
-    if (id === "lock") {
-      setIsLocked((value) => !value)
-      return
-    }
-    if (id === "hide") {
-      setDrawingsVisible((value) => !value)
-      return
-    }
-    if (id === "trash") {
-      setDrawingsVersion((value) => value + 1)
-      setStatusMessage("رسم‌ها پاک شد")
-      return
-    }
-    if (id === "zoom") {
-      setRange("All")
-      setStatusMessage("نمای کامل چارت")
-      setDrawingTool("crosshair")
-      return
-    }
-    setDrawingTool(id)
-    const labels: Partial<Record<DrawingToolId, string>> = {
-      crosshair: "نشانگر فعال شد",
-      trend: "ابزار خط روند فعال شد",
-      fib: "ابزار فیبوناچی فعال شد",
-      shape: "اشکال هندسی فعال شد",
-      text: "ابزار متن فعال شد",
-      emoji: "آیکون‌ها فعال شد",
-      measure: "اندازه‌گیری فعال شد",
-    }
-    if (labels[id]) setStatusMessage(labels[id] ?? null)
-  }, [])
+  const handleDrawingTool = useCallback(
+    createDrawingToolHandler({
+      setIsMagnet,
+      setIsLocked,
+      setDrawingsVisible,
+      setDrawingsVersion,
+      setUndoVersion,
+      getCanUndo: () => canUndoRef.current,
+      setRange,
+      setDrawingTool,
+      setDrawingType,
+      setDrawingPayload,
+      setDrawingAsIcon,
+      setStatusMessage,
+    }),
+    []
+  )
 
   const addCompare = useCallback(() => {
     const alt = marketsQuery.data?.find(
@@ -165,11 +159,17 @@ export function useChartControls(options: UseChartControlsOptions = {}) {
       indicators,
       toggleIndicator,
       drawingTool,
+      drawingType,
+      drawingPayload,
+      drawingAsIcon,
       handleDrawingTool,
       isMagnet,
       isLocked,
       drawingsVisible,
       drawingsVersion,
+      undoVersion,
+      canUndo,
+      setCanUndo: setCanUndoSafe,
       showSettings,
       setShowSettings,
       statusMessage,
@@ -191,11 +191,17 @@ export function useChartControls(options: UseChartControlsOptions = {}) {
       indicators,
       toggleIndicator,
       drawingTool,
+      drawingType,
+      drawingPayload,
+      drawingAsIcon,
       handleDrawingTool,
       isMagnet,
       isLocked,
       drawingsVisible,
       drawingsVersion,
+      undoVersion,
+      canUndo,
+      setCanUndoSafe,
       showSettings,
       statusMessage,
       addCompare,

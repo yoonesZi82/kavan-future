@@ -1,37 +1,50 @@
+export type MarketCategory = "all" | "bourse" | "crypto" | "fx" | "gold"
+
 export type DecisionAlertTone = "danger" | "warning" | "success"
 
-export type DecisionAlert = {
+export type CrisisCard = {
   id: string
   tone: DecisionAlertTone
   title: string
-  rows: { label: string; value: string; valueTone?: "danger" | "warning" | "muted" }[]
+  detail: string
+  value?: string
+  badge: string
 }
 
-export type MyAlertTone = "danger" | "success" | "warning" | "info"
-
-export type MyAlert = {
+export type ActiveAlert = {
   id: string
-  tone: MyAlertTone
+  tone: DecisionAlertTone
   title: string
-  asset: string
-  description: string
+  detail: string
   time: string
 }
 
-export type AssetMetricTone = "gain" | "loss" | "info" | "neutral"
+export type AnalysisTab = "indicators" | "levels" | "history"
 
-export type AssetMetric = {
+export type IndicatorStatus = "warning" | "normal" | "neutral"
+
+export type AnalysisIndicator = {
+  id: string
+  name: string
+  value: string
+  status: IndicatorStatus
+  statusLabel: string
+  sparkline: number[]
+}
+
+export type CandleMetric = {
   id: string
   label: string
   value: string
-  tone: AssetMetricTone
+  tone: "gain" | "loss" | "info"
 }
 
 export type ReturnsSeries = {
   id: string
   label: string
   color: string
+  change: string
   data: number[]
 }
 
-export type ReturnsRange = "1M" | "3M" | "6M" | "YTD" | "1Y" | "ALL"
+export type ReturnsRange = "1M" | "3M" | "6M" | "1Y"

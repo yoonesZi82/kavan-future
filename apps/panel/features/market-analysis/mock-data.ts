@@ -1,135 +1,137 @@
 import type {
-  AssetMetric,
-  DecisionAlert,
-  MyAlert,
+  ActiveAlert,
+  AnalysisIndicator,
+  CandleMetric,
+  CrisisCard,
+  MarketCategory,
   ReturnsRange,
   ReturnsSeries,
 } from "@/features/market-analysis/types"
 
-export const DECISION_ALERTS: DecisionAlert[] = [
-  {
-    id: "crisis-1",
-    tone: "danger",
-    title: "بحران، نزدیک به سطح کلیدی",
-    rows: [
-      { label: "مقاومت", value: "۴٬۳۰۰٬۰۰۰", valueTone: "muted" },
-      { label: "ریسک ورود", value: "متوسط", valueTone: "warning" },
-      { label: "احتمال شکست", value: "بالا", valueTone: "danger" },
-    ],
-  },
-  {
-    id: "break-1",
-    tone: "success",
-    title: "شکست",
-    rows: [
-      { label: "جهت شکست", value: "صعودی", valueTone: "muted" },
-      { label: "ساختار تایید شده", value: "بله", valueTone: "muted" },
-      { label: "ریسک ورود", value: "کم", valueTone: "muted" },
-    ],
-  },
-  {
-    id: "break-2",
-    tone: "success",
-    title: "شکست",
-    rows: [
-      { label: "جهت شکست", value: "صعودی", valueTone: "muted" },
-      { label: "ساختار تایید شده", value: "بله", valueTone: "muted" },
-      { label: "ریسک ورود", value: "کم", valueTone: "muted" },
-    ],
-  },
-  {
-    id: "break-3",
-    tone: "success",
-    title: "شکست",
-    rows: [
-      { label: "جهت شکست", value: "صعودی", valueTone: "muted" },
-      { label: "ساختار تایید شده", value: "بله", valueTone: "muted" },
-      { label: "ریسک ورود", value: "کم", valueTone: "muted" },
-    ],
-  },
+export const MARKET_CATEGORIES: { id: MarketCategory; label: string }[] = [
+  { id: "all", label: "همه" },
+  { id: "bourse", label: "بورس" },
+  { id: "crypto", label: "کریپتو" },
+  { id: "fx", label: "ارز" },
+  { id: "gold", label: "طلا" },
 ]
 
-export const MY_ALERTS: MyAlert[] = [
-  {
-    id: "a1",
-    tone: "danger",
-    title: "شکست مقاومت",
-    asset: "XAU/IRT",
-    description: "شکست سطح ۸۷٬۵۰۰ با حجم بالا",
-    time: "۱۸:۴۲",
-  },
-  {
-    id: "a2",
-    tone: "success",
-    title: "ورود پول هوشمند",
-    asset: "BTC/USDT",
-    description: "جریان خرید نهادی در محدوده حمایتی",
-    time: "۱۷:۱۵",
-  },
-  {
-    id: "a3",
-    tone: "warning",
-    title: "فروش نهادی",
-    asset: "ETH/USDT",
-    description: "فشار فروش در نزدیکی مقاومت روزانه",
-    time: "۱۵:۳۰",
-  },
-  {
-    id: "a4",
-    tone: "info",
-    title: "تایید ساختار",
-    asset: "SOL/USDT",
-    description: "ساختار صعودی در تایم‌فریم ۴ ساعته",
-    time: "۱۲:۰۵",
-  },
-  {
-    id: "a5",
-    tone: "success",
-    title: "ورود پول هوشمند",
-    asset: "XAU/IRT",
-    description: "انباشت در محدوده ارزشمند",
-    time: "۱۰:۴۸",
-  },
-]
+export const MAIN_SIGNAL = {
+  score: 78,
+  trend: "صعودی",
+  instant: "صعودی",
+}
 
-export const ASSET_METRICS: AssetMetric[] = [
-  {
-    id: "intrinsic",
-    label: "ارزش ذاتی",
-    value: "در محدوده ارزشمند",
-    tone: "gain",
-  },
+export const CANDLE_METRICS: CandleMetric[] = [
   {
     id: "structure",
     label: "ساختار",
-    value: "صعودی",
+    value: "شتاب صعودی",
     tone: "gain",
+  },
+  {
+    id: "power",
+    label: "قدرت",
+    value: "بالا",
+    tone: "info",
   },
   {
     id: "direction",
     label: "جهت",
     value: "صعودی",
-    tone: "info",
-  },
-  {
-    id: "power",
-    label: "قدرت",
-    value: "مثبت",
     tone: "gain",
   },
 ]
 
-export const ASSET_ANALYSIS_TEXT =
-  "قیمت طلای ۱۸ عیار در محدوده حمایتی ۸۴ تا ۹۱ میلیون تومان در حال تثبیت است. با حفظ این سطح و تداوم تقاضای داخلی، احتمال ادامه روند صعودی در میان‌مدت بالاست. از منظر فاندامنتال، نوسان نرخ ارز و انتظارات تورمی همچنان از سمت تقاضا حمایت می‌کنند."
+export const CANDLE_FOOTER =
+  "ساختار سه کندل ادامه روند صعودی را تایید می‌کند."
 
-export const RETURNS_RANGES: ReturnsRange[] = [
-  "1M",
-  "3M",
-  "6M",
-  "YTD",
-  "1Y",
-  "ALL",
+export const CRISIS_CARDS: CrisisCard[] = [
+  {
+    id: "c1",
+    tone: "warning",
+    title: "بحران: طلا نزدیک سطح مقاومت",
+    detail: "احتمال شکست بالا",
+    value: "۴٬۳۰۰٬۰۰۰",
+    badge: "احتمال شکست: بالا",
+  },
+  {
+    id: "c2",
+    tone: "success",
+    title: "شکست رو به بالا، اقدام کنید",
+    detail: "ساختار تایید شد",
+    badge: "ساختار تایید شد",
+  },
+  {
+    id: "c3",
+    tone: "warning",
+    title: "ارزیابی ریسک",
+    detail: "ریسک متوسط",
+    value: "۴٬۲۱۰٬۰۰۰",
+    badge: "ریسک متوسط",
+  },
 ]
+
+export const ACTIVE_ALERTS: ActiveAlert[] = [
+  {
+    id: "a1",
+    tone: "warning",
+    title: "بحران مقاومت",
+    detail: "طلا نزدیک سطح ۴٬۳۰۰٬۰۰۰",
+    time: "امروز ۱۱:۲۴",
+  },
+  {
+    id: "a2",
+    tone: "success",
+    title: "شکست رو به بالا",
+    detail: "ساختار تایید شد — اقدام کنید",
+    time: "امروز ۱۰:۵۸",
+  },
+  {
+    id: "a3",
+    tone: "warning",
+    title: "ریسک متوسط",
+    detail: "سطح حمایتی ۴٬۲۱۰٬۰۰۰ زیر نظر",
+    time: "امروز ۰۹:۴۱",
+  },
+]
+
+export const ANALYSIS_INDICATORS: AnalysisIndicator[] = [
+  {
+    id: "bubble",
+    name: "Gold Bubble 18",
+    value: "۲٫۳٪",
+    status: "warning",
+    statusLabel: "هشدار",
+    sparkline: [1.1, 1.4, 1.2, 1.8, 2.0, 1.9, 2.3],
+  },
+  {
+    id: "real",
+    name: "Real Value Gold 18",
+    value: "۴٬۲۵۰٬۰۰۰",
+    status: "neutral",
+    statusLabel: "—",
+    sparkline: [4200, 4220, 4210, 4235, 4240, 4245, 4250],
+  },
+  {
+    id: "monthly",
+    name: "Monthly Return",
+    value: "+۱۲٫۴٪",
+    status: "normal",
+    statusLabel: "عادی",
+    sparkline: [2, 4, 5, 7, 8, 10, 12.4],
+  },
+  {
+    id: "strength",
+    name: "Gold/USD Strength",
+    value: "۶۸",
+    status: "normal",
+    statusLabel: "عادی",
+    sparkline: [55, 58, 60, 62, 64, 66, 68],
+  },
+]
+
+export const RETURNS_RANGES: ReturnsRange[] = ["1M", "3M", "6M", "1Y"]
 
 export const RETURNS_LABELS = [
   "هفته ۱",
@@ -144,33 +146,38 @@ export const RETURNS_LABELS = [
 
 export const RETURNS_SERIES: ReturnsSeries[] = [
   {
-    id: "xau",
-    label: "XAU/IRT",
+    id: "gold",
+    label: "طلا ۱۸ عیار",
     color: "#eab308",
-    data: [0, 1.2, 2.8, 1.5, 3.4, 4.1, 5.6, 6.2],
+    change: "+۱۲٫۴٪",
+    data: [0, 2, 4, 5, 7, 9, 11, 12.4],
+  },
+  {
+    id: "silver",
+    label: "نقره",
+    color: "#94a3b8",
+    change: "+۸٫۷٪",
+    data: [0, 1.5, 3, 4, 5.5, 6.5, 7.8, 8.7],
   },
   {
     id: "btc",
-    label: "BTC",
+    label: "بیت‌کوین",
     color: "#f97316",
-    data: [0, -2.1, -1.4, 0.8, 2.2, 1.1, 3.5, 4.8],
+    change: "+۶٫۲٪",
+    data: [0, -1, 1, 2.5, 3, 4.5, 5.5, 6.2],
   },
   {
     id: "eth",
-    label: "ETH",
-    color: "#3b82f6",
-    data: [0, -3.2, -4.5, -2.1, 0.4, -1.2, 1.8, 2.4],
-  },
-  {
-    id: "sol",
-    label: "SOL",
+    label: "اتریوم",
     color: "#a855f7",
-    data: [0, 2.4, -1.1, 3.8, 6.2, 4.5, 8.1, 7.4],
+    change: "+۴٫۱٪",
+    data: [0, -0.5, 0.5, 1.5, 2, 3, 3.5, 4.1],
   },
   {
-    id: "usdt",
-    label: "USDT",
-    color: "#14b8a6",
-    data: [0, 0.1, -0.2, 0.3, 0.1, -0.1, 0.2, 0.15],
+    id: "index",
+    label: "شاخص کل",
+    color: "#38bdf8",
+    change: "+۲٫۸٪",
+    data: [0, 0.4, 0.8, 1.2, 1.6, 2, 2.4, 2.8],
   },
 ]
