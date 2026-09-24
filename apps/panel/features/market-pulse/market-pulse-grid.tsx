@@ -1,11 +1,11 @@
 "use client"
 
-import { AlertsPanel } from "@/features/market-pulse/alerts/alerts-panel"
-import { ChartPanel } from "@/features/market-pulse/chart/chart-panel"
-import { PANEL_CHART_TIMEFRAMES } from "@/features/market-pulse/chart/chart-options"
-import { MajorIndicesPanel } from "@/features/market-pulse/watchlist/major-indices-panel"
-import { MarketFlowPanel } from "@/features/market-pulse/market-flow/market-flow-panel"
-import { useChartControls } from "@/features/market-pulse/chart/use-chart-controls"
+import { AlertsPanel } from "@/features/market-pulse/components/alerts/alerts-panel"
+import { ChartPanel } from "@/features/market-pulse/components/chart/chart-panel"
+import { PANEL_CHART_TIMEFRAMES } from "@/features/market-pulse/components/chart/chart-options"
+import { MajorIndicesPanel } from "@/features/market-pulse/components/watchlist/major-indices-panel"
+import { MarketFlowPanel } from "@/features/market-pulse/components/market-flow/market-flow-panel"
+import { useChartControls } from "@/features/market-pulse/components/chart/use-chart-controls"
 import {
   ResizableHandle,
   ResizablePanel,
