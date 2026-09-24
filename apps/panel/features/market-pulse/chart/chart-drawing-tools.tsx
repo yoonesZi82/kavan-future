@@ -94,7 +94,8 @@ export function ChartDrawingTools({
   onSelect,
 }: ChartDrawingToolsProps) {
   return (
-    <div className="flex w-9 shrink-0 flex-col items-center gap-0.5 border-e border-border py-1">
+    // * Mobile chart height is tight — rail must scroll, not clip tools
+    <div className="flex h-full min-h-0 w-9 shrink-0 flex-col items-center gap-0.5 overflow-y-auto overscroll-contain border-e border-border py-1 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
       {TOOLS.map((tool) => {
         const Icon = tool.icon
         const isActive = toolIsActive(

@@ -50,15 +50,16 @@ export function ChartFooter({
   }, [])
 
   return (
-    <div className="flex flex-wrap items-center gap-1 border-t border-border px-2 py-1">
-      <div className="flex flex-wrap items-center gap-0.5">
+    // * Narrow widths: ranges scroll horizontally instead of wrapping into the chart
+    <div className="flex shrink-0 items-center gap-1 border-t border-border px-2 py-1">
+      <div className="flex min-w-0 flex-1 items-center gap-0.5 overflow-x-auto overscroll-x-contain [scrollbar-width:thin]">
         {RANGE_OPTIONS.map((item) => (
           <Button
             key={item.value}
             variant="ghost"
             size="sm"
             className={cn(
-              "h-6 px-1.5 text-[11px]",
+              "h-6 shrink-0 px-1.5 text-[11px]",
               range === item.value && "bg-muted font-medium text-foreground"
             )}
             onClick={() => onRangeChange(item.value)}
@@ -68,11 +69,13 @@ export function ChartFooter({
         ))}
       </div>
 
-      <div className="ms-auto flex flex-wrap items-center gap-2 text-[11px] text-muted-foreground">
+      <div className="flex shrink-0 items-center gap-1.5 text-[11px] text-muted-foreground">
         {statusMessage ? (
-          <span className="text-sidebar-primary">{statusMessage}</span>
+          <span className="max-w-20 truncate text-sidebar-primary sm:max-w-none">
+            {statusMessage}
+          </span>
         ) : null}
-        <span>(تهران) {clock}</span>
+        <span className="tabular-nums">{clock}</span>
         <div className="flex items-center gap-0.5">
           {SCALES.map((item) => (
             <Button
@@ -80,7 +83,7 @@ export function ChartFooter({
               variant="ghost"
               size="sm"
               className={cn(
-                "h-6 px-1.5 text-[11px]",
+                "h-6 shrink-0 px-1.5 text-[11px]",
                 scaleMode === item.value &&
                   "bg-muted font-medium text-foreground"
               )}

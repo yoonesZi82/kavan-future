@@ -12,7 +12,8 @@ import {
   ResizablePanelGroup,
 } from "@workspace/ui/components/resizable"
 
-const HERO_HEIGHT = "h-[400px] md:h-[460px]"
+// * Mobile needs extra room so drawing rail + footer don't eat the candles
+const HERO_HEIGHT = "h-[min(520px,70svh)] md:h-[460px]"
 const FIT_CELL = "min-h-0 w-full self-start"
 
 export function MarketPulseGrid() {

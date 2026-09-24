@@ -2,6 +2,7 @@ import { SidebarInset, SidebarProvider } from "@workspace/ui/components/sidebar"
 import { AppHeader } from "@/components/dashboard/app-header"
 import { AppSidebar } from "@/components/dashboard/app-sidebar"
 import { MobileFloatingNav } from "@/components/dashboard/mobile-floating-nav"
+import { PageTransition } from "@/components/dashboard/page-transition"
 
 export default function DashboardLayout({
   children,
@@ -15,7 +16,7 @@ export default function DashboardLayout({
       <SidebarInset className="min-h-svh min-w-0 bg-background">
         <AppHeader />
         <div className="container max-w-none min-w-0 overflow-x-hidden px-4 py-4 pb-24 md:px-6 md:py-6 md:pb-6">
-          {children}
+          <PageTransition>{children}</PageTransition>
         </div>
       </SidebarInset>
       <MobileFloatingNav />
