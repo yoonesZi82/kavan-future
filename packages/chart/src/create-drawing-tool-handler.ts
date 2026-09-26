@@ -1,8 +1,8 @@
 "use client"
 
 import type { Dispatch, SetStateAction } from "react"
-import type { DrawingToolId, RangeKey } from "@/features/market-pulse/components/chart/chart-options"
-import { DRAWING_TOOL_TYPE } from "@/features/market-pulse/components/chart/chart-drawing-map"
+import type { DrawingToolId, RangeKey } from "./chart-options"
+import { DRAWING_TOOL_TYPE } from "./chart-drawing-map"
 
 type DrawingToolHandlerArgs = {
   setIsMagnet: Dispatch<SetStateAction<boolean>>

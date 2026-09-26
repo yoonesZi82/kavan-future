@@ -1,4 +1,4 @@
-import type { ChartTimeframe } from "@/features/market-pulse/types"
+import type { ChartTimeframe } from "./types"
 
 export type ChartType = "candle" | "line" | "area"
 export type ScaleMode = "normal" | "percent" | "log"

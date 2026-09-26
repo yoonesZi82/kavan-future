@@ -12,13 +12,13 @@ import type {
   ChartType,
   IndicatorId,
   RangeKey,
-} from "@/features/market-pulse/components/chart/chart-options"
+} from "./chart-options"
 import {
   computeSma,
   getVisibleLogicalRange,
   shiftSeries,
-} from "@/features/market-pulse/components/chart/chart-helpers"
-import type { CandlePoint } from "@/features/market-pulse/types"
+} from "./chart-helpers"
+import type { CandlePoint } from "./types"
 
 type SeriesBag = {
   volume: ISeriesApi<"Histogram"> | null

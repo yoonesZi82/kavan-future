@@ -11,8 +11,8 @@ import { ReturnsChart } from "@/features/market-analysis/components/returns/retu
 import { AnalysisSidebar } from "@/features/market-analysis/components/signal/analysis-sidebar"
 import { CrisisBreakoutPanel } from "@/features/market-analysis/components/signal/crisis-panel"
 import type { MarketCategory } from "@/features/market-analysis/types"
+import { PANEL_CHART_TIMEFRAMES } from "@workspace/chart"
 import { ChartPanel } from "@/features/market-pulse/components/chart/chart-panel"
-import { PANEL_CHART_TIMEFRAMES } from "@/features/market-pulse/components/chart/chart-options"
 import { useChartControls } from "@/features/market-pulse/components/chart/use-chart-controls"
 import { useMarketsQuery } from "@/features/market-pulse/data/hooks"
 

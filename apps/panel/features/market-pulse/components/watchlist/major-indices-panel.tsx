@@ -1,11 +1,11 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
-import { Badge } from "@workspace/ui/components/badge"
 import { Card, CardContent } from "@workspace/ui/components/card"
 import { Skeleton } from "@workspace/ui/components/skeleton"
 import { cn } from "@workspace/ui/lib/utils"
 import { useMarketsQuery } from "@/features/market-pulse/data/hooks"
+import { useWatchlist } from "@/features/market-pulse/data/use-watchlist"
 import { MajorIndicesHeader } from "@/features/market-pulse/components/watchlist/major-indices-header"
 import {
   WATCHLIST_COL,
@@ -64,6 +64,7 @@ export function MajorIndicesPanel({
   onSelect,
 }: MajorIndicesPanelProps) {
   const { data, isLoading } = useMarketsQuery()
+  const { ids: watchlistIds, ready: watchlistReady } = useWatchlist()
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE)
   // ! Avoid SSR/client cache mismatch on count + list (TanStack may already have data)
   const [mounted, setMounted] = useState(false)
@@ -74,10 +75,18 @@ export function MajorIndicesPanel({
     setMounted(true)
   }, [])
 
-  const rows = (data ?? []).slice(0, visibleCount)
-  const totalCount = mounted ? (data?.length ?? 0) : 0
+  const watchlistRows = (data ?? []).filter((row) =>
+    watchlistIds.includes(row.id)
+  )
+  // * Keep watchlist order (newest added first)
+  const ordered = watchlistIds
+    .map((id) => watchlistRows.find((row) => row.id === id))
+    .filter((row): row is MarketPair => Boolean(row))
+
+  const rows = ordered.slice(0, visibleCount)
+  const totalCount = mounted && watchlistReady ? ordered.length : 0
   const hasMore = visibleCount < totalCount
-  const showList = mounted && !isLoading
+  const showList = mounted && watchlistReady && !isLoading
 
   useEffect(() => {
     const root = listRef.current
@@ -162,18 +171,14 @@ export function MajorIndicesPanel({
                       <span className={WATCHLIST_DIVIDER} aria-hidden>
                         |
                       </span>
-                      <span className={WATCHLIST_COL}>
-                        <Badge
-                          variant="outline"
-                          className={cn(
-                            "h-5 min-w-12 justify-center px-1.5 text-[10px] tabular-nums",
-                            isGain
-                              ? "border-gain/35 bg-gain/10 text-gain"
-                              : "border-loss/35 bg-loss/10 text-loss"
-                          )}
-                        >
-                          {formatSigned(row.dayChange)}
-                        </Badge>
+                      <span
+                        className={cn(
+                          WATCHLIST_COL,
+                          "text-[10px] font-medium tabular-nums",
+                          isGain ? "text-gain" : "text-loss"
+                        )}
+                      >
+                        {formatSigned(row.dayChange)}
                       </span>
                     </button>
                   </li>
@@ -189,7 +194,7 @@ export function MajorIndicesPanel({
               ) : null}
               {!hasMore && totalCount === 0 ? (
                 <li className="px-2 py-6 text-center text-xs text-muted-foreground">
-                  نتیجه‌ای پیدا نشد
+                  از جستجو یک نماد به واچ‌لیست اضافه کنید
                 </li>
               ) : null}
             </ul>

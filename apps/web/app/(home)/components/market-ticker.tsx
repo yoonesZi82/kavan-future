@@ -4,6 +4,7 @@ import {
   MarketTickerCard,
   type MarketTickerCardProps,
 } from "@/components/market-ticker-card"
+import { SectionHeading } from "@/components/section-heading"
 
 const tickers: MarketTickerCardProps[] = [
   {
@@ -58,14 +59,6 @@ const tickers: MarketTickerCardProps[] = [
     tone: "blue",
     badge: "۴",
   },
-  {
-    symbol: "ن",
-    label: "شاخص کل",
-    price: "۲,۱۳۵,۴۰۰",
-    change: "+۱.۳۲٪",
-    positive: true,
-    tone: "gray",
-  },
 ]
 
 export function MarketTicker() {
@@ -73,21 +66,18 @@ export function MarketTicker() {
     <section className="w-full border-b border-border/60 bg-muted/30 py-3">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mb-2 flex items-center justify-between gap-3">
-          <div className="text-muted-foreground flex items-center gap-3 text-xs">
+          <div className="flex items-center gap-3 text-xs text-muted-foreground">
             <Badge variant="success" className="h-5 gap-1 px-1.5 text-[10px]">
-              <span className="bg-gain size-1.5 animate-pulse rounded-full" />
+              <span className="size-1.5 animate-pulse rounded-full bg-gain" />
               بازار باز است
             </Badge>
-            <span className="hidden sm:inline">سه‌شنبه ۱۸ شهریور ۱۴۰۴ · ۱۴:۱۲</span>
+            <span className="hidden sm:inline">
+              سه‌شنبه ۱۸ شهریور ۱۴۰۴ · ۱۴:۱۲
+            </span>
           </div>
-          <Link
-            href="/prices"
-            className="text-muted-foreground hover:text-foreground text-xs"
-          >
-            مشاهده همه ←
-          </Link>
+          <SectionHeading href="/prices" className="mb-0" />
         </div>
-        <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7">
+        <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
           {tickers.map((ticker) => (
             <MarketTickerCard key={ticker.label} {...ticker} />
           ))}

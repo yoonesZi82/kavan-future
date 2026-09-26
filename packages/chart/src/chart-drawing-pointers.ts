@@ -3,15 +3,15 @@ import type { Anchor, DrawingManager, IDrawing } from "lightweight-charts-drawin
 import {
   pointToAnchor,
   snapAnchorToCandle,
-} from "@/features/market-pulse/components/chart/chart-drawing-snap"
+} from "./chart-drawing-snap"
 import {
   applySlopeLineColor,
   commitDrawing,
   requiredAnchorsFor,
   syncPreviewDrawing,
-} from "@/features/market-pulse/components/chart/chart-drawing-session"
-import type { DrawingUndoStack } from "@/features/market-pulse/components/chart/chart-drawing-undo"
-import type { CandlePoint } from "@/features/market-pulse/types"
+} from "./chart-drawing-session"
+import type { DrawingUndoStack } from "./chart-drawing-undo"
+import type { CandlePoint } from "./types"
 
 type PointerParam = {
   point?: { x: number; y: number } | undefined

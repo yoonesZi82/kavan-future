@@ -1,6 +1,6 @@
-import type { CandlePoint } from "@/features/market-pulse/types"
-import type { RangeKey } from "@/features/market-pulse/components/chart/chart-options"
-import { RANGE_SECONDS } from "@/features/market-pulse/components/chart/chart-options"
+import type { CandlePoint } from "./types"
+import type { RangeKey } from "./chart-options"
+import { RANGE_SECONDS } from "./chart-options"
 
 export function computeSma(
   data: CandlePoint[],

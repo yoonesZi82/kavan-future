@@ -12,6 +12,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@workspace/chart": "workspace:*",
     "@workspace/ui": "workspace:*",
     "framer-motion": "^13.4.0",
     "lucide-react": "^1.47.0",

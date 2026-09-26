@@ -28,7 +28,7 @@ import {
   TooltipTrigger,
 } from "@workspace/ui/components/tooltip"
 import { cn } from "@workspace/ui/lib/utils"
-import type { DrawingToolId } from "@/features/market-pulse/components/chart/chart-options"
+import type { DrawingToolId } from "./chart-options"
 import {
   EMOJI_MENU,
   FIB_MENU,
@@ -36,7 +36,7 @@ import {
   TREND_MENU,
   type DrawingMenuItem,
   isDrawableTool,
-} from "@/features/market-pulse/components/chart/chart-drawing-map"
+} from "./chart-drawing-map"
 
 const TOOLS: {
   id: DrawingToolId

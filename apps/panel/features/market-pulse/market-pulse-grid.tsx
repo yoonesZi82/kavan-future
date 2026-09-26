@@ -1,11 +1,14 @@
 "use client"
 
+import { useEffect } from "react"
+import { useSearchParams } from "next/navigation"
 import { AlertsPanel } from "@/features/market-pulse/components/alerts/alerts-panel"
+import { PANEL_CHART_TIMEFRAMES } from "@workspace/chart"
 import { ChartPanel } from "@/features/market-pulse/components/chart/chart-panel"
-import { PANEL_CHART_TIMEFRAMES } from "@/features/market-pulse/components/chart/chart-options"
 import { MajorIndicesPanel } from "@/features/market-pulse/components/watchlist/major-indices-panel"
 import { MarketFlowPanel } from "@/features/market-pulse/components/market-flow/market-flow-panel"
 import { useChartControls } from "@/features/market-pulse/components/chart/use-chart-controls"
+import { useMarketsQuery } from "@/features/market-pulse/data/hooks"
 import {
   ResizableHandle,
   ResizablePanel,
@@ -17,10 +20,20 @@ const HERO_HEIGHT = "h-[min(520px,70svh)] md:h-[460px]"
 const FIT_CELL = "min-h-0 w-full self-start"
 
 export function MarketPulseGrid() {
+  const searchParams = useSearchParams()
+  const marketsQuery = useMarketsQuery()
   const controls = useChartControls({
     allowedTimeframes: PANEL_CHART_TIMEFRAMES,
     defaultTimeframe: "1h",
   })
+
+  // * Search dialog navigates here with ?market=id after adding to watchlist
+  useEffect(() => {
+    const marketId = searchParams.get("market")
+    if (!marketId || !marketsQuery.data?.length) return
+    const match = marketsQuery.data.find((item) => item.id === marketId)
+    if (match) controls.selectMarket(match)
+  }, [searchParams, marketsQuery.data, controls.selectMarket])
 
   return (
     <div className="flex w-full min-w-0 flex-col gap-4 overflow-x-hidden md:gap-5">
@@ -36,9 +49,7 @@ export function MarketPulseGrid() {
         </div>
       </div>
 
-      <div
-        className={`hidden w-full min-w-0 lg:block ${HERO_HEIGHT}`}
-      >
+      <div className={`hidden w-full min-w-0 lg:block ${HERO_HEIGHT}`}>
         <ResizablePanelGroup
           orientation="horizontal"
           className="h-full w-full min-w-0 gap-0"

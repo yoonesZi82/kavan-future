@@ -1,5 +1,5 @@
 import type { DrawingOptions, DrawingStyle } from "lightweight-charts-drawing"
-import type { DrawingToolId } from "@/features/market-pulse/components/chart/chart-options"
+import type { DrawingToolId } from "./chart-options"
 
 export type DrawingMenuItem = {
   type: string

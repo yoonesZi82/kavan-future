@@ -7,15 +7,15 @@ import {
   type Anchor,
   type IDrawing,
 } from "lightweight-charts-drawing"
-import { bindDrawingPointers } from "@/features/market-pulse/components/chart/chart-drawing-pointers"
+import { bindDrawingPointers } from "./chart-drawing-pointers"
 import {
   applySlopeLineColor,
   handleDrawingHotkey,
   PREVIEW_ID,
   removePreviewDrawing,
-} from "@/features/market-pulse/components/chart/chart-drawing-session"
-import { createDrawingUndoStack } from "@/features/market-pulse/components/chart/chart-drawing-undo"
-import type { CandlePoint } from "@/features/market-pulse/types"
+} from "./chart-drawing-session"
+import { createDrawingUndoStack } from "./chart-drawing-undo"
+import type { CandlePoint } from "./types"
 
 type UseChartDrawingArgs = {
   chart: IChartApi | null

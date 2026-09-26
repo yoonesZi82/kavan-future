@@ -1,6 +1,6 @@
 import type { IChartApi, ISeriesApi, SeriesType, Time } from "lightweight-charts"
 import type { Anchor } from "lightweight-charts-drawing"
-import type { CandlePoint } from "@/features/market-pulse/types"
+import type { CandlePoint } from "./types"
 
 export function pointToAnchor(
   chart: IChartApi,

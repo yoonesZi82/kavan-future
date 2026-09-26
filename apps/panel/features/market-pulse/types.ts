@@ -24,24 +24,10 @@ export type AlertItem = {
   isActive: boolean
 }
 
-export type CandlePoint = {
-  time: number
-  open: number
-  high: number
-  low: number
-  close: number
-  volume: number
-}
-
-export type ChartTimeframe =
-  | "1m"
-  | "5m"
-  | "15m"
-  | "1h"
-  | "4h"
-  | "1D"
-  | "1W"
-  | "All"
+export type {
+  CandlePoint,
+  ChartTimeframe,
+} from "@workspace/chart"
 
 export type MarketPair = {
   id: string

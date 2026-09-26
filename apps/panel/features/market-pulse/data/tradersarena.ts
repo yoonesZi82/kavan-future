@@ -36,15 +36,23 @@ function asNumber(value: unknown): number {
 function formatCompact(value: number): string {
   const abs = Math.abs(value)
   const sign = value < 0 ? "−" : ""
-  const body =
-    abs >= 1e12
-      ? `${(abs / 1e12).toFixed(2)}T`
-      : abs >= 1e9
-        ? `${(abs / 1e9).toFixed(2)}B`
-        : abs >= 1e6
-          ? `${(abs / 1e6).toFixed(2)}M`
-          : abs.toLocaleString("en-US", { maximumFractionDigits: 2 })
-  return `${sign}${body}`
+  let scaled = abs
+  let unit = ""
+  if (abs >= 1e12) {
+    scaled = abs / 1e12
+    unit = " ه‍م"
+  } else if (abs >= 1e9) {
+    scaled = abs / 1e9
+    unit = " مر"
+  } else if (abs >= 1e6) {
+    scaled = abs / 1e6
+    unit = " م"
+  }
+  const body = scaled.toLocaleString("fa-IR", {
+    minimumFractionDigits: unit ? 2 : 0,
+    maximumFractionDigits: 2,
+  })
+  return `${sign}${body}${unit}`
 }
 
 function mapGroupRow(

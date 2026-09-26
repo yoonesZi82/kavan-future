@@ -1,40 +1,48 @@
 "use client"
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react"
-import {
-  createDrawingToolHandler,
-  type ChartPanelControls,
-  type ChartTimeframe,
-  type ChartType,
-  type DrawingToolId,
-  type IndicatorId,
-  type RangeKey,
-  type ScaleMode,
-} from "@workspace/chart"
-import { getMarketChartTimeframes } from "@/features/market-pulse/data/bitycle-timeframes"
-import { useMarketsQuery } from "@/features/market-pulse/data/hooks"
-import type { MarketPair } from "@/features/market-pulse/types"
+import { useCallback, useMemo, useRef, useState } from "react"
+import type {
+  ChartType,
+  DrawingToolId,
+  IndicatorId,
+  RangeKey,
+  ScaleMode,
+} from "./chart-options"
+import { TIMEFRAME_OPTIONS } from "./chart-options"
+import { createDrawingToolHandler } from "./create-drawing-tool-handler"
+import type { ChartPanelControls } from "./chart-panel"
+import type { ChartMarketInfo, ChartTimeframe } from "./types"
 
-const DEFAULT_MARKET_ID = "btc-usdt"
-const DEFAULT_OHLC = "BTCUSDT"
+const DEMO_MARKET: ChartMarketInfo = {
+  symbol: "BTC/USDT",
+  ohlcSymbol: "BTCUSDT",
+  dayChange: 1.24,
+  latest: 68_450,
+}
 
-type UseChartControlsOptions = {
-  /** When set, only these timeframes appear (intersected with market support). */
-  allowedTimeframes?: readonly ChartTimeframe[]
+const DEFAULT_TIMEFRAMES: ChartTimeframe[] = TIMEFRAME_OPTIONS.map(
+  (item) => item.value
+)
+
+type UseDemoChartControlsOptions = {
+  market?: ChartMarketInfo
+  timeframeOptions?: ChartTimeframe[]
   defaultTimeframe?: ChartTimeframe
 }
 
-export function useChartControls(
-  options: UseChartControlsOptions = {}
+/** Local controls for marketing / demo charts — no remote market list. */
+export function useDemoChartControls(
+  options: UseDemoChartControlsOptions = {}
 ): ChartPanelControls & {
-  market: MarketPair | null
-  marketId: string
-  selectMarket: (next: MarketPair) => void
+  setMarket: (market: ChartMarketInfo) => void
 } {
-  const { allowedTimeframes, defaultTimeframe = "15m" } = options
-  const marketsQuery = useMarketsQuery()
-  const [marketId, setMarketId] = useState(DEFAULT_MARKET_ID)
-  const [compareSymbol, setCompareSymbol] = useState<string | null>(null)
+  const {
+    market: initialMarket = DEMO_MARKET,
+    timeframeOptions = DEFAULT_TIMEFRAMES,
+    defaultTimeframe = "1h",
+  } = options
+
+  const [market, setMarket] = useState<ChartMarketInfo>(initialMarket)
   const [timeframe, setTimeframe] = useState<ChartTimeframe>(defaultTimeframe)
   const [range, setRange] = useState<RangeKey>("1D")
   const [scaleMode, setScaleMode] = useState<ScaleMode>("normal")
@@ -53,44 +61,13 @@ export function useChartControls(
   const canUndoRef = useRef(false)
   const [showSettings, setShowSettings] = useState(true)
   const [statusMessage, setStatusMessage] = useState<string | null>(null)
+  const [compareSymbol, setCompareSymbol] = useState<string | null>(null)
 
   canUndoRef.current = canUndo
 
   const setCanUndoSafe = useCallback((value: boolean) => {
     canUndoRef.current = value
     setCanUndo(value)
-  }, [])
-
-  const market = useMemo(() => {
-    return marketsQuery.data?.find((item) => item.id === marketId) ?? null
-  }, [marketsQuery.data, marketId])
-
-  const timeframeOptions = useMemo(() => {
-    const available = getMarketChartTimeframes(
-      market?.ohlcSymbol ?? DEFAULT_OHLC
-    )
-    if (!allowedTimeframes?.length) return available
-    return allowedTimeframes.filter((tf) => available.includes(tf))
-  }, [allowedTimeframes, market?.ohlcSymbol])
-
-  useEffect(() => {
-    if (market || !marketsQuery.data?.length) return
-    const fallback =
-      marketsQuery.data.find((item) => item.id === DEFAULT_MARKET_ID) ??
-      marketsQuery.data[0]
-    if (fallback) setMarketId(fallback.id)
-  }, [market, marketsQuery.data])
-
-  useEffect(() => {
-    if (timeframeOptions.includes(timeframe)) return
-    const next = timeframeOptions[0]
-    if (next) setTimeframe(next)
-  }, [timeframe, timeframeOptions])
-
-  const selectMarket = useCallback((next: MarketPair) => {
-    setMarketId(next.id)
-    setCompareSymbol(null)
-    setStatusMessage(next.symbol)
   }, [])
 
   const cycleChartType = useCallback(() => {
@@ -128,32 +105,29 @@ export function useChartControls(
   )
 
   const addCompare = useCallback(() => {
-    const alt = marketsQuery.data?.find(
-      (item) => item.src === market?.src && item.id !== marketId
-    )
-    if (!alt) {
-      setStatusMessage("بازار دومی برای این ارز نیست")
-      return
-    }
     setCompareSymbol((current) => {
       if (current) {
         setStatusMessage("مقایسه خاموش شد")
         return null
       }
-      setStatusMessage(`مقایسه با ${alt.symbol}`)
-      return alt.symbol
+      setStatusMessage("مقایسه در نسخه دمو فعال نیست")
+      return null
     })
-  }, [market?.src, marketId, marketsQuery.data])
+  }, [])
 
   const flashStatus = useCallback((message: string) => {
     setStatusMessage(message)
   }, [])
 
+  const selectMarket = useCallback((next: ChartMarketInfo) => {
+    setMarket(next)
+    setStatusMessage(next.symbol)
+  }, [])
+
   return useMemo(
     () => ({
       market,
-      marketId,
-      selectMarket,
+      setMarket: selectMarket,
       compareSymbol,
       timeframe,
       timeframeOptions,
@@ -187,7 +161,6 @@ export function useChartControls(
     }),
     [
       market,
-      marketId,
       selectMarket,
       compareSymbol,
       timeframe,

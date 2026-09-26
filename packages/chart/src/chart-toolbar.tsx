@@ -11,13 +11,21 @@ import {
   DropdownMenuTrigger,
 } from "@workspace/ui/components/dropdown-menu"
 import { Tabs, TabsList, TabsTrigger } from "@workspace/ui/components/tabs"
+import { ChartMarketSelect } from "./chart-market-select"
 import {
   TIMEFRAME_OPTIONS,
   type ChartType,
   type IndicatorId,
-} from "@/features/market-pulse/components/chart/chart-options"
-import { ChartToolbarMore } from "@/features/market-pulse/components/chart/chart-toolbar-more"
-import type { ChartTimeframe } from "@/features/market-pulse/types"
+} from "./chart-options"
+import { ChartToolbarMore } from "./chart-toolbar-more"
+import type { ChartMarketOption, ChartTimeframe } from "./types"
+
+export type ChartToolbarMarketSelect = {
+  markets: ChartMarketOption[]
+  selectedId: string | null
+  onSelect: (market: ChartMarketOption) => void
+  isLoading?: boolean
+}
 
 type ChartToolbarProps = {
   timeframe: ChartTimeframe
@@ -33,6 +41,8 @@ type ChartToolbarProps = {
   onToggleSettings: () => void
   onSnapshot: () => void
   onFullscreen: () => void
+  /** Hidden by default — pass only for hero / marketing chart. */
+  marketSelect?: ChartToolbarMarketSelect
 }
 
 export function ChartToolbar({
@@ -49,6 +59,7 @@ export function ChartToolbar({
   onToggleSettings,
   onSnapshot,
   onFullscreen,
+  marketSelect,
 }: ChartToolbarProps) {
   const options = TIMEFRAME_OPTIONS.filter((item) =>
     timeframeOptions.includes(item.value)
@@ -60,6 +71,14 @@ export function ChartToolbar({
 
   return (
     <div className="flex flex-nowrap items-center gap-1 overflow-hidden border-b border-border px-2 py-1.5">
+      {marketSelect ? (
+        <ChartMarketSelect
+          markets={marketSelect.markets}
+          selectedId={marketSelect.selectedId}
+          onSelect={marketSelect.onSelect}
+          isLoading={marketSelect.isLoading}
+        />
+      ) : null}
       {options.length > 0 ? (
         <>
           <DropdownMenu>

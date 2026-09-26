@@ -1,7 +1,8 @@
-import { Award, Clock, FileText, Quote, Users } from "lucide-react"
+import { Award, Clock, FileText, Users } from "lucide-react"
 import { Card } from "@workspace/ui/components/card"
 import { StatItem } from "@/components/stat-item"
 
+// * Home social proof: compact one-line stats + short analyst quote
 const stats = [
   {
     icon: Award,
@@ -31,40 +32,23 @@ const stats = [
 
 export function StatsSection() {
   return (
-    <section className="py-16 sm:py-20">
+    <section className="py-6 sm:py-8">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <Card className="relative gap-0 overflow-hidden rounded-2xl border-0 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white shadow-2xl">
-          <div
-            aria-hidden
-            className="pointer-events-none absolute inset-0 opacity-40"
-            style={{
-              backgroundImage:
-                "radial-gradient(circle at 20% 20%, color-mix(in oklab, var(--gain) 25%, transparent), transparent 50%), radial-gradient(circle at 80% 80%, color-mix(in oklab, var(--primary) 20%, transparent), transparent 50%)",
-            }}
-          />
-          <div className="relative grid gap-8 p-8 sm:p-10 lg:grid-cols-12 lg:p-12">
-            <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 lg:col-span-8">
+        <Card className="gap-0 overflow-hidden rounded-xl border-0 bg-slate-900 text-white ring-1 ring-white/10">
+          <div className="flex flex-col gap-8 p-6 sm:p-8 lg:flex-row lg:items-center lg:justify-between lg:gap-8">
+            <div className="flex min-w-0 flex-1 flex-nowrap items-center gap-2.5 overflow-x-auto lg:gap-3">
               {stats.map((stat) => (
                 <StatItem key={stat.label} {...stat} />
               ))}
             </div>
-            <div className="lg:col-span-4">
-              <div className="mb-5 inline-flex size-11 items-center justify-center rounded-xl bg-white/10 text-primary">
-                <Quote />
-              </div>
-              <blockquote className="text-[15px] leading-8 text-white/85">
-                «این سامانه با ترکیب داده‌های خام بازار، تصویر قابل‌فهمی از وضعیت
-                واقعی بازار در اختیار شما قرار می‌دهد.»
+            <div className="max-w-xs shrink-0 border-t border-white/10 pt-6 lg:max-w-sm lg:border-t-0 lg:border-s lg:pt-0 lg:ps-8">
+              <blockquote className="text-sm leading-7 text-white/70">
+                «این سامانه با ترکیب داده‌های خام بازار، تصویر قابل‌فهمی از
+                وضعیت واقعی بازار در اختیار شما قرار می‌دهد.»
               </blockquote>
-              <div className="mt-6 flex items-center gap-3">
-                <div className="flex size-10 items-center justify-center rounded-full bg-white/10 text-sm font-bold">
-                  ک.ا
-                </div>
-                <div>
-                  <p className="text-sm font-semibold">کاوه امین‌پناه</p>
-                  <p className="text-xs text-white/60">تحلیلگر بازار</p>
-                </div>
-              </div>
+              <p className="mt-3 text-xs text-white/45">
+                کاوه امین‌پناه · تحلیلگر بازار
+              </p>
             </div>
           </div>
         </Card>

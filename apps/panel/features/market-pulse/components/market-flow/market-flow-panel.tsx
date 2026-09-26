@@ -28,13 +28,10 @@ import {
   useRefetchCountdown,
 } from "@/features/market-pulse/components/market-flow/use-refetch-countdown"
 
-const HEAD =
-  "px-2 text-center text-[11px] font-medium whitespace-nowrap text-muted-foreground"
-const CELL = "px-2 text-center text-sm tabular-nums whitespace-nowrap"
 const TOTAL_SECONDS = Math.ceil(MARKET_FLOW_REFETCH_MS / 1000)
 
 function formatBuyPower(value: number): string {
-  return value.toLocaleString("en-US", {
+  return value.toLocaleString("fa-IR", {
     maximumFractionDigits: 2,
     signDisplay: "exceptZero",
   })
@@ -50,8 +47,8 @@ export function MarketFlowPanel() {
   const urgency = countdownUrgencyStyle(secondsLeft, TOTAL_SECONDS)
 
   return (
-    <Card className="flex max-h-[400px] flex-col ring-inset md:max-h-[460px]">
-      <CardHeader className="shrink-0 border-b pb-3">
+    <Card className="flex max-h-[400px] flex-col gap-0 overflow-hidden py-0 ring-inset md:max-h-[460px]">
+      <CardHeader className="shrink-0 gap-0 border-b px-4 py-3">
         <div className="flex items-center justify-between gap-3">
           <CardTitle className="text-base">
             جریان بازار صندوق‌ها و گروه‌ها
@@ -69,29 +66,22 @@ export function MarketFlowPanel() {
           </Badge>
         </div>
       </CardHeader>
-      <CardContent className="scrollbar-brand min-h-0 flex-1 overflow-auto pt-3">
+      <CardContent className="scrollbar-brand min-h-0 flex-1 overflow-auto p-0">
         {isLoading ? (
-          <Skeleton className="h-40 w-full" />
+          <div className="p-4">
+            <Skeleton className="h-40 w-full" />
+          </div>
         ) : (
-          <Table className="table-fixed">
-            <colgroup>
-              <col className="w-[22%]" />
-              <col className="w-[12%]" />
-              <col className="w-[14%]" />
-              <col className="w-[14%]" />
-              <col className="w-[13%]" />
-              <col className="w-[13%]" />
-              <col className="w-[12%]" />
-            </colgroup>
-            <TableHeader className="sticky top-0 z-10 bg-card [&_tr]:border-b">
-              <TableRow className="hover:bg-transparent">
-                <TableHead className={HEAD}>نماد</TableHead>
-                <TableHead className={HEAD}>حجم</TableHead>
-                <TableHead className={HEAD}>ارزش معاملات</TableHead>
-                <TableHead className={HEAD}>ورود پول</TableHead>
-                <TableHead className={HEAD}>سرانه خرید</TableHead>
-                <TableHead className={HEAD}>سرانه فروش</TableHead>
-                <TableHead className={HEAD}>قدرت خرید</TableHead>
+          <Table>
+            <TableHeader className="sticky top-0 z-10 bg-card">
+              <TableRow>
+                <TableHead className="min-w-36 text-start">نماد</TableHead>
+                <TableHead className="text-center">حجم</TableHead>
+                <TableHead className="text-center">ارزش معاملات</TableHead>
+                <TableHead className="text-center">ورود پول</TableHead>
+                <TableHead className="text-center">سرانه خرید</TableHead>
+                <TableHead className="text-center">سرانه فروش</TableHead>
+                <TableHead className="text-center">قدرت خرید</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -99,12 +89,16 @@ export function MarketFlowPanel() {
                 const isIn = row.moneyInflow > 0
                 return (
                   <TableRow key={row.id}>
-                    <TableCell className="px-2 text-start text-xs font-medium whitespace-normal sm:text-sm">
+                    <TableCell className="max-w-44 truncate text-start font-medium">
                       {row.symbol}
                     </TableCell>
-                    <TableCell className={CELL}>{row.volume}</TableCell>
-                    <TableCell className={CELL}>{row.tradeValue}</TableCell>
-                    <TableCell className={CELL}>
+                    <TableCell className="text-center tabular-nums">
+                      {row.volume}
+                    </TableCell>
+                    <TableCell className="text-center tabular-nums">
+                      {row.tradeValue}
+                    </TableCell>
+                    <TableCell className="text-center tabular-nums">
                       <span
                         className={cn(
                           "inline-flex items-center justify-center gap-1",
@@ -119,11 +113,15 @@ export function MarketFlowPanel() {
                         {row.moneyInflowLabel}
                       </span>
                     </TableCell>
-                    <TableCell className={CELL}>{row.buyPerCapita}</TableCell>
-                    <TableCell className={CELL}>{row.sellPerCapita}</TableCell>
+                    <TableCell className="text-center tabular-nums">
+                      {row.buyPerCapita}
+                    </TableCell>
+                    <TableCell className="text-center tabular-nums">
+                      {row.sellPerCapita}
+                    </TableCell>
                     <TableCell
                       className={cn(
-                        CELL,
+                        "text-center tabular-nums",
                         row.buyPower >= 0 ? "text-gain" : "text-loss"
                       )}
                     >

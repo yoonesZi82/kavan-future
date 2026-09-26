@@ -20,6 +20,8 @@ interface AnimatedThemeTogglerProps extends React.ComponentPropsWithoutRef<"butt
   variant?: TransitionVariant
   /** When true, the transition expands from the viewport center instead of the button center. */
   fromCenter?: boolean
+  /** When true, plays the View Transition clip-path reveal. Off by default. */
+  animate?: boolean
   /**
    * Controlled theme value. When provided, the parent owns persistence
    * (e.g. `next-themes`) and this component will not write to localStorage.
@@ -155,6 +157,7 @@ export const AnimatedThemeToggler = ({
   duration = 400,
   variant,
   fromCenter = false,
+  animate = false,
   theme,
   onThemeChange,
   ...props
@@ -244,7 +247,8 @@ export const AnimatedThemeToggler = ({
       }
     }
 
-    if (typeof document.startViewTransition !== "function") {
+    // * Animation kept below; default is instant theme swap only
+    if (!animate || typeof document.startViewTransition !== "function") {
       applyTheme()
       return
     }
@@ -308,6 +312,7 @@ export const AnimatedThemeToggler = ({
   }, [
     shape,
     fromCenter,
+    animate,
     duration,
     isDark,
     isControlled,

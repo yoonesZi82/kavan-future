@@ -1,18 +1,14 @@
 "use client"
 
 import Link from "next/link"
-import Image from "next/image"
-import { useTheme } from "next-themes"
 import { buttonVariants } from "@workspace/ui/components/button"
 import { cn } from "@workspace/ui/lib/utils"
+import { MarketingChart } from "@workspace/chart"
 import { ArrowLeft, CircleCheck, PlayCircle } from "lucide-react"
 
 export function HeroSection() {
-  const { resolvedTheme } = useTheme()
-  const isDark = resolvedTheme === "dark"
-
   return (
-    <section className="relative overflow-hidden py-12 sm:py-16">
+    <section className="relative overflow-hidden py-2 sm:py-4">
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_70%_45%_at_70%_0%,color-mix(in_oklab,var(--gain)_12%,transparent),transparent)]"
@@ -41,7 +37,7 @@ export function HeroSection() {
                   "h-11 rounded-xl bg-gain px-6 text-sm font-semibold text-white hover:bg-gain/90"
                 )}
               >
-                مشاهده داشبورد
+                مشاهده رایگان داشبورد
                 <ArrowLeft data-icon="inline-end" />
               </Link>
               <Link
@@ -66,15 +62,7 @@ export function HeroSection() {
               </span>
             </div>
           </div>
-          <Image
-            src={isDark ? "/dark-chart.webp" : "/chart.webp"}
-            alt="چارت تحلیل تکنیکال بازار"
-            width={1000}
-            height={1000}
-            sizes="(max-width: 1024px) 100vw, 50vw"
-            priority
-            className="h-auto w-full rounded-xl"
-          />
+          <MarketingChart />
         </div>
       </div>
     </section>

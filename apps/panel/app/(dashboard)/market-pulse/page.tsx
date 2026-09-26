@@ -1,5 +1,7 @@
+import { Suspense } from "react"
 import { createMetadata } from "@/lib/seo/create-metadata"
 import { MarketPulseGrid } from "@/features/market-pulse/market-pulse-grid"
+import { Skeleton } from "@workspace/ui/components/skeleton"
 
 export const metadata = createMetadata({
   title: "نبض بازار",
@@ -10,5 +12,9 @@ export const metadata = createMetadata({
 })
 
 export default function MarketPulsePage() {
-  return <MarketPulseGrid />
+  return (
+    <Suspense fallback={<Skeleton className="h-[70svh] w-full rounded-xl" />}>
+      <MarketPulseGrid />
+    </Suspense>
+  )
 }

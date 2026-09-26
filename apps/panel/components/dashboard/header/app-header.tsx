@@ -46,14 +46,14 @@ export function AppHeader() {
           </div>
         </div>
 
-        {/* * Opens shared GlobalSearchDialog — does not filter the watchlist */}
+        {/* * Opens asset search — picks go into the watchlist */}
         <div className="relative hidden min-w-0 flex-1 md:block md:max-w-2xl">
           <SearchIcon className="pointer-events-none absolute top-1/2 right-3 z-10 size-4 -translate-y-1/2 text-muted-foreground" />
           <Input
             className="h-8 w-full cursor-pointer pr-9"
             readOnly
-            placeholder="جستجوی دارایی، شاخص، نماد..."
-            aria-label="جستجو"
+            placeholder="جستجوی نماد برای واچ‌لیست..."
+            aria-label="جستجوی نماد"
             onFocus={(event) => {
               event.currentTarget.blur()
               openSearch()

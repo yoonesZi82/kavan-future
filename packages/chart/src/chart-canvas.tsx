@@ -17,11 +17,11 @@ import type {
   IndicatorId,
   RangeKey,
   ScaleMode,
-} from "@/features/market-pulse/components/chart/chart-options"
-import { applyChartData } from "@/features/market-pulse/components/chart/apply-chart-data"
-import { useChartDrawing } from "@/features/market-pulse/components/chart/use-chart-drawing"
-import { useChartView } from "@/features/market-pulse/components/chart/use-chart-view"
-import type { CandlePoint } from "@/features/market-pulse/types"
+} from "./chart-options"
+import { applyChartData } from "./apply-chart-data"
+import { useChartDrawing } from "./use-chart-drawing"
+import { useChartView } from "./use-chart-view"
+import type { CandlePoint } from "./types"
 
 type ChartCanvasProps = {
   data: CandlePoint[] | undefined

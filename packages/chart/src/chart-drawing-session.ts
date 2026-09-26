@@ -9,7 +9,7 @@ import {
   getDrawingStyle,
   isSlopeColoredTool,
   slopeLineColor,
-} from "@/features/market-pulse/components/chart/chart-drawing-map"
+} from "./chart-drawing-map"
 
 export const PREVIEW_ID = "__preview__"
 
