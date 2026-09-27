@@ -22,6 +22,14 @@ export const MAIN_SIGNAL = {
   instant: "صعودی",
 }
 
+/** Sidebar “تحلیل امروز” — fake daily digest until real API exists. */
+export const TODAY_ANALYSIS = {
+  title: "طلا در آستانه شکست مقاومت",
+  bias: "صعودی",
+  summary:
+    "قیمت نزدیک سطح ۴٬۳۰۰٬۰۰۰ است. ساختار سه کندل شتاب صعودی را تایید می‌کند و احتمال شکست مقاومت بالاست. ورود پلکانی و حد ضرر زیر حمایت ۴٬۲۱۰٬۰۰۰ پیشنهاد می‌شود.",
+} as const
+
 export const CANDLE_METRICS: CandleMetric[] = [
   {
     id: "structure",

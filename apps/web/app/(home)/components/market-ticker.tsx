@@ -4,7 +4,7 @@ import {
   MarketTickerCard,
   type MarketTickerCardProps,
 } from "@/components/market-ticker-card"
-import { SectionHeading } from "@/components/section-heading"
+import { siteContainerClass } from "@/lib/site-container"
 
 const tickers: MarketTickerCardProps[] = [
   {
@@ -16,21 +16,12 @@ const tickers: MarketTickerCardProps[] = [
     tone: "green",
   },
   {
-    symbol: "€",
-    label: "یورو",
-    price: "۹۴,۸۰۰",
-    change: "+۰.۴۱٪",
-    positive: true,
-    tone: "teal",
-  },
-  {
     symbol: "T",
     label: "تتر",
     price: "۸۷,۲۰۰",
     change: "+۰.۱۸٪",
     positive: true,
     tone: "green",
-    badge: "۱",
   },
   {
     symbol: "طلا",
@@ -39,16 +30,6 @@ const tickers: MarketTickerCardProps[] = [
     change: "+۰.۸۱٪",
     positive: true,
     tone: "yellow",
-    badge: "۲",
-  },
-  {
-    symbol: "سکه",
-    label: "سکه امامی",
-    price: "۷۹,۵۰۰,۰۰۰",
-    change: "−۰.۲۵٪",
-    positive: false,
-    tone: "red",
-    badge: "۳",
   },
   {
     symbol: "₿",
@@ -57,29 +38,63 @@ const tickers: MarketTickerCardProps[] = [
     change: "+۲.۳۳٪",
     positive: true,
     tone: "blue",
-    badge: "۴",
+  },
+  {
+    symbol: "سکه",
+    label: "سکه امامی",
+    price: "۷۹,۵۰۰,۰۰۰",
+    change: "−۰.۲۵٪",
+    positive: false,
+    tone: "red",
+  },
+  {
+    symbol: "ش",
+    label: "شاخص کل",
+    price: "۲,۱۴۵,۰۰۰",
+    change: "+۰.۴۲٪",
+    positive: true,
+    tone: "teal",
   },
 ]
 
 export function MarketTicker() {
   return (
-    <section className="w-full border-b border-border/60 bg-muted/30 py-3">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="mb-2 flex items-center justify-between gap-3">
-          <div className="flex items-center gap-3 text-xs text-muted-foreground">
-            <Badge variant="success" className="h-5 gap-1 px-1.5 text-[10px]">
+    // * overflow-x-clip keeps page sticky header stable while the row scrolls
+    <section className="w-full overflow-x-clip border-b border-border/50 py-4 sm:py-5">
+      <div className={siteContainerClass}>
+        {/* * Keep title/badge out of the scrollport so they never clip on mobile */}
+        <div className="relative z-10 mb-4 flex items-center justify-between gap-3">
+          <div className="min-w-0 shrink">
+            <h2 className="text-xl font-black tracking-tight sm:text-2xl">
+              نبض بازار
+            </h2>
+            <div className="mt-1.5 h-1 w-10 rounded-full bg-primary" />
+          </div>
+          <div className="flex shrink-0 items-center gap-2 text-xs text-muted-foreground sm:gap-3">
+            <Badge
+              variant="success"
+              className="h-5 gap-1 px-1.5 text-[10px]"
+            >
               <span className="size-1.5 animate-pulse rounded-full bg-gain" />
               بازار باز است
             </Badge>
-            <span className="hidden sm:inline">
-              سه‌شنبه ۱۸ شهریور ۱۴۰۴ · ۱۴:۱۲
-            </span>
+            <span className="hidden sm:inline">امروز · به‌روز لحظه‌ای</span>
           </div>
-          <SectionHeading href="/prices" className="mb-0" />
         </div>
-        <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
+
+        {/* * Mobile/tablet: snap carousel; lg+: 6-col grid */}
+        <div
+          className="-mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto overscroll-x-contain px-4 pb-1 touch-pan-x [scrollbar-width:none] lg:mx-0 lg:grid lg:grid-cols-6 lg:gap-3 lg:overflow-visible lg:px-0 lg:pb-0 lg:touch-auto [&::-webkit-scrollbar]:hidden"
+        >
           {tickers.map((ticker) => (
-            <MarketTickerCard key={ticker.label} {...ticker} />
+            <div
+              key={ticker.label}
+              className="w-[min(78vw,17rem)] shrink-0 snap-center lg:w-auto lg:snap-none"
+            >
+              <Link href="/prices" className="block">
+                <MarketTickerCard {...ticker} />
+              </Link>
+            </div>
           ))}
         </div>
       </div>

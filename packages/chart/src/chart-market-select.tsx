@@ -9,6 +9,7 @@ import {
   DropdownMenuTrigger,
 } from "@workspace/ui/components/dropdown-menu"
 import { cn } from "@workspace/ui/lib/utils"
+import { AnimatedMarketNumber } from "./animated-market-number"
 import type { ChartMarketOption } from "./types"
 
 type ChartMarketSelectProps = {
@@ -26,6 +27,9 @@ function formatChange(value: number): string {
   const sign = value > 0 ? "+" : ""
   return `${sign}${value.toLocaleString("fa-IR", { maximumFractionDigits: 2 })}`
 }
+
+const HEADER_CLASS =
+  "chart-market-select-item sticky top-0 z-10 border-b border-border/60 bg-popover px-2 py-1.5 text-[10px] font-medium tracking-wide text-muted-foreground"
 
 export function ChartMarketSelect({
   markets,
@@ -57,6 +61,11 @@ export function ChartMarketSelect({
         align="start"
         className="chart-market-select-menu scrollbar-brand max-h-72 overflow-y-auto"
       >
+        <div className={HEADER_CLASS} role="presentation" aria-hidden>
+          <span>نماد</span>
+          <span className="text-center">قیمت</span>
+          <span className="min-w-16 text-end">تغییر</span>
+        </div>
         {markets.map((market) => {
           const isActive = market.id === selected?.id
           const isUp = market.dayChange > 0
@@ -71,18 +80,20 @@ export function ChartMarketSelect({
               )}
             >
               <span className="truncate font-medium">{market.nameFa}</span>
-              <span className="tabular-nums text-muted-foreground">
-                {formatPrice(market.latest)}
-              </span>
-              <span
+              <AnimatedMarketNumber
+                value={market.latest}
+                format={formatPrice}
+                className="tabular-nums text-muted-foreground"
+              />
+              <AnimatedMarketNumber
+                value={market.dayChange}
+                format={formatChange}
                 className={cn(
                   "min-w-16 text-end tabular-nums",
                   isUp && "text-gain",
                   isDown && "text-loss"
                 )}
-              >
-                {formatChange(market.dayChange)}
-              </span>
+              />
             </DropdownMenuItem>
           )
         })}

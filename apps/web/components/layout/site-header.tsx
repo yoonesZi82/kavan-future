@@ -14,6 +14,7 @@ import {
 import { cn } from "@workspace/ui/lib/utils"
 import { Menu, TrendingUp } from "lucide-react"
 import { BRAND_NAME, BRAND_TAGLINE } from "@/lib/brand"
+import { siteContainerClass } from "@/lib/site-container"
 import { AnimatedThemeToggler } from "@workspace/ui/components/animated-theme-toggler"
 
 const navItems = [
@@ -68,7 +69,12 @@ export function SiteHeader() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/60 bg-background/85 backdrop-blur-md">
-      <div className="relative mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
+      <div
+        className={cn(
+          siteContainerClass,
+          "relative flex h-16 items-center justify-between gap-4"
+        )}
+      >
         <Link href="/" className="flex shrink-0 items-center gap-2.5">
           <span className="flex size-9 items-center justify-center rounded-lg bg-primary/15 text-primary">
             <TrendingUp />
@@ -97,13 +103,19 @@ export function SiteHeader() {
           <div className="hidden items-center gap-2 sm:flex">
             <Link
               href="/login"
-              className={cn(buttonVariants({ variant: "ghost", size: "sm" }))}
+              className={cn(
+                buttonVariants({ variant: "secondary", size: "lg" }),
+                "box-border h-9 min-h-9 rounded-lg border border-transparent px-4"
+              )}
             >
               ورود
             </Link>
             <Link
               href="/register"
-              className={cn(buttonVariants({ size: "sm", variant: "default" }))}
+              className={cn(
+                buttonVariants({ variant: "outline", size: "lg" }),
+                "box-border h-9 min-h-9 rounded-lg border border-primary/50 px-4 text-primary hover:bg-primary/10"
+              )}
             >
               ثبت‌نام
             </Link>
@@ -142,7 +154,7 @@ export function SiteHeader() {
                   href="/login"
                   onClick={() => setMobileOpen(false)}
                   className={cn(
-                    buttonVariants({ variant: "outline" }),
+                    buttonVariants({ variant: "secondary" }),
                     "w-full"
                   )}
                 >
@@ -152,8 +164,8 @@ export function SiteHeader() {
                   href="/register"
                   onClick={() => setMobileOpen(false)}
                   className={cn(
-                    buttonVariants(),
-                    "w-full bg-gain text-white hover:bg-gain/90"
+                    buttonVariants({ variant: "outline" }),
+                    "w-full border-primary/50 text-primary"
                   )}
                 >
                   ثبت‌نام

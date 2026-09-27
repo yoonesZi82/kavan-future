@@ -3,66 +3,87 @@
 import Link from "next/link"
 import { buttonVariants } from "@workspace/ui/components/button"
 import { cn } from "@workspace/ui/lib/utils"
-import { MarketingChart } from "@workspace/chart"
-import { ArrowLeft, CircleCheck, PlayCircle } from "lucide-react"
+import {
+  ArrowLeft,
+  Database,
+  PlayCircle,
+  ShieldCheck,
+  Sparkles,
+} from "lucide-react"
+import { HeroChart } from "@/app/(home)/components/hero-chart"
+import { HeroTodayAnalysis } from "@/app/(home)/components/hero-today-analysis"
+import { siteContainerClass } from "@/lib/site-container"
+
+const TRUST = [
+  { icon: Sparkles, label: "تحلیل تخصصی" },
+  { icon: Database, label: "منابع داده معتبر" },
+  { icon: ShieldCheck, label: "بدون اطلاعات بانکی" },
+] as const
 
 export function HeroSection() {
   return (
-    <section className="relative overflow-hidden py-2 sm:py-4">
+    <section className="relative overflow-hidden py-8 sm:py-12 lg:py-14">
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_70%_45%_at_70%_0%,color-mix(in_oklab,var(--gain)_12%,transparent),transparent)]"
+        className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_60%_50%_at_50%_0%,color-mix(in_oklab,var(--primary)_12%,transparent),transparent)]"
       />
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="grid items-center gap-10 lg:grid-cols-2">
-          <div>
-            <p className="mb-4 text-sm font-semibold text-primary">
-              دستیار تصمیم‌گیری مالی
+      <div className={siteContainerClass}>
+        {/* * Mobile: copy → chart → analysis; lg RTL: analysis | chart | copy */}
+        <div className="grid items-stretch gap-6 lg:grid-cols-[minmax(200px,0.72fr)_minmax(0,1.4fr)_minmax(0,0.95fr)] lg:gap-5">
+          <div className="order-1 flex flex-col justify-center lg:order-3">
+            <p className="mb-3 inline-flex w-fit rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
+              پلتفرم جامع تحلیل و تصمیم‌سازی مالی
             </p>
-            <h1 className="text-3xl leading-[1.3] font-black tracking-tight sm:text-4xl lg:text-[42px]">
+            <h1 className="text-3xl leading-[1.35] font-black tracking-tight text-foreground sm:text-4xl lg:text-[2.35rem]">
               قبل از تصمیم،
               <br />
               تصویر کامل بازار را ببینید
             </h1>
-            <p className="mt-5 max-w-lg text-[15px] leading-7 text-muted-foreground">
-              دسترسی به قیمت‌های لحظه‌ای، تحلیل هندسی قیمت، ساختار بازار،
-              سناریوها و احتمال‌ها، پایش سبد دارایی و هشدارهای هوشمند در یک محیط
-              یکپارچه.
+            <p className="mt-4 max-w-lg text-[15px] leading-7 text-muted-foreground">
+              با داده‌های لحظه‌ای، ساختار بازار و سناریوهای ریسک، تصمیم مالی را
+              شفاف‌تر و آگاهانه‌تر بگیرید.
             </p>
-            <div className="mt-7 flex flex-wrap items-center gap-3">
+            <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
               <Link
                 href="https://kavan-panel-gamma.vercel.app/market-pulse/"
                 className={cn(
                   buttonVariants({ size: "lg" }),
-                  "h-11 rounded-xl bg-gain px-6 text-sm font-semibold text-white hover:bg-gain/90"
+                  "h-12 rounded-xl bg-primary px-6 text-sm font-bold text-primary-foreground shadow-none hover:bg-primary/90"
                 )}
               >
-                مشاهده رایگان داشبورد
+                شروع تحلیل رایگان
                 <ArrowLeft data-icon="inline-end" />
               </Link>
               <Link
                 href="/demo"
                 className={cn(
                   buttonVariants({ variant: "outline", size: "lg" }),
-                  "h-11 gap-2 rounded-xl px-5 text-sm font-medium"
+                  "h-12 gap-2 rounded-xl border-primary/50 px-5 text-sm font-medium text-primary hover:bg-primary/10"
                 )}
               >
-                <PlayCircle data-icon="inline-start" className="text-gain" />
+                <PlayCircle data-icon="inline-start" className="text-primary" />
                 آشنایی با روش تحلیل
               </Link>
             </div>
-            <div className="mt-7 flex flex-wrap items-center gap-4 text-xs text-muted-foreground">
-              <span className="flex items-center gap-1.5">
-                <CircleCheck className="size-3.5 text-gain" />
-                بدون نیاز به ثبت‌نام
-              </span>
-              <span className="flex items-center gap-1.5">
-                <CircleCheck className="size-3.5 text-gain" />
-                مبتنی بر داده و رفتار بازار
-              </span>
+            <div className="mt-7 flex flex-wrap items-center gap-x-5 gap-y-3 text-xs text-muted-foreground">
+              {TRUST.map(({ icon: Icon, label }) => (
+                <span key={label} className="flex items-center gap-1.5">
+                  <span className="flex size-7 items-center justify-center rounded-full border border-primary/30 text-primary">
+                    <Icon className="size-3.5" />
+                  </span>
+                  {label}
+                </span>
+              ))}
             </div>
           </div>
-          <MarketingChart />
+
+          <div className="order-2 flex min-h-0 min-w-0 lg:order-2 lg:h-full">
+            <HeroChart />
+          </div>
+
+          <div className="order-3 min-h-0 lg:order-1 lg:h-full">
+            <HeroTodayAnalysis />
+          </div>
         </div>
       </div>
     </section>

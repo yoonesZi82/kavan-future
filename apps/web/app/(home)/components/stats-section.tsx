@@ -1,6 +1,7 @@
 import { Award, Clock, FileText, Users } from "lucide-react"
 import { Card } from "@workspace/ui/components/card"
 import { StatItem } from "@/components/stat-item"
+import { siteContainerClass } from "@/lib/site-container"
 
 // * Home social proof: compact one-line stats + short analyst quote
 const stats = [
@@ -33,7 +34,7 @@ const stats = [
 export function StatsSection() {
   return (
     <section className="py-6 sm:py-8">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className={siteContainerClass}>
         <Card className="gap-0 overflow-hidden rounded-xl border-0 bg-slate-900 text-white ring-1 ring-white/10">
           <div className="flex flex-col gap-8 p-6 sm:p-8 lg:flex-row lg:items-center lg:justify-between lg:gap-8">
             <div className="flex min-w-0 flex-1 flex-nowrap items-center gap-2.5 overflow-x-auto lg:gap-3">

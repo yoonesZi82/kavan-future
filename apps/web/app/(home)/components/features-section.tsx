@@ -1,6 +1,7 @@
 import { Activity, GitBranch, LineChart, Shield } from "lucide-react"
 import { FeatureCard } from "@/components/feature-card"
 import { SectionHeading } from "@/components/section-heading"
+import { siteContainerClass } from "@/lib/site-container"
 
 const features = [
   {
@@ -8,7 +9,7 @@ const features = [
     title: "نبض بازار",
     description:
       "قیمت‌های لحظه‌ای، تغییرات ۲۴ ساعته و نمودارهای حرفه‌ای برای رصد سریع بازار",
-    iconClassName: "bg-chart-5/15 text-chart-5",
+    iconClassName: "text-chart-5",
     href: "/features",
   },
   {
@@ -16,7 +17,7 @@ const features = [
     title: "تحلیل و تصمیم‌ها",
     description:
       "بررسی جهت، قدرت و ساختار حرکت بازار و دارایی‌ها در یک نمای یکپارچه",
-    iconClassName: "bg-gain/15 text-gain",
+    iconClassName: "text-gain",
     href: "/features",
   },
   {
@@ -24,7 +25,7 @@ const features = [
     title: "سناریو و احتمالات",
     description:
       "شبیه‌سازی سناریوهای محتمل و برآورد احتمال برای تصمیم‌گیری آگاهانه‌تر",
-    iconClassName: "bg-primary/15 text-primary",
+    iconClassName: "text-primary",
     href: "/features",
   },
   {
@@ -32,15 +33,15 @@ const features = [
     title: "سپر ریسک",
     description:
       "شناسایی محدوده‌ها، شکست‌ها و هشدارهای هوشمند برای مدیریت ریسک",
-    iconClassName: "bg-chart-4/15 text-chart-4",
+    iconClassName: "text-chart-4",
     href: "/features",
   },
 ]
 
 export function FeaturesSection() {
   return (
-    <section className="py-2 sm:py-4">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <section className="py-8 sm:py-12">
+      <div className={siteContainerClass}>
         <SectionHeading title="آنچه در یک نگاه می‌بینید" href="/features" />
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {features.map((feature) => (

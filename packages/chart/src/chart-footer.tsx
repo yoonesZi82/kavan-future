@@ -52,7 +52,7 @@ export function ChartFooter({
   return (
     // * Narrow widths: ranges scroll horizontally instead of wrapping into the chart
     <div className="flex shrink-0 items-center gap-1 border-t border-border px-2 py-1">
-      <div className="flex min-w-0 flex-1 items-center gap-0.5 overflow-x-auto overscroll-x-contain [scrollbar-width:thin]">
+      <div className="flex min-w-0 flex-1 items-center gap-0.5 overflow-x-auto overscroll-x-contain [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {RANGE_OPTIONS.map((item) => (
           <Button
             key={item.value}

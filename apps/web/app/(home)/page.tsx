@@ -1,7 +1,7 @@
 import { createMetadata } from "@/lib/seo/create-metadata"
 import { BRAND_NAME, BRAND_TAGLINE } from "@/lib/brand"
-import { MarketTicker } from "./components/market-ticker"
 import { HeroSection } from "./components/hero-section"
+import { MarketTicker } from "./components/market-ticker"
 import { FeaturesSection } from "./components/features-section"
 import { AnalysisSection } from "./components/analysis-section"
 import { StatsSection } from "./components/stats-section"
@@ -37,7 +37,7 @@ export const metadata = createMetadata({
   },
 })
 
-// * Home sections only — chrome (header/footer) comes from root layout
+// * Home: desktop = mockup large; mobile = stacked same sections
 export default function HomePage() {
   return (
     <main className="flex-1">

@@ -23,11 +23,11 @@ export function FeatureCard({
     <Card className="group hover:border-primary/40 relative gap-0 border-border/60 bg-card p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
       <div
         className={cn(
-          "mb-5 inline-flex size-11 items-center justify-center rounded-xl",
-          iconClassName ?? "bg-primary/15 text-primary"
+          "mb-5 inline-flex size-12 items-center justify-center rounded-full border-2 border-primary/40 bg-background",
+          iconClassName ?? "text-primary"
         )}
       >
-        <Icon />
+        <Icon className="size-5" />
       </div>
       <h3 className="mb-2 text-lg font-bold">{title}</h3>
       <p className="text-muted-foreground mb-5 text-[13px] leading-6">

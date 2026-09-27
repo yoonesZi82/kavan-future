@@ -12,6 +12,7 @@ import {
   WATCHLIST_DIVIDER,
   WATCHLIST_GRID,
 } from "@/features/market-pulse/components/watchlist/watchlist-layout"
+import { AnimatedMarketNumber } from "@/features/market-pulse/components/watchlist/animated-market-number"
 import type { MarketPair } from "@/features/market-pulse/types"
 
 type MajorIndicesPanelProps = {
@@ -160,26 +161,26 @@ export function MajorIndicesPanel({
                       <span className={WATCHLIST_DIVIDER} aria-hidden>
                         |
                       </span>
-                      <span
+                      <AnimatedMarketNumber
+                        value={row.latest}
+                        format={formatPrice}
                         className={cn(
                           WATCHLIST_COL,
                           "text-sm font-semibold tabular-nums"
                         )}
-                      >
-                        {formatPrice(row.latest)}
-                      </span>
+                      />
                       <span className={WATCHLIST_DIVIDER} aria-hidden>
                         |
                       </span>
-                      <span
+                      <AnimatedMarketNumber
+                        value={row.dayChange}
+                        format={formatSigned}
                         className={cn(
                           WATCHLIST_COL,
-                          "text-[10px] font-medium tabular-nums",
+                          "text-xs font-medium tabular-nums",
                           isGain ? "text-gain" : "text-loss"
                         )}
-                      >
-                        {formatSigned(row.dayChange)}
-                      </span>
+                      />
                     </button>
                   </li>
                 )

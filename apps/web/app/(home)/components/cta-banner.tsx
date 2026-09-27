@@ -3,11 +3,12 @@ import { buttonVariants } from "@workspace/ui/components/button"
 import { cn } from "@workspace/ui/lib/utils"
 import { ArrowLeft, BarChart3 } from "lucide-react"
 import { BRAND_NAME } from "@/lib/brand"
+import { siteContainerClass } from "@/lib/site-container"
 
 export function CtaBanner() {
   return (
     <section className="pb-4 sm:pb-6">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className={siteContainerClass}>
         <div className="cta-banner-gradient relative overflow-hidden rounded-2xl p-8 sm:p-10">
           <div className="relative flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-center">
             <div className="flex items-start gap-4">
@@ -28,7 +29,7 @@ export function CtaBanner() {
               href="/register"
               className={cn(
                 buttonVariants({ size: "lg" }),
-                "h-12 shrink-0 rounded-xl bg-primary px-7 text-sm font-bold text-primary-foreground shadow-lg hover:bg-primary/90"
+                "h-12 shrink-0 rounded-xl bg-primary px-7 text-sm font-bold text-primary-foreground shadow-none hover:bg-primary/90"
               )}
             >
               شروع رایگان

@@ -3,12 +3,13 @@ import {
   FeaturedAnalysisCard,
 } from "@/components/analysis-card"
 import { SectionHeading } from "@/components/section-heading"
+import { siteContainerClass } from "@/lib/site-container"
 
 export function AnalysisSection() {
   return (
-    <section className="bg-muted/30 py-2 sm:py-4">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <SectionHeading title="تحلیل روز" href="/analyses" />
+    <section className="bg-muted/30 py-8 sm:py-12">
+      <div className={siteContainerClass}>
+        <SectionHeading title="اخبار روز" href="/analyses" />
         <div className="grid gap-4 lg:grid-cols-3">
           <FeaturedAnalysisCard
             className="lg:col-span-2"

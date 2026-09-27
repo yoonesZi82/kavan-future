@@ -22,12 +22,12 @@ const toneClass: Record<NonNullable<MarketTickerCardProps["tone"]>, string> = {
 }
 
 const strokeClass: Record<NonNullable<MarketTickerCardProps["tone"]>, string> = {
-  green: "stroke-gain",
-  yellow: "stroke-primary",
-  red: "stroke-loss",
-  blue: "stroke-chart-4",
-  teal: "stroke-gain",
-  gray: "stroke-muted-foreground",
+  green: "text-gain",
+  yellow: "text-primary",
+  red: "text-loss",
+  blue: "text-chart-4",
+  teal: "text-gain",
+  gray: "text-muted-foreground",
 }
 
 function Sparkline({
@@ -40,17 +40,27 @@ function Sparkline({
   const path = positive
     ? "M0,20 C10,18 20,10 30,12 C40,14 50,6 60,4"
     : "M0,4 C10,8 20,14 30,10 C40,6 50,16 60,18"
+  const area = `${path} L60,24 L0,24 Z`
 
   return (
     <svg
       viewBox="0 0 60 24"
-      className={cn("h-8 w-16", strokeClass[tone])}
+      className={cn(
+        "h-8 w-16 overflow-visible",
+        strokeClass[tone],
+        "[filter:drop-shadow(0_1px_2px_color-mix(in_oklab,currentColor_45%,transparent))_drop-shadow(0_0_6px_color-mix(in_oklab,currentColor_55%,transparent))]"
+      )}
       fill="none"
-      strokeWidth="1.75"
-      strokeLinecap="round"
-      strokeLinejoin="round"
+      aria-hidden
     >
-      <path d={path} />
+      <path d={area} fill="currentColor" fillOpacity={0.14} stroke="none" />
+      <path
+        d={path}
+        stroke="currentColor"
+        strokeWidth="1.9"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
     </svg>
   )
 }

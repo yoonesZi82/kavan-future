@@ -8,6 +8,8 @@ import {
   Video,
 } from "lucide-react"
 import { BRAND_NAME, BRAND_TAGLINE } from "@/lib/brand"
+import { siteContainerClass } from "@/lib/site-container"
+import { cn } from "@workspace/ui/lib/utils"
 
 const footerCols = [
   {
@@ -50,7 +52,7 @@ const socials = [
 export function SiteFooter() {
   return (
     <footer className="border-t border-border/60 bg-background">
-      <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+      <div className={cn(siteContainerClass, "py-12")}>
         <div className="grid gap-10 lg:grid-cols-12">
           <div className="lg:col-span-4">
             <Link href="/" className="flex items-center gap-2.5">

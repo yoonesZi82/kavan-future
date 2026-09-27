@@ -6,11 +6,16 @@ import {
   CardHeader,
   CardTitle,
 } from "@workspace/ui/components/card"
-import { MAIN_SIGNAL } from "@/features/market-analysis/data/mock-data"
+import { TodayAnalysisCard } from "@/features/market-analysis/components/details/today-analysis-card"
 import { CandleStructure } from "@/features/market-analysis/components/signal/candle-structure"
 import { SignalGauge } from "@/features/market-analysis/components/signal/signal-gauge"
+import { MAIN_SIGNAL } from "@/features/market-analysis/data/mock-data"
 
-export function AnalysisSidebar() {
+type AnalysisSidebarProps = {
+  onViewTodayAnalysis?: () => void
+}
+
+export function AnalysisSidebar({ onViewTodayAnalysis }: AnalysisSidebarProps) {
   return (
     <div className="flex flex-col gap-3">
       <Card className="gap-0 overflow-hidden py-0 ring-inset">
@@ -34,6 +39,8 @@ export function AnalysisSidebar() {
           <CandleStructure />
         </CardContent>
       </Card>
+
+      <TodayAnalysisCard onView={onViewTodayAnalysis} />
     </div>
   )
 }
