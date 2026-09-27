@@ -31,7 +31,7 @@ type MarketOverviewBody = {
 /** Fetch TSE overall index snapshot for market pulse. */
 export async function fetchTseIndexMarket(): Promise<MarketPair> {
   const { data } = await tsetmcClient.get<MarketOverviewBody>(
-    "/api/MarketData/GetMarketOverview/1"
+    "/api/tsetmc-overview"
   )
   const overview = data.marketOverview
   const latest = overview?.indexLastValue ?? 0

@@ -9,8 +9,9 @@ import {
 import type { ChartMarketOption } from "./types"
 import type { ChartTimeframe } from "./types"
 
+// * Same-origin `/api/market-chart` → Next rewrite → Bitycle (no browser CORS)
 const bitycleClient = axios.create({
-  baseURL: "https://widget-data.bitycle.com",
+  baseURL: "",
   headers: { Accept: "application/json" },
 })
 
@@ -47,13 +48,14 @@ async function fetchWidgetData(params: {
   limit?: number
 }): Promise<CandlePoint[]> {
   const { data } = await bitycleClient.get<BitycleWidgetBody>(
-    "/c1/api/exchange/widget_data",
+    "/api/market-chart",
     {
       params: {
         symbol: params.symbol,
         time_frame: params.timeFrame,
         source: params.source,
         end: Math.floor(Date.now() / 1000),
+        is_first: "true",
         limit: params.limit ?? 500,
       },
     }

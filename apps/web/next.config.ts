@@ -7,6 +7,16 @@ const nextConfig: NextConfig = {
     "@workspace/chart",
     "lightweight-charts-drawing",
   ],
+  // * Marketing chart: same-origin proxy → Bitycle (avoids browser CORS)
+  async rewrites() {
+    return [
+      {
+        source: "/api/market-chart",
+        destination:
+          "https://widget-data.bitycle.com/c1/api/exchange/widget_data",
+      },
+    ]
+  },
   images: {
     remotePatterns: [
       {

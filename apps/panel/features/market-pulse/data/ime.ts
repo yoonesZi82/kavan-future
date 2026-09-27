@@ -1,6 +1,6 @@
 import type { CandlePoint, MarketPair } from "@/features/market-pulse/types"
 
-const IME_CDC_URL = "https://dataapi.ime.co.ir/api/CDC/CDCTrades"
+const IME_CDC_URL = "/api/ime-cdc"
 /** گواهی شمش نقره */
 const SILVER_FILTER = "21"
 const LOOKBACK_DAYS = 365

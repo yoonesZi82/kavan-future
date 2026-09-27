@@ -77,7 +77,9 @@ function mapGroupRow(
 
 /** Market flow by fund/group buckets from tradersarena market0. */
 export async function fetchTradersArenaMarket0(): Promise<MarketFlowItem[]> {
-  const { data } = await tradersarenaClient.get<Market0Response>("/data/market0")
+  const { data } = await tradersarenaClient.get<Market0Response>(
+    "/api/market-flow"
+  )
   if (!data || typeof data !== "object") return []
   return MARKET_GROUPS.map(({ key, label }) =>
     mapGroupRow(key, label, data[key])

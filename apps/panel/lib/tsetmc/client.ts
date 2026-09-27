@@ -1,7 +1,7 @@
 import axios from "axios"
 
-// * TSETMC CDN — browser axios (no Next API proxy)
+// * Same-origin `/api/tsetmc-overview` → Next rewrite → TSETMC CDN (no browser CORS)
 export const tsetmcClient = axios.create({
-  baseURL: "https://cdn.tsetmc.com",
+  baseURL: "",
   headers: { Accept: "application/json" },
 })

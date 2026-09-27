@@ -47,13 +47,14 @@ export async function fetchWidgetData(params: {
 }): Promise<CandlePoint[]> {
   const end = params.end ?? Math.floor(Date.now() / 1000)
   const { data } = await bitycleClient.get<BitycleWidgetBody>(
-    "/c1/api/exchange/widget_data",
+    "/api/market-chart",
     {
       params: {
         symbol: params.symbol,
         time_frame: params.timeFrame,
         source: params.source,
         end,
+        is_first: "true",
         limit: params.limit ?? 500,
       },
     }
