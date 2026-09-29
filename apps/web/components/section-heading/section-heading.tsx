@@ -1,12 +1,13 @@
 import Link from "next/link"
 import { ArrowLeft } from "lucide-react"
 import { cn } from "@workspace/ui/lib/utils"
-import { Activity } from "react"
+import { Activity, type ReactNode } from "react"
 
 type SectionHeadingProps = {
   title?: string
   href?: string
   linkLabel?: string
+  actions?: ReactNode
   className?: string
 }
 
@@ -14,6 +15,7 @@ export function SectionHeading({
   title,
   href,
   linkLabel = "مشاهده همه",
+  actions,
   className,
 }: SectionHeadingProps) {
   return (
@@ -28,15 +30,16 @@ export function SectionHeading({
           <div className="mt-2 h-1 w-12 rounded-full bg-primary" />
         </div>
       </Activity>
-      {href ? (
-        <Link
-          href={href}
-          className="hidden items-center gap-1 text-sm text-muted-foreground hover:text-foreground sm:inline-flex"
-        >
-          {linkLabel}
-          <ArrowLeft className="size-3.5" />
-        </Link>
-      ) : null}
+      {actions ??
+        (href ? (
+          <Link
+            href={href}
+            className="hidden items-center gap-1 text-sm text-muted-foreground hover:text-foreground sm:inline-flex"
+          >
+            {linkLabel}
+            <ArrowLeft className="size-3.5" />
+          </Link>
+        ) : null)}
     </div>
   )
 }

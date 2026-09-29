@@ -1,6 +1,6 @@
 "use client"
 
-import { ArrowDownIcon, ArrowUpIcon } from "lucide-react"
+import { TrendingDownIcon, TrendingUpIcon } from "lucide-react"
 import { Badge } from "@workspace/ui/components/badge"
 import {
   Card,
@@ -106,9 +106,9 @@ export function MarketFlowPanel() {
                         )}
                       >
                         {isIn ? (
-                          <ArrowUpIcon className="size-3.5 shrink-0" />
+                          <TrendingUpIcon className="size-3.5 shrink-0" />
                         ) : (
-                          <ArrowDownIcon className="size-3.5 shrink-0" />
+                          <TrendingDownIcon className="size-3.5 shrink-0" />
                         )}
                         {row.moneyInflowLabel}
                       </span>
@@ -119,13 +119,20 @@ export function MarketFlowPanel() {
                     <TableCell className="text-center tabular-nums">
                       {row.sellPerCapita}
                     </TableCell>
-                    <TableCell
-                      className={cn(
-                        "text-center tabular-nums",
-                        row.buyPower >= 0 ? "text-gain" : "text-loss"
-                      )}
-                    >
-                      {formatBuyPower(row.buyPower)}
+                    <TableCell className="text-center tabular-nums">
+                      <span
+                        className={cn(
+                          "inline-flex items-center justify-center gap-1",
+                          row.buyPower >= 0 ? "text-gain" : "text-loss"
+                        )}
+                      >
+                        {row.buyPower >= 0 ? (
+                          <TrendingUpIcon className="size-3.5 shrink-0" />
+                        ) : (
+                          <TrendingDownIcon className="size-3.5 shrink-0" />
+                        )}
+                        {formatBuyPower(row.buyPower)}
+                      </span>
                     </TableCell>
                   </TableRow>
                 )

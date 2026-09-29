@@ -1,4 +1,4 @@
-import { PlaceholderLayout } from "@/components/placeholder-layout"
+import { PlaceholderLayout } from "@/components/sections/placeholder-layout"
 import { createMetadata } from "@/lib/seo/create-metadata"
 
 export const metadata = createMetadata({
@@ -13,6 +13,7 @@ export default function ReportPage() {
     <PlaceholderLayout
       title="گزارش خطا و پیشنهاد"
       description="به‌زودی فرم گزارش مشکلات فنی، پیشنهادات و درخواست‌های ویژگی جدید در این صفحه قرار داده خواهد شد."
+      pagePath="/report"
     />
   )
 }

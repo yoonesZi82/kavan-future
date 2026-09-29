@@ -37,22 +37,15 @@ function formatCompact(value: number): string {
   const abs = Math.abs(value)
   const sign = value < 0 ? "−" : ""
   let scaled = abs
-  let unit = ""
-  if (abs >= 1e12) {
-    scaled = abs / 1e12
-    unit = " ه‍م"
-  } else if (abs >= 1e9) {
-    scaled = abs / 1e9
-    unit = " مر"
-  } else if (abs >= 1e6) {
-    scaled = abs / 1e6
-    unit = " م"
-  }
+  if (abs >= 1e12) scaled = abs / 1e12
+  else if (abs >= 1e9) scaled = abs / 1e9
+  else if (abs >= 1e6) scaled = abs / 1e6
+  const hasScale = abs >= 1e6
   const body = scaled.toLocaleString("fa-IR", {
-    minimumFractionDigits: unit ? 2 : 0,
+    minimumFractionDigits: hasScale ? 2 : 0,
     maximumFractionDigits: 2,
   })
-  return `${sign}${body}${unit}`
+  return `${sign}${body}`
 }
 
 function mapGroupRow(

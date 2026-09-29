@@ -1,9 +1,9 @@
-import { PlaceholderLayout } from "@/components/placeholder-layout"
+import { PlaceholderLayout } from "@/components/sections/placeholder-layout"
 import { createMetadata } from "@/lib/seo/create-metadata"
 
 export const metadata = createMetadata({
   title: "ویژگی‌ها",
-  description: "کلیه ویژگی‌ها و قابلیت‌های آگاه پرداز پارس.",
+  description: "کلیه ویژگی‌ها و قابلیت‌های آگه پرداز پارس.",
   path: "/features",
 })
 
@@ -11,7 +11,8 @@ export default function FeaturesPage() {
   return (
     <PlaceholderLayout
       title="همه ویژگی‌ها"
-      description="در این صفحه به‌زودی معرفی کامل و جزئیات کلیه قابلیت‌های پلتفرم آگاه پرداز پارس را مشاهده خواهید کرد."
+      description="در این صفحه به‌زودی معرفی کامل و جزئیات کلیه قابلیت‌های پلتفرم آگه پرداز پارس را مشاهده خواهید کرد."
+      pagePath="/features"
     />
   )
 }

@@ -29,8 +29,8 @@ export function HeroSection() {
       />
       <div className={siteContainerClass}>
         {/* * Mobile: copy → chart → analysis; lg RTL: analysis | chart | copy */}
-        <div className="grid items-stretch gap-6 lg:grid-cols-[minmax(200px,0.72fr)_minmax(0,1.4fr)_minmax(0,0.95fr)] lg:gap-5">
-          <div className="order-1 flex flex-col justify-center lg:order-3">
+        <div className="grid items-start gap-6 lg:grid-cols-[minmax(200px,0.72fr)_minmax(0,1.4fr)_minmax(0,0.95fr)] lg:gap-5">
+          <div className="order-1 flex flex-col justify-center lg:order-3 lg:self-center">
             <p className="mb-3 inline-flex w-fit rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
               پلتفرم جامع تحلیل و تصمیم‌سازی مالی
             </p>
@@ -77,11 +77,11 @@ export function HeroSection() {
             </div>
           </div>
 
-          <div className="order-2 flex min-h-0 min-w-0 lg:order-2 lg:h-full">
+          <div className="order-2 flex min-h-0 min-w-0 lg:order-2">
             <HeroChart />
           </div>
 
-          <div className="order-3 min-h-0 lg:order-1 lg:h-full">
+          <div className="order-3 min-h-0 lg:order-1">
             <HeroTodayAnalysis />
           </div>
         </div>

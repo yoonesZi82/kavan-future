@@ -1,45 +1,51 @@
-import {
-  CompactAnalysisCard,
-  FeaturedAnalysisCard,
-} from "@/components/analysis-card"
-import { SectionHeading } from "@/components/section-heading"
+import { AnalysisNewsCarousel } from "@/app/(home)/components/analysis-news-carousel"
+import type { AnalysisCardProps } from "@/components/analysis-card"
 import { siteContainerClass } from "@/lib/site-container"
+
+const NEWS_ITEMS: AnalysisCardProps[] = [
+  {
+    title: "تحلیل روند طلای ۱۸ عیار؛ تداوم قدرت خریداران در محدوده حمایتی",
+    date: "۱۰:۴۵ · ۱۸ شهریور ۱۴۰۴",
+    source: "آگاه‌پرداز",
+    imageSrc: "/chart.webp",
+    imageAlt: "تحلیل طلا و سکه",
+    category: "طلا و سکه",
+    href: "/analyses",
+  },
+  {
+    title: "بررسی روند دلار آزاد در محدوده مقاومتی",
+    date: "۰۹:۲۰ · ۱۸ شهریور ۱۴۰۴",
+    source: "آگاه‌پرداز",
+    imageSrc: "/chart.webp",
+    imageAlt: "تحلیل دلار",
+    category: "دلار و ارز",
+    href: "/analyses",
+  },
+  {
+    title: "تحلیل بیت‌کوین؛ تثبیت بالای محدوده حمایتی",
+    date: "۰۸:۰۵ · ۱۸ شهریور ۱۴۰۴",
+    source: "آگاه‌پرداز",
+    imageSrc: "/chart.webp",
+    imageAlt: "تحلیل بیت‌کوین",
+    category: "رمزارزها",
+    href: "/analyses",
+  },
+  {
+    title: "شاخص بورس؛ واکنش به حمایت روانی بازار",
+    date: "۱۶:۱۰ · ۱۷ شهریور ۱۴۰۴",
+    source: "آگاه‌پرداز",
+    imageSrc: "/chart.webp",
+    imageAlt: "تحلیل بورس",
+    category: "بورس",
+    href: "/analyses",
+  },
+]
 
 export function AnalysisSection() {
   return (
     <section className="bg-muted/30 py-8 sm:py-12">
       <div className={siteContainerClass}>
-        <SectionHeading title="اخبار روز" href="/analyses" />
-        <div className="grid gap-4 lg:grid-cols-3">
-          <FeaturedAnalysisCard
-            className="lg:col-span-2"
-            title="تحلیل روند طلای ۱۸ عیار؛ تداوم قدرت خریداران در محدوده حمایتی"
-            date="سه‌شنبه ۱۸ شهریور ۱۴۰۴ · ۱۰:۴۵"
-            excerpt="با توجه به حفظ سطوح حمایتی کلیدی و افزایش تقاضا در بازار داخلی، احتمال ادامه روند صعودی در کوتاه‌مدت وجود دارد."
-            imageSrc="/chart.webp"
-            imageAlt="تحلیل طلا و سکه"
-            category="طلا و سکه"
-            href="/analyses"
-          />
-          <div className="flex flex-col gap-4">
-            <CompactAnalysisCard
-              title="بررسی روند دلار آزاد در محدوده مقاومتی"
-              date="سه‌شنبه ۱۸ شهریور ۱۴۰۴ · ۰۹:۲۰"
-              imageSrc="/chart.webp"
-              imageAlt="تحلیل دلار"
-              category="دلار و ارز"
-              href="/analyses"
-            />
-            <CompactAnalysisCard
-              title="تحلیل بیت‌کوین؛ تثبیت بالای محدوده حمایتی"
-              date="سه‌شنبه ۱۸ شهریور ۱۴۰۴ · ۰۸:۰۵"
-              imageSrc="/chart.webp"
-              imageAlt="تحلیل بیت‌کوین"
-              category="رمزارزها"
-              href="/analyses"
-            />
-          </div>
-        </div>
+        <AnalysisNewsCarousel title="اخبار روز" items={NEWS_ITEMS} />
       </div>
     </section>
   )

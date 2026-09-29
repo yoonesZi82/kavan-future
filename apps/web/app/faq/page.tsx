@@ -1,4 +1,4 @@
-import { PlaceholderLayout } from "@/components/placeholder-layout"
+import { PlaceholderLayout } from "@/components/sections/placeholder-layout"
 import { createMetadata } from "@/lib/seo/create-metadata"
 
 export const metadata = createMetadata({
@@ -12,6 +12,7 @@ export default function FaqPage() {
     <PlaceholderLayout
       title="سوالات متداول"
       description="پاسخ به بیش از ۱۰۰ سوال رایج درباره ثبت‌نام، استفاده از پلتفرم، حساب کاربری، طرح‌های اشتراک و موارد دیگر."
+      pagePath="/faq"
     />
   )
 }

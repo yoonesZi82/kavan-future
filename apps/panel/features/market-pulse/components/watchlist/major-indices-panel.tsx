@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
+import { TrendingDownIcon, TrendingUpIcon } from "lucide-react"
 import { Card, CardContent } from "@workspace/ui/components/card"
 import { Skeleton } from "@workspace/ui/components/skeleton"
 import { cn } from "@workspace/ui/lib/utils"
@@ -9,6 +10,7 @@ import { useWatchlist } from "@/features/market-pulse/data/use-watchlist"
 import { MajorIndicesHeader } from "@/features/market-pulse/components/watchlist/major-indices-header"
 import {
   WATCHLIST_COL,
+  WATCHLIST_COL_SYMBOL,
   WATCHLIST_DIVIDER,
   WATCHLIST_GRID,
 } from "@/features/market-pulse/components/watchlist/watchlist-layout"
@@ -34,20 +36,16 @@ function formatPrice(value: number): string {
   return value.toLocaleString("fa-IR", { maximumFractionDigits: 2 })
 }
 
-function marketInitials(nameFa: string): string {
-  return nameFa.slice(0, 2)
-}
-
 function WatchlistColumnLabels() {
   return (
     <div
       className={cn(
         WATCHLIST_GRID,
-        "sticky top-0 z-10 border-b border-border bg-card px-0 py-2"
+        "sticky top-0 z-10 border-b border-border bg-card px-2.5 py-2"
       )}
       role="row"
     >
-      <span className={cn(WATCHLIST_COL, COLUMN_LABEL)}>نماد</span>
+      <span className={cn(WATCHLIST_COL_SYMBOL, COLUMN_LABEL)}>نماد</span>
       <span className={WATCHLIST_DIVIDER} aria-hidden>
         |
       </span>
@@ -134,7 +132,7 @@ export function MajorIndicesPanel({
                       onClick={() => onSelect(row)}
                       className={cn(
                         WATCHLIST_GRID,
-                        "cursor-pointer rounded-lg py-2.5 transition-colors",
+                        "cursor-pointer rounded-lg px-2.5 py-2.5 transition-colors",
                         isActive
                           ? "bg-primary/10 ring-1 ring-primary/30 ring-inset"
                           : "hover:bg-muted/70"
@@ -142,21 +140,16 @@ export function MajorIndicesPanel({
                     >
                       <span
                         className={cn(
-                          WATCHLIST_COL,
-                          "flex flex-row items-center gap-1"
+                          WATCHLIST_COL_SYMBOL,
+                          "flex flex-col items-stretch gap-0.5"
                         )}
                       >
-                        <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-primary/10 text-[10px] font-bold text-primary">
-                          {marketInitials(row.nameFa)}
+                        <span className="truncate text-sm font-medium leading-tight">
+                          {row.nameFa}
                         </span>
-                        <div className="flex flex-col gap-0.5">
-                          <span className="w-full truncate text-start text-sm font-medium">
-                            {row.nameFa}
-                          </span>
-                          <span className="max-w-full truncate rounded bg-muted px-1.5 py-0.5 text-start text-[10px] text-muted-foreground">
-                            {row.symbol}
-                          </span>
-                        </div>
+                        <span className="w-fit max-w-full truncate rounded bg-muted px-1.5 py-0.5 text-[10px] leading-tight text-muted-foreground">
+                          {row.symbol}
+                        </span>
                       </span>
                       <span className={WATCHLIST_DIVIDER} aria-hidden>
                         |
@@ -166,21 +159,29 @@ export function MajorIndicesPanel({
                         format={formatPrice}
                         className={cn(
                           WATCHLIST_COL,
-                          "text-sm font-semibold tabular-nums"
+                          "block text-sm font-semibold"
                         )}
                       />
                       <span className={WATCHLIST_DIVIDER} aria-hidden>
                         |
                       </span>
-                      <AnimatedMarketNumber
-                        value={row.dayChange}
-                        format={formatSigned}
+                      <span
                         className={cn(
                           WATCHLIST_COL,
-                          "text-xs font-medium tabular-nums",
+                          "inline-flex items-center justify-center gap-1 text-xs font-medium",
                           isGain ? "text-gain" : "text-loss"
                         )}
-                      />
+                      >
+                        {isGain ? (
+                          <TrendingUpIcon className="size-3.5 shrink-0" />
+                        ) : (
+                          <TrendingDownIcon className="size-3.5 shrink-0" />
+                        )}
+                        <AnimatedMarketNumber
+                          value={row.dayChange}
+                          format={formatSigned}
+                        />
+                      </span>
                     </button>
                   </li>
                 )
