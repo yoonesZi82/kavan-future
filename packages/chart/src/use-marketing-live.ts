@@ -9,6 +9,7 @@ import {
 import {
   getMarketingMarket,
   MARKETING_MARKETS,
+  resolveMarketingLiveSource,
   resolveMarketingTimeframe,
 } from "./marketing-markets"
 import type { CandlePoint, ChartTimeframe } from "./types"
@@ -50,7 +51,10 @@ export function useMarketingLive({
       for (const market of MARKETING_MARKETS) {
         sendJson(socket, {
           message_type: "subscribe_mp",
-          data: { source: market.source, market: market.ohlcSymbol },
+          data: {
+            source: resolveMarketingLiveSource(market),
+            market: market.ohlcSymbol,
+          },
         })
       }
       if (!ohlcSymbol) return
@@ -61,7 +65,7 @@ export function useMarketingLive({
         data: {
           market: config.ohlcSymbol,
           tf: resolveMarketingTimeframe(config, timeframe),
-          source: config.source,
+          source: resolveMarketingLiveSource(config),
         },
       })
     })

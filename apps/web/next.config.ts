@@ -7,13 +7,18 @@ const nextConfig: NextConfig = {
     "@workspace/chart",
     "lightweight-charts-drawing",
   ],
-  // * Marketing chart: same-origin proxy → Bitycle (avoids browser CORS)
+  // * Same-origin proxies — browser must not call upstream (CORS on deploy)
   async rewrites() {
     return [
       {
         source: "/api/market-chart",
         destination:
           "https://widget-data.bitycle.com/c1/api/exchange/widget_data",
+      },
+      {
+        source: "/api/tsetmc-overview",
+        destination:
+          "https://cdn.tsetmc.com/api/MarketData/GetMarketOverview/1",
       },
     ]
   },

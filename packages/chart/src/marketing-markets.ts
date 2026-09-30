@@ -6,7 +6,10 @@ export type MarketingMarketConfig = {
   nameFa: string
   symbol: string
   ohlcSymbol: string
+  /** History `source` for widget_data. */
   source: string
+  /** Live WS `source` (defaults to `source`). */
+  liveSource?: string
   timeframes: readonly string[]
   fallbackTimeframe: string
 }
@@ -37,6 +40,7 @@ export const MARKETING_MARKETS: readonly MarketingMarketConfig[] = [
     symbol: "طلا۱۸/IRT",
     ohlcSymbol: "GOLD18IRT",
     source: "brs",
+    liveSource: "tehran_cgf",
     timeframes: ["1m", "5m", "15m", "1h", "4h", "1d", "1w"],
     fallbackTimeframe: "1d",
   },
@@ -109,10 +113,17 @@ export const MARKETING_MARKETS: readonly MarketingMarketConfig[] = [
     symbol: "طلا۲۴/IRT",
     ohlcSymbol: "GOLD24IRT",
     source: "brs",
+    liveSource: "tehran_cgf",
     timeframes: ["1m", "5m", "15m", "1h", "4h", "1d", "1w"],
     fallbackTimeframe: "1d",
   },
 ]
+
+export function resolveMarketingLiveSource(
+  config: MarketingMarketConfig
+): string {
+  return config.liveSource ?? config.source
+}
 
 const BY_OHLC = new Map(
   MARKETING_MARKETS.map((market) => [market.ohlcSymbol, market])

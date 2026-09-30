@@ -1,4 +1,4 @@
-import { PlaceholderLayout } from "@/components/sections/placeholder-layout"
+import { PlaceholderLayout } from "@/components/placeholder-layout"
 import { createMetadata } from "@/lib/seo/create-metadata"
 
 export const metadata = createMetadata({
@@ -12,7 +12,6 @@ export default function FeaturesPage() {
     <PlaceholderLayout
       title="همه ویژگی‌ها"
       description="در این صفحه به‌زودی معرفی کامل و جزئیات کلیه قابلیت‌های پلتفرم آگه پرداز پارس را مشاهده خواهید کرد."
-      pagePath="/features"
     />
   )
 }

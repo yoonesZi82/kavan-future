@@ -10,6 +10,8 @@ export type MarketTickerCardProps = {
   positive: boolean
   tone?: "green" | "yellow" | "red" | "blue" | "teal" | "gray"
   badge?: string
+  /** Currency / unit shown beside the price (e.g. تومان). */
+  unit?: string
 }
 
 const toneClass: Record<NonNullable<MarketTickerCardProps["tone"]>, string> = {
@@ -73,6 +75,7 @@ export function MarketTickerCard({
   positive,
   tone = "green",
   badge,
+  unit,
 }: MarketTickerCardProps) {
   return (
     <Card
@@ -93,7 +96,14 @@ export function MarketTickerCard({
             <span className="text-muted-foreground text-[11px] font-medium">
               {label}
             </span>
-            <span className="text-sm font-bold">{price}</span>
+            <span className="flex items-baseline gap-1">
+              <span className="text-sm font-bold">{price}</span>
+              {unit ? (
+                <span className="text-muted-foreground text-[10px] font-medium">
+                  {unit}
+                </span>
+              ) : null}
+            </span>
           </span>
         </div>
         {badge ? (

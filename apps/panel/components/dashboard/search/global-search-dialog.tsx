@@ -18,9 +18,19 @@ import { useMarketsQuery } from "@/features/market-pulse/data/hooks"
 import { useWatchlist } from "@/features/market-pulse/data/use-watchlist"
 import type { MarketPair } from "@/features/market-pulse/types"
 
-function formatSigned(value: number): string {
-  const sign = value > 0 ? "+" : ""
-  return `${sign}${value.toLocaleString("fa-IR", { maximumFractionDigits: 2 })}`
+function dayChangePercent(latest: number, dayChange: number): number {
+  const basis = latest - dayChange
+  if (!Number.isFinite(basis) || basis === 0) return 0
+  return (dayChange / basis) * 100
+}
+
+function formatPercentChange(value: number): string {
+  const sign = value > 0 ? "+" : value < 0 ? "−" : ""
+  const abs = Math.abs(value).toLocaleString("fa-IR", {
+    maximumFractionDigits: 2,
+    minimumFractionDigits: 2,
+  })
+  return `${sign}${abs}٪`
 }
 
 function formatPrice(value: number): string {
@@ -34,7 +44,8 @@ function MarketResultRow({
   market: MarketPair
   inWatchlist: boolean
 }) {
-  const isGain = market.dayChange >= 0
+  const percent = dayChangePercent(market.latest, market.dayChange)
+  const isGain = percent >= 0
   return (
     <span className="flex min-w-0 flex-1 items-center justify-between gap-3">
       <span className="min-w-0 flex-1">
@@ -65,7 +76,7 @@ function MarketResultRow({
               : "border-loss/35 bg-loss/10 text-loss"
           )}
         >
-          {formatSigned(market.dayChange)}
+          {formatPercentChange(percent)}
         </Badge>
       </span>
     </span>

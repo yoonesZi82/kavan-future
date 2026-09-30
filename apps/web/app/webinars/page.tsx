@@ -1,4 +1,4 @@
-import { PlaceholderLayout } from "@/components/sections/placeholder-layout"
+import { PlaceholderLayout } from "@/components/placeholder-layout"
 import { createMetadata } from "@/lib/seo/create-metadata"
 
 export const metadata = createMetadata({
@@ -12,7 +12,6 @@ export default function WebinarsPage() {
     <PlaceholderLayout
       title="وبینارها و رویدادها"
       description="برنامه وبینارهای آموزشی هفتگی، کارگاه‌های تخصصی و رویدادهای آنلاین به‌زودی در این صفحه منتشر می‌شود."
-      pagePath="/webinars"
     />
   )
 }

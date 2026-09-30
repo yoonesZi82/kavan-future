@@ -27,9 +27,19 @@ const PAGE_SIZE = 40
 const COLUMN_LABEL =
   "text-[10px] font-medium tracking-wide text-muted-foreground"
 
-function formatSigned(value: number): string {
-  const sign = value > 0 ? "+" : ""
-  return `${sign}${value.toLocaleString("fa-IR", { maximumFractionDigits: 2 })}`
+function dayChangePercent(latest: number, dayChange: number): number {
+  const basis = latest - dayChange
+  if (!Number.isFinite(basis) || basis === 0) return 0
+  return (dayChange / basis) * 100
+}
+
+function formatPercentChange(value: number): string {
+  const sign = value > 0 ? "+" : value < 0 ? "−" : ""
+  const abs = Math.abs(value).toLocaleString("fa-IR", {
+    maximumFractionDigits: 2,
+    minimumFractionDigits: 2,
+  })
+  return `${sign}${abs}٪`
 }
 
 function formatPrice(value: number): string {
@@ -53,7 +63,7 @@ function WatchlistColumnLabels() {
       <span className={WATCHLIST_DIVIDER} aria-hidden>
         |
       </span>
-      <span className={cn(WATCHLIST_COL, COLUMN_LABEL)}>تغییر قیمت</span>
+      <span className={cn(WATCHLIST_COL, COLUMN_LABEL)}>تغییر ٪</span>
     </div>
   )
 }
@@ -120,7 +130,8 @@ export function MajorIndicesPanel({
             <WatchlistColumnLabels />
             <ul className="flex flex-col gap-1 py-1">
               {rows.map((row) => {
-                const isGain = row.dayChange >= 0
+                const percent = dayChangePercent(row.latest, row.dayChange)
+                const isGain = percent >= 0
                 const isActive = row.id === selectedId
                 return (
                   <li
@@ -178,8 +189,8 @@ export function MajorIndicesPanel({
                           <TrendingDownIcon className="size-3.5 shrink-0" />
                         )}
                         <AnimatedMarketNumber
-                          value={row.dayChange}
-                          format={formatSigned}
+                          value={percent}
+                          format={formatPercentChange}
                         />
                       </span>
                     </button>

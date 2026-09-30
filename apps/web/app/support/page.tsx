@@ -1,4 +1,4 @@
-import { PlaceholderLayout } from "@/components/sections/placeholder-layout"
+import { PlaceholderLayout } from "@/components/placeholder-layout"
 import { createMetadata } from "@/lib/seo/create-metadata"
 
 export const metadata = createMetadata({
@@ -13,7 +13,6 @@ export default function SupportPage() {
     <PlaceholderLayout
       title="مرکز پشتیبانی"
       description="تیکتینگ پشتیبانی، چت آنلاین، تماس تلفنی و راهنماهای رفع اشکال به‌زودی در این صفحه فعال خواهد شد."
-      pagePath="/support"
     />
   )
 }

@@ -1,4 +1,4 @@
-import { PlaceholderLayout } from "@/components/sections/placeholder-layout"
+import { PlaceholderLayout } from "@/components/placeholder-layout"
 import { createMetadata } from "@/lib/seo/create-metadata"
 
 export const metadata = createMetadata({
@@ -12,7 +12,6 @@ export default function AboutPage() {
     <PlaceholderLayout
       title="درباره ما"
       description="آگه پرداز پارس با هدف دستیابی به ابزارهای تصمیم‌گیری مالی مدرن و در دسترس برای همه سرمایه‌گذاران ایرانی، شکل گرفته است."
-      pagePath="/about"
     />
   )
 }

@@ -1,4 +1,4 @@
-import { PlaceholderLayout } from "@/components/sections/placeholder-layout"
+import { PlaceholderLayout } from "@/components/placeholder-layout"
 import { createMetadata } from "@/lib/seo/create-metadata"
 
 export const metadata = createMetadata({
@@ -12,7 +12,6 @@ export default function ToolsPage() {
     <PlaceholderLayout
       title="صفحه ابزارها"
       description="ابزارهای تخصصی تحلیل بازار، ماشین حساب‌های مالی، شبیه‌سازها و ابزارهای سبدسازی به‌زودی در این بخش فعال می‌شوند."
-      pagePath="/tools"
     />
   )
 }

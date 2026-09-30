@@ -1,6 +1,7 @@
 import {
   Activity,
   Briefcase,
+  LayoutDashboard,
   LineChart,
   Newspaper,
   Network,
@@ -17,6 +18,12 @@ export type NavItem = {
 }
 
 export const navItems: NavItem[] = [
+  {
+    title: "داشبورد",
+    href: "/",
+    icon: LayoutDashboard,
+    enabled: true,
+  },
   { title: "نبض بازار", href: "/market-pulse", icon: Activity, enabled: true },
   {
     title: "تحلیل بازار",

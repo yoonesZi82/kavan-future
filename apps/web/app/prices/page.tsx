@@ -1,4 +1,4 @@
-import { PlaceholderLayout } from "@/components/sections/placeholder-layout"
+import { PlaceholderLayout } from "@/components/placeholder-layout"
 import { createMetadata } from "@/lib/seo/create-metadata"
 
 export const metadata = createMetadata({
@@ -12,7 +12,6 @@ export default function PricesPage() {
     <PlaceholderLayout
       title="صفحه قیمت‌ها"
       description="قیمت‌های لحظه‌ای ارزها، طلا، سکه، سهام و رمزارزها همراه با نمودارهای تعاملی و هشدارهای قیمت، به‌زودی در این صفحه."
-      pagePath="/prices"
     />
   )
 }
