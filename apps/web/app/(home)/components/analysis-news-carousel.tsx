@@ -13,6 +13,7 @@ import {
   type AnalysisCardProps,
 } from "@/components/analysis-card"
 import { SectionHeading } from "@/components/section-heading"
+import { Reveal } from "./reveal"
 
 type AnalysisNewsCarouselProps = {
   title: string
@@ -57,14 +58,18 @@ export function AnalysisNewsCarousel({
       opts={{ align: "start", direction: "rtl", loop: true }}
       className="w-full"
     >
-      <SectionHeading title={title} actions={<CarouselNav />} />
+      <Reveal y={18}>
+        <SectionHeading title={title} actions={<CarouselNav />} />
+      </Reveal>
       <CarouselContent>
-        {items.map((item) => (
+        {items.map((item, index) => (
           <CarouselItem
             key={item.title}
             className="basis-[90%] sm:basis-[70%] lg:basis-[48%]"
           >
-            <AnalysisCard {...item} />
+            <Reveal y={22} delay={0.06 * index}>
+              <AnalysisCard {...item} />
+            </Reveal>
           </CarouselItem>
         ))}
       </CarouselContent>

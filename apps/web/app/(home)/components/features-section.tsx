@@ -2,6 +2,7 @@ import { Activity, GitBranch, LineChart, Shield } from "lucide-react"
 import { FeatureCard } from "@/components/feature-card"
 import { SectionHeading } from "@/components/section-heading"
 import { siteContainerClass } from "@/lib/site-container"
+import { RevealItem, RevealStagger } from "./reveal"
 
 const features = [
   {
@@ -41,14 +42,18 @@ const features = [
 export function FeaturesSection() {
   return (
     <section className="py-8 sm:py-12">
-      <div className={siteContainerClass}>
-        <SectionHeading title="آنچه در یک نگاه می‌بینید" href="/features" />
+      <RevealStagger className={siteContainerClass}>
+        <RevealItem>
+          <SectionHeading title="آنچه در یک نگاه می‌بینید" href="/features" />
+        </RevealItem>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {features.map((feature) => (
-            <FeatureCard key={feature.title} {...feature} />
+            <RevealItem key={feature.title}>
+              <FeatureCard {...feature} />
+            </RevealItem>
           ))}
         </div>
-      </div>
+      </RevealStagger>
     </section>
   )
 }

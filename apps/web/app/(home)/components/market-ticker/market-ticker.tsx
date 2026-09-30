@@ -20,6 +20,7 @@ import {
 } from "./ticker-format"
 import { isBitycleTicker, TICKER_MARKETS } from "./ticker-markets"
 import { useTickerLive } from "./use-ticker-live"
+import { RevealItem, RevealStagger } from "../reveal"
 
 function toCard(
   market: (typeof TICKER_MARKETS)[number],
@@ -98,39 +99,41 @@ export function MarketTicker() {
 
   return (
     <section className="w-full overflow-x-clip border-b border-border/50 py-4 sm:py-5">
-      <div className={siteContainerClass}>
-        <div className="relative z-10 mb-4 flex items-center justify-between gap-3">
-          <div className="min-w-0 shrink">
-            <h2 className="text-xl font-black tracking-tight sm:text-2xl">
-              نبض بازار
-            </h2>
-            <div className="mt-1.5 h-1 w-10 rounded-full bg-primary" />
+      <RevealStagger className={siteContainerClass} stagger={0.05}>
+        <RevealItem>
+          <div className="relative z-10 mb-4 flex items-center justify-between gap-3">
+            <div className="min-w-0 shrink">
+              <h2 className="text-xl font-black tracking-tight sm:text-2xl">
+                نبض بازار
+              </h2>
+              <div className="mt-1.5 h-1 w-10 rounded-full bg-primary" />
+            </div>
+            <div className="flex shrink-0 items-center gap-2 text-xs text-muted-foreground sm:gap-3">
+              <Badge
+                variant="success"
+                className="h-5 gap-1 px-1.5 text-[10px]"
+              >
+                <span className="size-1.5 animate-pulse rounded-full bg-gain" />
+                بازار باز است
+              </Badge>
+              <span className="hidden sm:inline">امروز · به‌روز لحظه‌ای</span>
+            </div>
           </div>
-          <div className="flex shrink-0 items-center gap-2 text-xs text-muted-foreground sm:gap-3">
-            <Badge
-              variant="success"
-              className="h-5 gap-1 px-1.5 text-[10px]"
-            >
-              <span className="size-1.5 animate-pulse rounded-full bg-gain" />
-              بازار باز است
-            </Badge>
-            <span className="hidden sm:inline">امروز · به‌روز لحظه‌ای</span>
-          </div>
-        </div>
+        </RevealItem>
 
         <div className="-mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto overscroll-x-contain px-4 pb-1 touch-pan-x [scrollbar-width:none] lg:mx-0 lg:grid lg:grid-cols-6 lg:gap-3 lg:overflow-visible lg:px-0 lg:pb-0 lg:touch-auto [&::-webkit-scrollbar]:hidden">
           {TICKER_MARKETS.map((market) => (
-            <div
+            <RevealItem
               key={market.id}
               className="w-[min(78vw,17rem)] shrink-0 snap-center lg:w-auto lg:snap-none"
             >
               <Link href="/prices" className="block">
                 <MarketTickerCard {...toCard(market, byId.get(market.id))} />
               </Link>
-            </div>
+            </RevealItem>
           ))}
         </div>
-      </div>
+      </RevealStagger>
     </section>
   )
 }

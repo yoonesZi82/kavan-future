@@ -1,5 +1,6 @@
 import { createMetadata } from "@/lib/seo/create-metadata"
 import { BRAND_NAME, BRAND_TAGLINE } from "@/lib/brand"
+import { Reveal } from "./components/reveal"
 import { HeroSection } from "./components/hero-section"
 import { MarketTicker } from "./components/market-ticker"
 import { FeaturesSection } from "./components/features-section"
@@ -37,16 +38,28 @@ export const metadata = createMetadata({
   },
 })
 
-// * Home: desktop = mockup large; mobile = stacked same sections
+// * Home: each block reveals on scroll; inner grids stagger their items
 export default function HomePage() {
   return (
     <main className="flex-1">
-      <MarketTicker />
-      <HeroSection />
-      <FeaturesSection />
-      <AnalysisSection />
-      <StatsSection />
-      <CtaBanner />
+      <Reveal y={20}>
+        <MarketTicker />
+      </Reveal>
+      <Reveal delay={0.05}>
+        <HeroSection />
+      </Reveal>
+      <Reveal>
+        <FeaturesSection />
+      </Reveal>
+      <Reveal>
+        <AnalysisSection />
+      </Reveal>
+      <Reveal>
+        <StatsSection />
+      </Reveal>
+      <Reveal>
+        <CtaBanner />
+      </Reveal>
     </main>
   )
 }
