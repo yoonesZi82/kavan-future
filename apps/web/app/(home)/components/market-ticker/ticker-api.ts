@@ -20,17 +20,21 @@ type BitycleWidgetBody = {
   data?: BitycleCandle[]
 }
 
-type MarketOverviewBody = {
-  marketOverview?: {
-    indexLastValue?: number
-    indexChange?: number
+type TgjuQuote = {
+  p?: string
+  d?: string
+  dp?: number
+}
+
+type TgjuAjaxBody = {
+  current?: {
+    bourse?: TgjuQuote
   }
 }
 
 const BITYCLE_DIRECT =
   "https://widget-data.bitycle.com/c1/api/exchange/widget_data"
 const FETCH_MS = 8_000
-const TSE_FETCH_MS = 4_000
 
 function snapshotFromCandles(
   id: string,
@@ -52,6 +56,11 @@ function emptySnapshot(id: string): TickerSnapshot {
 
 function withTimeout(ms: number): AbortSignal {
   return AbortSignal.timeout(ms)
+}
+
+function parseTgjuNumber(value: string | undefined): number {
+  if (!value) return 0
+  return Number(value.replace(/,/g, "")) || 0
 }
 
 async function readBitycleBody(
@@ -95,17 +104,22 @@ async function fetchBitycleSnapshot(
   return readBitycleBody(proxied, market.id)
 }
 
+/** TSE index via TGJU — Cloudflare-backed; TSETMC CDN is unreachable from Vercel. */
 async function fetchTseSnapshot(): Promise<TickerSnapshot> {
-  // ! Vercel → TSETMC often hangs (Iran CDN). Hard timeout so ticker/WS stay alive.
-  const response = await fetch("/api/tsetmc-overview", {
-    signal: withTimeout(TSE_FETCH_MS),
+  const response = await fetch("/api/tgju-ajax", {
+    signal: withTimeout(FETCH_MS),
   })
   if (!response.ok) return emptySnapshot("tse")
-  const body = (await response.json()) as MarketOverviewBody
-  const latest = body.marketOverview?.indexLastValue ?? 0
-  const dayChange = body.marketOverview?.indexChange ?? 0
-  const basis = latest - dayChange
-  const changePercent = basis !== 0 ? (dayChange / basis) * 100 : 0
+  const body = (await response.json()) as TgjuAjaxBody
+  const quote = body.current?.bourse
+  const latest = parseTgjuNumber(quote?.p)
+  const dayChange = parseTgjuNumber(quote?.d)
+  const changePercent =
+    typeof quote?.dp === "number"
+      ? quote.dp
+      : latest - dayChange !== 0
+        ? (dayChange / (latest - dayChange)) * 100
+        : 0
   return { id: "tse", latest, dayChange, changePercent }
 }
 

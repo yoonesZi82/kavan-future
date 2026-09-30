@@ -15,7 +15,11 @@ const nextConfig: NextConfig = {
         destination:
           "https://widget-data.bitycle.com/c1/api/exchange/widget_data",
       },
-      // * TSETMC handled in middleware (needs Referer/UA — bare rewrite hangs on Vercel)
+      // * TSE index — TGJU on Cloudflare (TSETMC CDN times out from Vercel)
+      {
+        source: "/api/tgju-ajax",
+        destination: "https://call1.tgju.org/ajax.json",
+      },
     ]
   },
   images: {
