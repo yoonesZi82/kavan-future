@@ -8,7 +8,10 @@ import {
   type MarketTickerCardProps,
 } from "@/components/market-ticker-card"
 import { siteContainerClass } from "@/lib/site-container"
-import { fetchTickerSnapshots, fetchTseTickerSnapshot } from "./ticker-api"
+import {
+  fetchOneTickerSnapshot,
+  fetchTseTickerSnapshot,
+} from "./ticker-api"
 import {
   formatTickerPercent,
   formatTickerPrice,
@@ -35,27 +38,35 @@ function toCard(
   }
 }
 
-// * Client island: history via rewrite + live Bitycle WS / TSETMC overview
+function upsertSnapshot(
+  current: TickerSnapshot[],
+  next: TickerSnapshot
+): TickerSnapshot[] {
+  const index = current.findIndex((row) => row.id === next.id)
+  if (index < 0) return [...current, next]
+  const copy = current.slice()
+  copy[index] = next
+  return copy
+}
+
+// * Client island: history via rewrite + live Bitycle WS (WS must not wait on HTTP)
 export function MarketTicker() {
   const [snapshots, setSnapshots] = useState<TickerSnapshot[]>([])
-  const [ready, setReady] = useState(false)
 
   useEffect(() => {
     let cancelled = false
-    void fetchTickerSnapshots()
-      .then((rows) => {
-        if (!cancelled) setSnapshots(rows)
+    // * Per-market: Bitycle must not wait for TSETMC (Vercel→TSETMC often hangs)
+    for (const market of TICKER_MARKETS) {
+      void fetchOneTickerSnapshot(market).then((row) => {
+        if (!cancelled) {
+          setSnapshots((current) => upsertSnapshot(current, row))
+        }
       })
-      .finally(() => {
-        if (!cancelled) setReady(true)
-      })
-    // * TSETMC has no WS — poll overview only (do not refetch Bitycle candles)
+    }
     const timer = window.setInterval(() => {
       void fetchTseTickerSnapshot().then((tse) => {
-        if (cancelled) return
-        setSnapshots((current) =>
-          current.map((row) => (row.id === "tse" ? tse : row))
-        )
+        if (cancelled || tse.latest === 0) return
+        setSnapshots((current) => upsertSnapshot(current, tse))
       })
     }, 60_000)
     return () => {
@@ -69,14 +80,19 @@ export function MarketTicker() {
       (row) => isBitycleTicker(row) && row.ohlcSymbol === ohlcSymbol
     )
     if (!market) return
-    setSnapshots((current) =>
-      current.map((row) =>
-        row.id === market.id ? withLivePrice(row, price) : row
-      )
-    )
+    setSnapshots((current) => {
+      const existing = current.find((row) => row.id === market.id)
+      const base = existing ?? {
+        id: market.id,
+        latest: price,
+        dayChange: 0,
+        changePercent: 0,
+      }
+      return upsertSnapshot(current, withLivePrice(base, price))
+    })
   }, [])
 
-  useTickerLive({ enabled: ready, onPrice })
+  useTickerLive({ onPrice })
 
   const byId = new Map(snapshots.map((row) => [row.id, row]))
 

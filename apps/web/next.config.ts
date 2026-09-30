@@ -15,11 +15,7 @@ const nextConfig: NextConfig = {
         destination:
           "https://widget-data.bitycle.com/c1/api/exchange/widget_data",
       },
-      {
-        source: "/api/tsetmc-overview",
-        destination:
-          "https://cdn.tsetmc.com/api/MarketData/GetMarketOverview/1",
-      },
+      // * TSETMC handled in middleware (needs Referer/UA — bare rewrite hangs on Vercel)
     ]
   },
   images: {

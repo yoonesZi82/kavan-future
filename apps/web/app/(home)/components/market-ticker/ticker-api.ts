@@ -27,6 +27,11 @@ type MarketOverviewBody = {
   }
 }
 
+const BITYCLE_DIRECT =
+  "https://widget-data.bitycle.com/c1/api/exchange/widget_data"
+const FETCH_MS = 8_000
+const TSE_FETCH_MS = 4_000
+
 function snapshotFromCandles(
   id: string,
   candles: BitycleCandle[]
@@ -45,28 +50,56 @@ function emptySnapshot(id: string): TickerSnapshot {
   return { id, latest: 0, dayChange: 0, changePercent: 0 }
 }
 
-async function fetchBitycleSnapshot(
-  market: BitycleTickerConfig
+function withTimeout(ms: number): AbortSignal {
+  return AbortSignal.timeout(ms)
+}
+
+async function readBitycleBody(
+  response: Response,
+  id: string
 ): Promise<TickerSnapshot> {
+  if (!response.ok) return emptySnapshot(id)
+  const body = (await response.json()) as BitycleWidgetBody
+  if (body.status !== "success") return emptySnapshot(id)
+  return snapshotFromCandles(id, body.data ?? [])
+}
+
+function bitycleQuery(market: BitycleTickerConfig): string {
   const end = Math.floor(Date.now() / 1000)
-  const params = new URLSearchParams({
+  return new URLSearchParams({
     symbol: market.ohlcSymbol,
     time_frame: market.timeFrame,
     source: market.source,
     end: String(end),
     is_first: "true",
     limit: "3",
+  }).toString()
+}
+
+async function fetchBitycleSnapshot(
+  market: BitycleTickerConfig
+): Promise<TickerSnapshot> {
+  const query = bitycleQuery(market)
+  // * Prefer direct (Iran → Bitycle). CORS only allows localhost today; else rewrite.
+  try {
+    const direct = await fetch(`${BITYCLE_DIRECT}?${query}`, {
+      signal: withTimeout(FETCH_MS),
+    })
+    if (direct.ok) return readBitycleBody(direct, market.id)
+  } catch {
+    // fall through to same-origin rewrite
+  }
+  const proxied = await fetch(`/api/market-chart?${query}`, {
+    signal: withTimeout(FETCH_MS),
   })
-  // * Same-origin rewrite → Bitycle widget_data (see next.config)
-  const response = await fetch(`/api/market-chart?${params.toString()}`)
-  if (!response.ok) return emptySnapshot(market.id)
-  const body = (await response.json()) as BitycleWidgetBody
-  if (body.status !== "success") return emptySnapshot(market.id)
-  return snapshotFromCandles(market.id, body.data ?? [])
+  return readBitycleBody(proxied, market.id)
 }
 
 async function fetchTseSnapshot(): Promise<TickerSnapshot> {
-  const response = await fetch("/api/tsetmc-overview")
+  // ! Vercel → TSETMC often hangs (Iran CDN). Hard timeout so ticker/WS stay alive.
+  const response = await fetch("/api/tsetmc-overview", {
+    signal: withTimeout(TSE_FETCH_MS),
+  })
   if (!response.ok) return emptySnapshot("tse")
   const body = (await response.json()) as MarketOverviewBody
   const latest = body.marketOverview?.indexLastValue ?? 0
@@ -84,22 +117,18 @@ export async function fetchTseTickerSnapshot(): Promise<TickerSnapshot> {
   }
 }
 
+export async function fetchOneTickerSnapshot(
+  market: (typeof TICKER_MARKETS)[number]
+): Promise<TickerSnapshot> {
+  try {
+    if (isBitycleTicker(market)) return await fetchBitycleSnapshot(market)
+    return await fetchTseSnapshot()
+  } catch {
+    return emptySnapshot(isBitycleTicker(market) ? market.id : "tse")
+  }
+}
+
 /** Parallel history/overview snapshots for the home ticker strip. */
 export async function fetchTickerSnapshots(): Promise<TickerSnapshot[]> {
-  return Promise.all(
-    TICKER_MARKETS.map(async (market) => {
-      if (isBitycleTicker(market)) {
-        try {
-          return await fetchBitycleSnapshot(market)
-        } catch {
-          return emptySnapshot(market.id)
-        }
-      }
-      try {
-        return await fetchTseSnapshot()
-      } catch {
-        return emptySnapshot("tse")
-      }
-    })
-  )
+  return Promise.all(TICKER_MARKETS.map(fetchOneTickerSnapshot))
 }
