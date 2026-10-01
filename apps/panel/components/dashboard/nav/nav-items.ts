@@ -7,6 +7,7 @@ import {
   Network,
   Settings2,
   Shield,
+  Users,
   type LucideIcon,
 } from "lucide-react"
 
@@ -24,6 +25,7 @@ export const navItems: NavItem[] = [
     icon: LayoutDashboard,
     enabled: true,
   },
+  { title: "کاربران", href: "/users", icon: Users, enabled: true },
   { title: "نبض بازار", href: "/market-pulse", icon: Activity, enabled: true },
   {
     title: "تحلیل بازار",
