@@ -1,6 +1,7 @@
 import {
   Activity,
   Briefcase,
+  CreditCard,
   LayoutDashboard,
   LineChart,
   Newspaper,
@@ -26,6 +27,12 @@ export const navItems: NavItem[] = [
     enabled: true,
   },
   { title: "کاربران", href: "/users", icon: Users, enabled: true },
+  {
+    title: "اشتراک و پرداخت‌ها",
+    href: "/subscriptions",
+    icon: CreditCard,
+    enabled: true,
+  },
   { title: "نبض بازار", href: "/market-pulse", icon: Activity, enabled: true },
   {
     title: "تحلیل بازار",

@@ -5,13 +5,16 @@ import { useCallback, useEffect, useState, useSyncExternalStore } from "react"
 const STORAGE_KEY = "kavan-watchlist-ids"
 
 /** Seed so the watchlist isn’t empty on first visit. */
-const DEFAULT_IDS = [
+const DEFAULT_IDS: string[] = [
   "btc-usdt",
   "eth-usdt",
   "gold18-irt",
   "xau-usd",
   "usdt-rls",
-] as const
+]
+
+// ! useSyncExternalStore: getServerSnapshot must return a stable reference
+const SERVER_SNAPSHOT: string[] = DEFAULT_IDS
 
 type Listener = () => void
 
@@ -19,18 +22,18 @@ let memoryIds: string[] | null = null
 const listeners = new Set<Listener>()
 
 function readIds(): string[] {
-  if (typeof window === "undefined") return [...DEFAULT_IDS]
+  if (typeof window === "undefined") return DEFAULT_IDS
   try {
     const raw = window.localStorage.getItem(STORAGE_KEY)
-    if (!raw) return [...DEFAULT_IDS]
+    if (!raw) return DEFAULT_IDS
     const parsed: unknown = JSON.parse(raw)
-    if (!Array.isArray(parsed)) return [...DEFAULT_IDS]
+    if (!Array.isArray(parsed)) return DEFAULT_IDS
     const ids = parsed.filter(
       (item): item is string => typeof item === "string"
     )
-    return ids.length > 0 ? ids : [...DEFAULT_IDS]
+    return ids.length > 0 ? ids : DEFAULT_IDS
   } catch {
-    return [...DEFAULT_IDS]
+    return DEFAULT_IDS
   }
 }
 
@@ -40,7 +43,7 @@ function getSnapshot(): string[] {
 }
 
 function getServerSnapshot(): string[] {
-  return [...DEFAULT_IDS]
+  return SERVER_SNAPSHOT
 }
 
 function setIds(next: string[]): void {
