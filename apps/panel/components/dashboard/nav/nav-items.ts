@@ -2,6 +2,7 @@ import {
   Activity,
   Briefcase,
   CreditCard,
+  FilePenLine,
   LayoutDashboard,
   LineChart,
   Newspaper,
@@ -33,6 +34,7 @@ export const navItems: NavItem[] = [
     icon: CreditCard,
     enabled: true,
   },
+  { title: "تحلیل‌ها", href: "/analyses", icon: FilePenLine, enabled: true },
   { title: "نبض بازار", href: "/market-pulse", icon: Activity, enabled: true },
   {
     title: "تحلیل بازار",
