@@ -271,8 +271,24 @@
   animation: cta-banner-shift 8s ease-in-out infinite;
 }
 
+/* * Solid CTA button: shifting brand gradient */
+.brand-action-gradient {
+  background-image: linear-gradient(
+    120deg,
+    var(--primary),
+    color-mix(in oklab, var(--gain) 55%, var(--primary)),
+    color-mix(in oklab, var(--primary) 70%, oklch(0.92 0.08 70)),
+    color-mix(in oklab, var(--chart-2) 45%, var(--primary)),
+    var(--primary)
+  );
+  background-size: 260% 260%;
+  animation: cta-banner-shift 4s ease-in-out infinite;
+  color: var(--primary-foreground);
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .cta-banner-gradient {
+  .cta-banner-gradient,
+  .brand-action-gradient {
     animation: none;
     background-position: 50% 50%;
   }
