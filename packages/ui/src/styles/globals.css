@@ -8,6 +8,22 @@
 @source "../../../chart/src/**/*.{ts,tsx}";
 @source "../**/*.{ts,tsx}";
 
+/* * Shared page shell: centered, padded, max-w-6xl — prefer this over ad-hoc mx-auto */
+@utility container {
+  width: 100%;
+  margin-inline: auto;
+  max-width: 72rem;
+  padding-inline: 1rem;
+
+  @variant sm {
+    padding-inline: 1.5rem;
+  }
+
+  @variant lg {
+    padding-inline: 2rem;
+  }
+}
+
 :root {
   --background: oklch(0.9789 0.0029 264.5421);
   --foreground: oklch(0.2315 0.0245 266.9464);
@@ -35,6 +51,9 @@
   --chart-5: oklch(0.1998 0.0332 260.2494);
   --gain: oklch(0.6253 0.1106 171.2013);
   --loss: oklch(0.5988 0.1364 22.5944);
+  /* * Landing sapphire — used as primary inside .landing-theme */
+  --landing-blue: oklch(0.42 0.15 262);
+  --landing-blue-foreground: oklch(0.99 0.005 260);
   --sidebar: oklch(0.1998 0.0332 260.2494);
   --sidebar-foreground: oklch(0.9466 0.0114 252.0898);
   --sidebar-primary: oklch(0.777 0.1384 85.6644);
@@ -97,6 +116,8 @@
   --chart-5: oklch(0.3715 0 0);
   --gain: oklch(0.6253 0.1106 171.2013);
   --loss: oklch(0.5988 0.1364 22.5944);
+  --landing-blue: oklch(0.58 0.14 262);
+  --landing-blue-foreground: oklch(0.18 0.03 260);
   --sidebar: oklch(0.15 0.03 263);
   --sidebar-foreground: oklch(0.9466 0.0114 252.0898);
   --sidebar-primary: oklch(0.777 0.1384 85.6644);
@@ -130,6 +151,13 @@
   --shadow-2xl: 0px 2px 0px 0px hsl(0 0% 20% / 0.38);
 }
 
+/* * Landing app: remap semantic primary to sapphire blue */
+.landing-theme {
+  --primary: var(--landing-blue);
+  --primary-foreground: var(--landing-blue-foreground);
+  --ring: var(--landing-blue);
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -157,6 +185,8 @@
   --color-chart-5: var(--chart-5);
   --color-gain: var(--gain);
   --color-loss: var(--loss);
+  --color-landing-blue: var(--landing-blue);
+  --color-landing-blue-foreground: var(--landing-blue-foreground);
   --color-sidebar: var(--sidebar);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar-primary: var(--sidebar-primary);
@@ -201,6 +231,10 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 /* Brand gradient scrollbar — thin rail for dense lists */

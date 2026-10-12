@@ -12,6 +12,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@paper-design/shaders-react": "^0.0.81",
     "@workspace/ui": "workspace:*",
     "framer-motion": "^13.4.0",
     "lucide-react": "^1.47.0",

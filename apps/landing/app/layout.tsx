@@ -24,7 +24,7 @@ export default function RootLayout({
       suppressHydrationWarning
       className={cn("font-sans antialiased", vazirmatn.variable)}
     >
-      <body>
+      <body className="landing-theme">
         <AppProviders>{children}</AppProviders>
       </body>
     </html>
