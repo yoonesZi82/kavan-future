@@ -27,7 +27,7 @@ export function HomeFaq() {
               </div>
             </AccordionTrigger>
             <AccordionContent className="relative ps-9 leading-relaxed text-foreground/80">
-              <div className="inset-s-3 absolute top-0 bottom-3 w-px border-s border-dashed border-primary" />
+              <div className="inset-s-4 absolute top-0 bottom-3 w-px border-s border-dashed border-primary" />
               {answer}
             </AccordionContent>
           </AccordionItem>

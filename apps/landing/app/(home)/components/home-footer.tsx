@@ -2,12 +2,6 @@ import Link from "next/link"
 import { BRAND_NAME } from "@/lib/brand"
 import { BrandMark } from "./brand-mark"
 
-const FOOTER_LINKS = [
-  { href: "#", label: "درباره ما" },
-  { href: "#", label: "تماس" },
-  { href: "#", label: "حریم خصوصی" },
-] as const
-
 export function HomeFooter() {
   return (
     <footer className="relative mt-8 overflow-hidden border-t border-primary/15">
@@ -23,27 +17,16 @@ export function HomeFooter() {
         <div className="flex flex-col items-center gap-6 text-center sm:flex-row sm:items-start sm:justify-between sm:text-start">
           <div className="flex flex-col items-center gap-3 sm:items-start">
             <BrandMark />
-            <p className="text-muted-foreground max-w-xs text-sm leading-relaxed">
+            <p className="max-w-xs text-sm leading-relaxed text-muted-foreground">
               منطق تصمیم را شفاف می‌کند — انتخاب نهایی همیشه با شماست.
             </p>
           </div>
-          <nav className="flex flex-wrap items-center justify-center gap-2 sm:justify-end">
-            {FOOTER_LINKS.map((link) => (
-              <Link
-                key={link.label}
-                href={link.href}
-                className="text-foreground/80 hover:bg-primary/10 hover:text-primary rounded-lg px-3 py-1.5 text-sm font-medium transition-colors"
-              >
-                {link.label}
-              </Link>
-            ))}
-          </nav>
         </div>
-        <div className="border-border/60 flex flex-col items-center gap-3 border-t pt-6 sm:flex-row sm:justify-between">
-          <p className="text-muted-foreground text-xs sm:text-sm">
+        <div className="flex flex-col items-center gap-3 border-t border-border/60 pt-6 sm:flex-row sm:justify-between">
+          <p className="text-xs text-muted-foreground sm:text-sm">
             © 2026 {BRAND_NAME}
           </p>
-          <p className="bg-primary/10 text-primary inline-flex items-center rounded-full px-3 py-1 text-xs font-medium">
+          <p className="inline-flex items-center rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
             ابزار تحلیل — بدون توصیه خرید یا فروش
           </p>
         </div>
