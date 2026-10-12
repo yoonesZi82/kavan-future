@@ -23,8 +23,8 @@ export function HomeHero() {
         <h1 className="min-h-[8.5rem] w-full text-center sm:min-h-[9.5rem] lg:min-h-[11rem] lg:text-start">
           <StrokeText
             text={HERO_TITLE}
-            strokeColor="var(--foreground)"
-            fillColor="var(--primary)"
+            strokeColor="var(--hero-title-stroke)"
+            fillColor="var(--hero-title-fill)"
             strokeWidth={1.2}
             drawDuration={1.4}
             fillDelay={0.15}

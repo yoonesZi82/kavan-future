@@ -156,6 +156,14 @@
   --primary: var(--landing-blue);
   --primary-foreground: var(--landing-blue-foreground);
   --ring: var(--landing-blue);
+  /* * Hero StrokeText: dark outline in light, soft primary pair in dark (no white rim) */
+  --hero-title-stroke: oklch(0.28 0.05 262);
+  --hero-title-fill: var(--landing-blue);
+}
+
+.dark .landing-theme {
+  --hero-title-stroke: oklch(0.78 0.1 262);
+  --hero-title-fill: oklch(0.68 0.14 262);
 }
 
 @theme inline {
