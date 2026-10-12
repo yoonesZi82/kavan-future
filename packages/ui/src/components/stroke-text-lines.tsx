@@ -16,6 +16,8 @@ type StrokeTextLinesProps = {
   strokeColor: string
   fillColor: string
   useWipe: boolean
+  keepJoined: boolean
+  centered: boolean
   fontStyle: CSSProperties
   strokeControls: MotionControls
   fillControls: MotionControls
@@ -31,12 +33,59 @@ export function StrokeTextLines({
   strokeColor,
   fillColor,
   useWipe,
+  keepJoined,
+  centered,
   fontStyle,
   strokeControls,
   fillControls,
 }: StrokeTextLinesProps) {
-  let charIndex = 0
+  const textAnchor = centered ? "middle" : "start"
 
+  // * Joined scripts: one text node per line so Safari keeps cursive forms
+  if (keepJoined) {
+    return lines.map((line, lineIndex) => {
+      const shared = {
+        className: "select-none",
+        x: 0,
+        y: lineIndex * rowHeight,
+        direction,
+        textAnchor: textAnchor as "start" | "middle",
+        strokeWidth: mode === "stroke" ? strokeWidth : undefined,
+        strokeLinejoin: mode === "stroke" ? ("round" as const) : undefined,
+        strokeLinecap: mode === "stroke" ? ("round" as const) : undefined,
+        style: {
+          ...fontStyle,
+          fill: mode === "stroke" ? "none" : fillColor,
+          stroke: mode === "stroke" ? strokeColor : "none",
+        },
+        custom: lineIndex,
+      }
+      if (mode === "stroke") {
+        return (
+          <motion.text
+            key={`${mode}-${lineIndex}`}
+            {...shared}
+            initial={{ strokeDasharray: dash, strokeDashoffset: dash }}
+            animate={strokeControls}
+          >
+            {line}
+          </motion.text>
+        )
+      }
+      return (
+        <motion.text
+          key={`${mode}-${lineIndex}`}
+          {...shared}
+          initial={{ opacity: useWipe ? 1 : 0 }}
+          animate={fillControls}
+        >
+          {line}
+        </motion.text>
+      )
+    })
+  }
+
+  let charIndex = 0
   return lines.map((line, lineIndex) => {
     const chars = Array.from(line)
     const startIndex = charIndex
@@ -48,9 +97,7 @@ export function StrokeTextLines({
         x={0}
         y={lineIndex * rowHeight}
         direction={direction}
-        unicodeBidi="plaintext"
-        // * RTL: "start" is the right edge — keeps every wrapped line flush
-        textAnchor="start"
+        textAnchor={textAnchor}
         strokeWidth={mode === "stroke" ? strokeWidth : undefined}
         strokeLinejoin={mode === "stroke" ? "round" : undefined}
         strokeLinecap={mode === "stroke" ? "round" : undefined}

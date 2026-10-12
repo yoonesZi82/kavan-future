@@ -20,7 +20,7 @@ export function HomeHero() {
           </span>
           {HERO_BADGE}
         </span>
-        <h1 className="min-h-[8.5rem] w-full text-start sm:min-h-[9.5rem] lg:min-h-[11rem]">
+        <h1 className="min-h-[8.5rem] w-full text-center sm:min-h-[9.5rem] lg:min-h-[11rem] lg:text-start">
           <StrokeText
             text={HERO_TITLE}
             strokeColor="var(--foreground)"
@@ -36,6 +36,7 @@ export function HomeHero() {
             fontWeight={800}
             letterSpacing={0}
             direction="rtl"
+            align="center-mobile"
             className="w-full"
           />
         </h1>

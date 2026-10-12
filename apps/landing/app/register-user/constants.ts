@@ -29,8 +29,6 @@ export type ContactOption = {
   dir?: "ltr"
 }
 
-export const WAITLIST_TAGLINE = "تصمیم‌های بهتر، با داده‌های دقیق‌تر"
-
 export const BENEFITS: BenefitItem[] = [
   {
     title: "دسترسی زودهنگام",

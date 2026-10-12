@@ -16,10 +16,17 @@ import {
   type StrokeTextProps,
   mapEase,
   measureStrokeBox,
+  needsJoinedGlyphs,
   wrapTextLines,
 } from "./stroke-text-utils"
 
-export type { StrokeTextDirection, StrokeTextFillMode, StrokeTextProps, StrokeTextTrigger } from "./stroke-text-utils"
+export type {
+  StrokeTextAlign,
+  StrokeTextDirection,
+  StrokeTextFillMode,
+  StrokeTextProps,
+  StrokeTextTrigger,
+} from "./stroke-text-utils"
 
 const DEFAULT_TEXT = "Draw Attention"
 
@@ -39,6 +46,7 @@ const StrokeText = ({
   letterSpacing = -4,
   reverse = false,
   direction = "ltr",
+  align = "start",
   lineHeight,
   className = "",
   style = {},
@@ -50,6 +58,7 @@ const StrokeText = ({
   const wipeControls = useAnimationControls()
   const [box, setBox] = useState<StrokeTextBox | null>(null)
   const [maxWidth, setMaxWidth] = useState(0)
+  const [isLargeScreen, setIsLargeScreen] = useState(false)
   const prefersReducedMotion = useReducedMotion()
   const isInView = useInView(rootRef, { once: true, margin: "0px 0px -18% 0px" })
   const wipeId = `stroke-text-wipe-${useId().replace(/[^a-zA-Z0-9_-]/g, "")}`
@@ -58,20 +67,24 @@ const StrokeText = ({
     () => wrapTextLines(text ?? "", maxWidth, fontSize, fontWeight, letterSpacing),
     [text, maxWidth, fontSize, fontWeight, letterSpacing]
   )
-  const characters = useMemo(() => lines.flatMap((line) => Array.from(line)), [lines])
+  const keepJoined = needsJoinedGlyphs(text ?? "")
+  const unitCount = keepJoined
+    ? lines.length
+    : lines.reduce((total, line) => total + Array.from(line).length, 0)
   const dash = Math.max(fontSize * 7, 200)
   const fillEnabled = fillMode !== "none"
   const useWipe = fillEnabled && fillMode === "wipe"
   const fillDuration = Math.max(0.4, drawDuration * 0.5)
   const motionEase = mapEase(ease)
   const isRtl = direction === "rtl"
+  const isCentered =
+    align === "center" || (align === "center-mobile" && !isLargeScreen)
   const fontStyle = useMemo<CSSProperties>(
     () => ({
       fontSize: `${fontSize}px`,
       fontWeight,
       letterSpacing: `${letterSpacing}px`,
       direction,
-      unicodeBidi: "plaintext",
     }),
     [fontSize, fontWeight, letterSpacing, direction]
   )
@@ -85,6 +98,15 @@ const StrokeText = ({
     observer.observe(root)
     return () => observer.disconnect()
   }, [])
+
+  useLayoutEffect(() => {
+    if (align !== "center-mobile") return undefined
+    const media = window.matchMedia("(min-width: 1024px)")
+    const update = () => setIsLargeScreen(media.matches)
+    update()
+    media.addEventListener("change", update)
+    return () => media.removeEventListener("change", update)
+  }, [align])
 
   useLayoutEffect(() => {
     if (!strokeTextRef.current || maxWidth <= 0) return undefined
@@ -108,19 +130,28 @@ const StrokeText = ({
     return () => {
       cancelled = true
     }
-  }, [lines, fontSize, fontWeight, letterSpacing, strokeWidth, maxWidth, direction])
+  }, [
+    lines,
+    fontSize,
+    fontWeight,
+    letterSpacing,
+    strokeWidth,
+    maxWidth,
+    direction,
+    isCentered,
+  ])
 
   useStrokeTextAnimation({
     rootRef,
     box,
-    charCount: characters.length,
+    charCount: unitCount,
     dash,
     drawDuration,
     fillDelay,
     fillDuration,
     fillEnabled,
     useWipe,
-    stagger,
+    stagger: keepJoined ? Math.max(stagger, 0.12) : stagger,
     reverse,
     direction,
     motionEase,
@@ -141,6 +172,8 @@ const StrokeText = ({
     strokeColor,
     fillColor,
     useWipe,
+    keepJoined,
+    centered: isCentered,
     fontStyle,
     strokeControls,
     fillControls,
@@ -168,8 +201,13 @@ const StrokeText = ({
             : { height: reservedHeight }
         }
         viewBox={box ? `${box.x} ${box.y} ${box.width} ${box.height}` : undefined}
-        // * RTL start = right edge; avoid xMid letterboxing gap beside the title
-        preserveAspectRatio={isRtl ? "xMaxYMid meet" : "xMinYMid meet"}
+        preserveAspectRatio={
+          isCentered
+            ? "xMidYMid meet"
+            : isRtl
+              ? "xMaxYMid meet"
+              : "xMinYMid meet"
+        }
         aria-hidden="true"
       >
         {fillMode === "wipe" && box ? (

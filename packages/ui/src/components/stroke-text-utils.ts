@@ -4,6 +4,7 @@ import type { Easing } from "framer-motion"
 export type StrokeTextTrigger = "mount" | "hover" | "scroll" | "loop"
 export type StrokeTextFillMode = "wipe" | "fade" | "none"
 export type StrokeTextDirection = "ltr" | "rtl"
+export type StrokeTextAlign = "start" | "center" | "center-mobile"
 
 export interface StrokeTextProps {
   text?: string
@@ -21,6 +22,7 @@ export interface StrokeTextProps {
   letterSpacing?: number
   reverse?: boolean
   direction?: StrokeTextDirection
+  align?: StrokeTextAlign
   lineHeight?: number
   className?: string
   style?: CSSProperties
@@ -45,6 +47,13 @@ const EASE_MAP: Record<string, Easing> = {
 
 export function mapEase(ease: string): Easing {
   return EASE_MAP[ease] ?? "easeOut"
+}
+
+/** * Arabic/Persian must stay as whole runs — per-glyph SVG tspans break joining on Safari */
+export function needsJoinedGlyphs(text: string): boolean {
+  return /[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF]/.test(
+    text
+  )
 }
 
 export function charDelay(
