@@ -23,7 +23,7 @@ export type FaqItem = {
   icon: LucideIcon
 }
 
-export const HERO_BADGE = "دسترسی زودهنگام — به‌زودی"
+export const HERO_BADGE = "دسترسی زودهنگام"
 
 export const HERO_TITLE =
   "تصمیم‌های مالی هوشمندتر، بدون سیگنال‌دهی و پیش‌بینی‌های آماده"
