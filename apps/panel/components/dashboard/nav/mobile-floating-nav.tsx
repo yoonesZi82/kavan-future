@@ -76,7 +76,12 @@ export function MobileFloatingNav() {
         >
           <AnimatePresence mode="popLayout" initial={false}>
             {items.map((item) => {
-              const isActive = item.enabled && pathname === item.href
+              const isActive =
+                item.enabled &&
+                (item.href === "/"
+                  ? pathname === "/"
+                  : pathname === item.href ||
+                    pathname.startsWith(`${item.href}/`))
               return (
                 <motion.div
                   key={item.title}

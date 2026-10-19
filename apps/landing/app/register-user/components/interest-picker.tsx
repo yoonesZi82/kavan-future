@@ -18,8 +18,8 @@ export function InterestPicker({ value, onValueChange }: InterestPickerProps) {
   return (
     <Field>
       <FieldLabel>به کدام بخش علاقه‌مندید؟ (اختیاری)</FieldLabel>
+      {/* * One primary interest only — ToggleGroup without `multiple` */}
       <ToggleGroup
-        multiple
         value={value}
         onValueChange={(next) => onValueChange(next as Interest[])}
         className="flex w-full flex-wrap gap-2"

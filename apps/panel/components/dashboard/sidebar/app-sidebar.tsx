@@ -59,7 +59,12 @@ export function AppSidebar() {
             <LayoutGroup id="sidebar-nav">
               <SidebarMenu className="gap-1">
                 {navItems.map((item) => {
-                  const isActive = item.enabled && pathname === item.href
+                  const isActive =
+                    item.enabled &&
+                    (item.href === "/"
+                      ? pathname === "/"
+                      : pathname === item.href ||
+                        pathname.startsWith(`${item.href}/`))
                   return (
                     <SidebarMenuItem key={item.title}>
                       <SidebarNavItem item={item} isActive={isActive} />

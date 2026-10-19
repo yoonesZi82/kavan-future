@@ -44,7 +44,7 @@ export const navItems: NavItem[] = [
   },
   { title: "سناریوها", href: "#", icon: Network, enabled: false },
   { title: "سبد ریسک", href: "#", icon: Shield, enabled: false },
-  { title: "سبد من", href: "#", icon: Briefcase, enabled: false },
+  { title: "سبد من", href: "/my-portfolio", icon: Briefcase, enabled: true },
   { title: "اتاق خبر", href: "#", icon: Newspaper, enabled: false },
   { title: "سفارشی سازی", href: "#", icon: Settings2, enabled: false },
 ]
