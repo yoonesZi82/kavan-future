@@ -76,7 +76,7 @@ export const CONTACT_OPTIONS: ContactOption[] = [
     icon: Mail,
     fieldLabel: "ایمیل",
     placeholder: "example@email.com",
-    hint: "این فیلد اختیاری است",
+    hint: "برای اطلاع‌رسانی ضروری است",
     inputType: "email",
     autoComplete: "email",
     dir: "ltr",
@@ -88,4 +88,5 @@ export const INTEREST_OPTIONS: { value: Interest; label: string }[] = [
   { value: "portfolio", label: "مدیریت سبد" },
 ]
 
-export const TELEGRAM_CHANNEL_URL = "https://t.me/"
+export const TELEGRAM_CHANNEL_URL = "https://t.me/market_puls_1"
+export const TELEGRAM_CHANNEL_HANDLE = "@market_puls_1"

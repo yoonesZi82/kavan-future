@@ -1,4 +1,7 @@
+import Link from "next/link"
+import { ArrowLeft } from "lucide-react"
 import { AnimatedThemeToggler } from "@workspace/ui/components/animated-theme-toggler"
+import { Button } from "@workspace/ui/components/button"
 import { BRAND_NAME, BRAND_TAGLINE } from "@/lib/brand"
 
 export function WaitlistHeader() {
@@ -8,8 +11,18 @@ export function WaitlistHeader() {
         <span className="text-base font-bold tracking-tight">{BRAND_NAME}</span>
         <span className="text-xs text-muted-foreground">{BRAND_TAGLINE}</span>
       </div>
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-2">
         <AnimatedThemeToggler />
+        <Button
+          variant="outline"
+          size="icon"
+          className="rounded-full"
+          nativeButton={false}
+          render={<Link href="/" />}
+          aria-label="بازگشت"
+        >
+          <ArrowLeft />
+        </Button>
       </div>
     </header>
   )

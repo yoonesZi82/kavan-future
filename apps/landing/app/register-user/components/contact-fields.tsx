@@ -16,6 +16,14 @@ import { CONTACT_OPTIONS, type ContactChannel } from "../constants"
 import type { WaitlistFormValues } from "../waitlist-form-values"
 import { WaitlistFieldIcon } from "./waitlist-field-icon"
 
+const FIELD_MAX: Record<"telegram" | "mobile" | "email", number> = {
+  telegram: 100,
+  mobile: 20,
+  email: 254,
+}
+
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
 type ContactFieldsProps = {
   control: Control<WaitlistFormValues>
   channels: ContactChannel[]
@@ -32,7 +40,7 @@ export function ContactFields({
       {CONTACT_OPTIONS.filter((option) => channels.includes(option.value)).map(
         (option) => {
           const Icon = option.icon
-          const isRequired = option.value !== "email"
+          const maxLength = FIELD_MAX[option.value]
           return (
             <Field
               key={option.value}
@@ -45,9 +53,23 @@ export function ContactFields({
                 name={option.value}
                 control={control}
                 rules={{
-                  required: isRequired
-                    ? `${option.fieldLabel} الزامی است`
-                    : false,
+                  // * telegram_id is optional on the API; phone + email are required
+                  required:
+                    option.value === "telegram"
+                      ? false
+                      : `${option.fieldLabel} الزامی است`,
+                  maxLength: {
+                    value: maxLength,
+                    message: `حداکثر ${maxLength} کاراکتر`,
+                  },
+                  ...(option.value === "email"
+                    ? {
+                        pattern: {
+                          value: EMAIL_PATTERN,
+                          message: "ایمیل معتبر نیست",
+                        },
+                      }
+                    : {}),
                 }}
                 render={({ field }) => (
                   <InputGroup className="h-11">
@@ -63,6 +85,7 @@ export function ContactFields({
                       ref={field.ref}
                       placeholder={option.placeholder}
                       autoComplete={option.autoComplete}
+                      maxLength={maxLength}
                       aria-invalid={!!errors[option.value]}
                     />
                     <WaitlistFieldIcon>
