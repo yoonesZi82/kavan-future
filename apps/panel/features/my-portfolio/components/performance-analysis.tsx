@@ -53,7 +53,7 @@ function AnalysisItem({ block }: { block: AnalysisBlock }) {
           </span>
         ) : null}
       </div>
-      <p className="text-[11px] leading-relaxed text-muted-foreground">
+      <p className="text-sm font-medium leading-relaxed text-foreground/80">
         {block.body}
       </p>
     </div>

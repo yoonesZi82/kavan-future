@@ -82,8 +82,8 @@ export function ManageTradesDialog({
               >
                 <AccordionTrigger
                   className={cn(
-                    "items-center gap-2 px-3 py-2.5 hover:bg-transparent",
-                    isOpen && "border-s-2 border-s-amber-400"
+                    "items-center gap-2 rounded-none border-transparent px-3 py-2.5 hover:bg-transparent",
+                    isOpen && "border-r-2 border-r-amber-400"
                   )}
                 >
                   <div className="flex w-full min-w-0 flex-wrap items-center gap-2 pe-2 text-xs">
@@ -138,16 +138,18 @@ export function ManageTradesDialog({
           </div>
           <div className="grid gap-3 sm:grid-cols-2 sm:divide-x sm:divide-border/70 sm:divide-x-reverse">
             <div>
-              <p className="text-[11px] text-muted-foreground">
+              <p className="text-sm font-medium text-foreground/80">
                 میانگین قیمت جدید:
               </p>
-              <p className="mt-1 text-sm font-bold text-amber-500 tabular-nums">
+              <p className="mt-1 text-base font-bold text-amber-500 tabular-nums">
                 {preview.avgPriceLabel}
               </p>
             </div>
             <div className="sm:ps-3">
-              <p className="text-[11px] text-muted-foreground">حجم کل جدید:</p>
-              <p className="mt-1 text-sm font-bold tabular-nums">
+              <p className="text-sm font-medium text-foreground/80">
+                حجم کل جدید:
+              </p>
+              <p className="mt-1 text-base font-bold tabular-nums">
                 {preview.totalVolumeLabel}
               </p>
             </div>

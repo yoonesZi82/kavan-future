@@ -77,7 +77,7 @@ export function AssetAllocationCard() {
                   style={{ backgroundColor: slice.color }}
                   aria-hidden
                 />
-                <span className="truncate text-muted-foreground">
+                <span className="truncate font-medium text-foreground/70">
                   {slice.label}
                 </span>
               </span>

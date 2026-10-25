@@ -6,17 +6,19 @@ import { usePathname } from "next/navigation"
 import {
   HistoryIcon,
   LineChartIcon,
-  PlusIcon,
+  TrendingDownIcon,
   WalletIcon,
 } from "lucide-react"
 import { Button } from "@workspace/ui/components/button"
-import { cn } from "@workspace/ui/lib/utils"
 import { CashTransactionDialog } from "./cash-transaction-dialog"
 
 export function PortfolioToolbar() {
   const pathname = usePathname()
-  const isHistory = pathname.startsWith("/my-portfolio/history")
   const [cashOpen, setCashOpen] = useState(false)
+
+  if (pathname.startsWith("/my-portfolio/history")) {
+    return null
+  }
 
   return (
     <>
@@ -26,16 +28,19 @@ export function PortfolioToolbar() {
           variant="outline"
           size="sm"
           nativeButton={false}
-          className={cn(
-            "gap-1.5",
-            isHistory && "border-primary/40 bg-primary/5"
-          )}
+          className="gap-1.5"
           render={<Link href="/my-portfolio/history" />}
         >
           <HistoryIcon className="size-3.5" aria-hidden />
           تاریخچه معاملات
         </Button>
-        <Button type="button" variant="outline" size="sm" className="gap-1.5">
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          className="gap-1.5"
+          onClick={() => setCashOpen(true)}
+        >
           <WalletIcon className="size-3.5" aria-hidden />
           واریز / برداشت
         </Button>
@@ -45,12 +50,12 @@ export function PortfolioToolbar() {
         </Button>
         <Button
           type="button"
+          variant="outline"
           size="sm"
-          className="gap-1.5"
-          onClick={() => setCashOpen(true)}
+          className="gap-1.5 border-loss/40 text-loss hover:bg-loss/10 hover:text-loss"
         >
-          <PlusIcon className="size-3.5" aria-hidden />
-          افزودن دارایی
+          <TrendingDownIcon className="size-3.5" aria-hidden />
+          فروش
         </Button>
       </div>
 

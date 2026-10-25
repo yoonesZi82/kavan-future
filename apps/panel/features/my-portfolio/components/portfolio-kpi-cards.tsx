@@ -38,7 +38,7 @@ function KpiCard({ kpi }: { kpi: PortfolioKpi }) {
   return (
     <Card className="gap-3 p-4 ring-inset">
       <div className="flex items-start justify-between gap-2">
-        <p className="text-xs text-muted-foreground">{kpi.title}</p>
+        <p className="text-xs font-medium text-foreground/70">{kpi.title}</p>
         <MiniSparkline values={kpi.sparkline} />
       </div>
       <p className="text-xl font-bold tracking-tight tabular-nums sm:text-2xl">
@@ -66,11 +66,11 @@ function MixCard() {
   return (
     <Card className="flex flex-row items-center gap-4 p-4 ring-inset">
       <div className="min-w-0 flex-1 space-y-1">
-        <p className="text-xs text-muted-foreground">نسبت کلی سبد</p>
+        <p className="text-xs font-medium text-foreground/70">نسبت کلی سبد</p>
         <p className="text-xl font-bold tabular-nums sm:text-2xl">
           {PORTFOLIO_MIX_PERCENT.toLocaleString("fa-IR")}٪
         </p>
-        <p className="text-xs text-muted-foreground">پوشش اهداف تخصیص</p>
+        <p className="text-xs font-medium text-foreground/70">پوشش اهداف تخصیص</p>
       </div>
       <svg viewBox="0 0 48 48" className="size-14 shrink-0" aria-hidden>
         <circle

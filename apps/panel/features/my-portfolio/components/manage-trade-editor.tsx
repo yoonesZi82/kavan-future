@@ -1,6 +1,6 @@
 "use client"
 
-import { CalendarIcon, GlobeIcon, LockIcon } from "lucide-react"
+import { GlobeIcon, LockIcon } from "lucide-react"
 import { Badge } from "@workspace/ui/components/badge"
 import {
   InputGroup,
@@ -8,6 +8,7 @@ import {
   InputGroupInput,
 } from "@workspace/ui/components/input-group"
 import { Input } from "@workspace/ui/components/input"
+import { JalaliDatePicker } from "@workspace/ui/components/jalali-date-picker"
 import { Label } from "@workspace/ui/components/label"
 import type { HoldingLot } from "../manage-trades-mock"
 
@@ -47,7 +48,7 @@ export function ManageTradeEditor({
       <div className="grid gap-3 sm:grid-cols-2">
         <div className="space-y-1.5">
           <Label className="text-xs">تعداد / مقدار</Label>
-          <InputGroup className="h-9 bg-background">
+          <InputGroup className="h-9 bg-background font-sans">
             <InputGroupAddon align="inline-end" className="pe-2.5 text-xs text-muted-foreground">
               {unit}
             </InputGroupAddon>
@@ -56,14 +57,13 @@ export function ManageTradeEditor({
               onChange={(event) =>
                 onChange({ ...lot, quantity: event.target.value })
               }
-              className="tabular-nums"
-              dir="ltr"
+              className="font-sans text-sm tabular-nums"
             />
           </InputGroup>
         </div>
         <div className="space-y-1.5">
           <Label className="text-xs">قیمت هر واحد (تومان)</Label>
-          <InputGroup className="h-9 bg-background">
+          <InputGroup className="h-9 bg-background font-sans">
             <InputGroupAddon align="inline-start" className="ps-3 pe-2.5">
               <GlobeIcon className="size-3.5" aria-hidden />
             </InputGroupAddon>
@@ -72,25 +72,17 @@ export function ManageTradeEditor({
               onChange={(event) =>
                 onChange({ ...lot, unitPrice: event.target.value })
               }
-              className="tabular-nums"
-              dir="ltr"
+              className="font-sans text-sm tabular-nums"
             />
           </InputGroup>
         </div>
         <div className="space-y-1.5">
           <Label className="text-xs">تاریخ معامله</Label>
-          <InputGroup className="h-9 bg-background">
-            <InputGroupAddon align="inline-start" className="ps-3 pe-2.5">
-              <CalendarIcon className="size-3.5" aria-hidden />
-            </InputGroupAddon>
-            <InputGroupInput
-              value={lot.date}
-              onChange={(event) =>
-                onChange({ ...lot, date: event.target.value })
-              }
-              className="tabular-nums"
-            />
-          </InputGroup>
+          <JalaliDatePicker
+            value={lot.date}
+            onValueChange={(date) => onChange({ ...lot, date })}
+            size="sm"
+          />
         </div>
         <div className="space-y-1.5">
           <Label className="text-xs">یادداشت (اختیاری)</Label>

@@ -4,7 +4,6 @@ import { useState, type ReactNode } from "react"
 import {
   ArrowDownToLineIcon,
   ArrowUpFromLineIcon,
-  CalendarIcon,
   CrosshairIcon,
 } from "lucide-react"
 import { Button } from "@workspace/ui/components/button"
@@ -19,6 +18,7 @@ import {
   InputGroupAddon,
   InputGroupInput,
 } from "@workspace/ui/components/input-group"
+import { JalaliDatePicker } from "@workspace/ui/components/jalali-date-picker"
 import { Label } from "@workspace/ui/components/label"
 import { Textarea } from "@workspace/ui/components/textarea"
 import { cn } from "@workspace/ui/lib/utils"
@@ -93,7 +93,7 @@ export function CashTransactionDialog({
         <div className="flex flex-col gap-4">
           <div className="space-y-2">
             <Label htmlFor="cash-amount">مبلغ (تومان)</Label>
-            <InputGroup className="h-10 bg-background">
+            <InputGroup className="h-10 bg-background font-sans">
               <InputGroupAddon align="inline-start" className="ps-3 pe-2.5">
                 <CrosshairIcon className="size-3.5" aria-hidden />
               </InputGroupAddon>
@@ -102,22 +102,19 @@ export function CashTransactionDialog({
                 value={amount}
                 onChange={(event) => setAmount(formatAmount(event.target.value))}
                 inputMode="numeric"
+                className="font-sans text-sm tabular-nums"
               />
             </InputGroup>
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="cash-date">تاریخ</Label>
-            <InputGroup className="h-10 bg-background">
-              <InputGroupAddon align="inline-start" className="ps-3 pe-2.5">
-                <CalendarIcon className="size-3.5" aria-hidden />
-              </InputGroupAddon>
-              <InputGroupInput
-                id="cash-date"
-                value={date}
-                onChange={(event) => setDate(event.target.value)}
-              />
-            </InputGroup>
+            <JalaliDatePicker
+              id="cash-date"
+              value={date}
+              onValueChange={setDate}
+              size="default"
+            />
           </div>
 
           <div className="space-y-2">

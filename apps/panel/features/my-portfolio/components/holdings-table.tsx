@@ -108,6 +108,7 @@ export function HoldingsTable({ rows, onEdit }: HoldingsTableProps) {
                       variant="outline"
                       size="sm"
                       className="border-loss/40 text-loss hover:bg-loss/10 hover:text-loss"
+                      onClick={() => onEdit(row)}
                     >
                       فروش
                     </Button>

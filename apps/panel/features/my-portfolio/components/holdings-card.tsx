@@ -2,8 +2,10 @@
 
 import { useMemo, useState } from "react"
 import {
+  ChevronDownIcon,
   DownloadIcon,
   FilterIcon,
+  PlusIcon,
   SearchIcon,
   Settings2Icon,
 } from "lucide-react"
@@ -14,6 +16,15 @@ import {
   CardHeader,
   CardTitle,
 } from "@workspace/ui/components/card"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuTrigger,
+} from "@workspace/ui/components/dropdown-menu"
 import {
   InputGroup,
   InputGroupAddon,
@@ -46,7 +57,7 @@ export function HoldingsCard() {
             دارایی‌های سبد اصلی
           </CardTitle>
           <div className="flex flex-wrap items-center gap-2">
-            <InputGroup className="h-8 w-full sm:w-56">
+            <InputGroup className="h-9 w-full sm:w-72">
               <InputGroupAddon align="inline-start" className="ps-3 pe-2.5">
                 <SearchIcon className="size-3.5" aria-hidden />
               </InputGroupAddon>
@@ -54,9 +65,53 @@ export function HoldingsCard() {
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
                 placeholder="جستجوی دارایی..."
-                className="text-xs"
+                className="text-sm"
               />
             </InputGroup>
+            <DropdownMenu>
+              <DropdownMenuTrigger
+                render={
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    className="h-8 gap-1.5"
+                  />
+                }
+              >
+                <PlusIcon className="size-3.5" aria-hidden />
+                افزودن معامله
+                <ChevronDownIcon className="size-3.5 opacity-60" aria-hidden />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="min-w-44">
+                <DropdownMenuSub>
+                  <DropdownMenuSubTrigger>خرید</DropdownMenuSubTrigger>
+                  <DropdownMenuSubContent className="min-w-44">
+                    {HOLDINGS.map((holding) => (
+                      <DropdownMenuItem
+                        key={`buy-${holding.id}`}
+                        onClick={() => setEditHolding(holding)}
+                      >
+                        {holding.name}
+                      </DropdownMenuItem>
+                    ))}
+                  </DropdownMenuSubContent>
+                </DropdownMenuSub>
+                <DropdownMenuSub>
+                  <DropdownMenuSubTrigger>فروش</DropdownMenuSubTrigger>
+                  <DropdownMenuSubContent className="min-w-44">
+                    {HOLDINGS.map((holding) => (
+                      <DropdownMenuItem
+                        key={`sell-${holding.id}`}
+                        onClick={() => setEditHolding(holding)}
+                      >
+                        {holding.name}
+                      </DropdownMenuItem>
+                    ))}
+                  </DropdownMenuSubContent>
+                </DropdownMenuSub>
+              </DropdownMenuContent>
+            </DropdownMenu>
             <Button type="button" variant="outline" size="icon-sm">
               <Settings2Icon className="size-3.5" aria-hidden />
               <span className="sr-only">تنظیمات جدول</span>
