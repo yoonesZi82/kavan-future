@@ -34,6 +34,16 @@ export type Holding = {
   accent: string
 }
 
+/** Search catalog entry — converted into a Holding when added to the table. */
+export type SearchableAsset = {
+  id: string
+  name: string
+  symbol: string
+  price: string
+  changePercent: number
+  accent: string
+}
+
 export type PerformanceRange = "1W" | "1M" | "6M" | "1Y" | "ALL"
 
 export type PerformancePoint = {

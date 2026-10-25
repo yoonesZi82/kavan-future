@@ -6,6 +6,7 @@ import type {
   PerformancePoint,
   PortfolioKpi,
   PortfolioStatusRow,
+  SearchableAsset,
 } from "./types"
 
 export const PORTFOLIO_KPIS: readonly PortfolioKpi[] = [
@@ -70,6 +71,139 @@ export const PORTFOLIO_STATUS: readonly PortfolioStatusRow[] = [
     tone: "loss",
   },
 ]
+
+/** Fake market catalog for the holdings search dropdown. */
+export const SEARCHABLE_ASSETS: readonly SearchableAsset[] = [
+  {
+    id: "btc",
+    name: "بیت‌کوین",
+    symbol: "BTC/USDT",
+    price: "۶۸٬۲۵۰",
+    changePercent: 2.4,
+    accent: "#f59e0b",
+  },
+  {
+    id: "eth",
+    name: "اتریوم",
+    symbol: "ETH/USDT",
+    price: "۳٬۴۸۰",
+    changePercent: 1.8,
+    accent: "#818cf8",
+  },
+  {
+    id: "sol",
+    name: "سولانا",
+    symbol: "SOL/USDT",
+    price: "۱۴۸٫۲۰",
+    changePercent: 4.1,
+    accent: "#a78bfa",
+  },
+  {
+    id: "bnb",
+    name: "بایننس‌کوین",
+    symbol: "BNB/USDT",
+    price: "۵۹۲٫۴۰",
+    changePercent: -0.6,
+    accent: "#fbbf24",
+  },
+  {
+    id: "xrp",
+    name: "ریپل",
+    symbol: "XRP/USDT",
+    price: "۰٫۶۲",
+    changePercent: 1.2,
+    accent: "#38bdf8",
+  },
+  {
+    id: "ada",
+    name: "کاردانو",
+    symbol: "ADA/USDT",
+    price: "۰٫۴۵",
+    changePercent: -1.1,
+    accent: "#60a5fa",
+  },
+  {
+    id: "doge",
+    name: "دوج‌کوین",
+    symbol: "DOGE/USDT",
+    price: "۰٫۱۲",
+    changePercent: 3.5,
+    accent: "#fcd34d",
+  },
+  {
+    id: "ton",
+    name: "تون‌کوین",
+    symbol: "TON/USDT",
+    price: "۵٫۸۴",
+    changePercent: 0.9,
+    accent: "#22d3ee",
+  },
+  {
+    id: "usdt",
+    name: "تتر",
+    symbol: "USDT",
+    price: "۸۹٬۴۰۰",
+    changePercent: 0.1,
+    accent: "#2dd4bf",
+  },
+  {
+    id: "gold18",
+    name: "طلا ۱۸ عیار",
+    symbol: "GOLD18",
+    price: "۴٬۳۸۴٬۰۰۰",
+    changePercent: 0.7,
+    accent: "#fbbf24",
+  },
+  {
+    id: "usd",
+    name: "دلار آزاد",
+    symbol: "USD",
+    price: "۹۰٬۰۰۰",
+    changePercent: 0.3,
+    accent: "#34d399",
+  },
+  {
+    id: "index",
+    name: "شاخص کل",
+    symbol: "TEDPIX",
+    price: "۲٬۱۱۰٬۰۰۰",
+    changePercent: -0.8,
+    accent: "#60a5fa",
+  },
+  {
+    id: "silver",
+    name: "نقره",
+    symbol: "SILVER",
+    price: "۸۴٬۵۰۰",
+    changePercent: 1.5,
+    accent: "#94a3b8",
+  },
+  {
+    id: "euro",
+    name: "یورو",
+    symbol: "EUR",
+    price: "۹۷٬۲۰۰",
+    changePercent: -0.2,
+    accent: "#818cf8",
+  },
+]
+
+export function searchableAssetToHolding(asset: SearchableAsset): Holding {
+  const isGain = asset.changePercent >= 0
+  const sign = isGain ? "+" : "−"
+  return {
+    id: asset.id,
+    name: asset.name,
+    symbol: asset.symbol,
+    buyPrice: asset.price,
+    quantity: "۱",
+    value: asset.price,
+    currentPrice: asset.price,
+    pnl: `${sign}۰`,
+    pnlPercent: asset.changePercent,
+    accent: asset.accent,
+  }
+}
 
 export const HOLDINGS: readonly Holding[] = [
   {
