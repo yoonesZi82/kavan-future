@@ -6,7 +6,6 @@ import { usePathname } from "next/navigation"
 import {
   HistoryIcon,
   LineChartIcon,
-  TrendingDownIcon,
   WalletIcon,
 } from "lucide-react"
 import { Button } from "@workspace/ui/components/button"
@@ -47,15 +46,6 @@ export function PortfolioToolbar() {
         <Button type="button" variant="outline" size="sm" className="gap-1.5">
           <LineChartIcon className="size-3.5" aria-hidden />
           عملکرد سبد
-        </Button>
-        <Button
-          type="button"
-          variant="outline"
-          size="sm"
-          className="gap-1.5 border-loss/40 text-loss hover:bg-loss/10 hover:text-loss"
-        >
-          <TrendingDownIcon className="size-3.5" aria-hidden />
-          فروش
         </Button>
       </div>
 

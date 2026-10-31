@@ -27,12 +27,12 @@ export function PortfolioStatusCard() {
           خلاصه وضعیت سبد
         </CardTitle>
       </CardHeader>
-      <CardContent className="min-h-0 flex-1 overflow-y-auto px-2 py-2">
-        <div className="flex min-h-full flex-col justify-between gap-1">
+      <CardContent className="min-h-0 flex-1 overflow-hidden px-2 py-1.5 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+        <div className="flex min-h-full flex-col justify-between gap-0">
         {PORTFOLIO_STATUS.map((row) => (
           <div
             key={row.id}
-            className="flex shrink-0 items-center justify-between gap-3 rounded-lg px-2 py-2"
+            className="flex shrink-0 items-center justify-between gap-3 rounded-lg px-2 py-1"
           >
             <span className="flex min-w-0 items-center gap-2 text-xs font-medium text-foreground/70">
               <span

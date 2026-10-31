@@ -13,9 +13,10 @@ import type { Holding } from "../types"
 type HoldingsTableProps = {
   rows: readonly Holding[]
   onEdit: (holding: Holding) => void
+  onSell: (holding: Holding) => void
 }
 
-export function HoldingsTable({ rows, onEdit }: HoldingsTableProps) {
+export function HoldingsTable({ rows, onEdit, onSell }: HoldingsTableProps) {
   return (
     <Table>
       <TableHeader>
@@ -108,7 +109,7 @@ export function HoldingsTable({ rows, onEdit }: HoldingsTableProps) {
                       variant="outline"
                       size="sm"
                       className="border-loss/40 text-loss hover:bg-loss/10 hover:text-loss"
-                      onClick={() => onEdit(row)}
+                      onClick={() => onSell(row)}
                     >
                       فروش
                     </Button>

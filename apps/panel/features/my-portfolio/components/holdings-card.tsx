@@ -2,7 +2,6 @@
 
 import { useEffect, useMemo, useRef, useState } from "react"
 import {
-  ChevronDownIcon,
   DownloadIcon,
   FilterIcon,
   PlusIcon,
@@ -17,15 +16,6 @@ import {
   CardTitle,
 } from "@workspace/ui/components/card"
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
-  DropdownMenuTrigger,
-} from "@workspace/ui/components/dropdown-menu"
-import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
@@ -37,13 +27,23 @@ import {
   searchableAssetToHolding,
 } from "../mock-data"
 import type { Holding, SearchableAsset } from "../types"
+import {
+  AddTradeDialog,
+  type AddTradePayload,
+} from "./add-trade-dialog"
 import { HoldingsTable } from "./holdings-table"
 import { ManageTradesDialog } from "./manage-trades-dialog"
+import {
+  SellAssetDialog,
+  type SellAssetPayload,
+} from "./sell-asset-dialog"
 
 export function HoldingsCard() {
   const [query, setQuery] = useState("")
   const [holdings, setHoldings] = useState<Holding[]>(() => [...HOLDINGS])
   const [editHolding, setEditHolding] = useState<Holding | null>(null)
+  const [sellHolding, setSellHolding] = useState<Holding | null>(null)
+  const [addAsset, setAddAsset] = useState<SearchableAsset | null>(null)
   const [searchOpen, setSearchOpen] = useState(false)
   const searchRef = useRef<HTMLDivElement>(null)
 
@@ -72,11 +72,43 @@ export function HoldingsCard() {
     return () => document.removeEventListener("pointerdown", handlePointerDown)
   }, [])
 
-  function handleAddAsset(asset: SearchableAsset) {
+  function handleOpenAddTrade(asset: SearchableAsset) {
     if (heldIds.has(asset.id)) return
-    setHoldings((current) => [...current, searchableAssetToHolding(asset)])
-    setQuery("")
+    setAddAsset(asset)
     setSearchOpen(false)
+  }
+
+  function handleSubmitTrade(payload: AddTradePayload) {
+    if (heldIds.has(payload.asset.id)) return
+    const holding = searchableAssetToHolding(payload.asset)
+    setHoldings((current) => [
+      ...current,
+      {
+        ...holding,
+        buyPrice: payload.unitPrice,
+        quantity: `${payload.quantity} ${payload.unit}`,
+        currentPrice: payload.asset.price,
+      },
+    ])
+    setAddAsset(null)
+    setQuery("")
+  }
+
+  function handleSubmitSell(payload: SellAssetPayload) {
+    const unit = payload.unit
+    setHoldings((current) =>
+      current
+        .map((row) => {
+          if (row.id !== payload.holding.id) return row
+          if (payload.remaining <= 0) return null
+          return {
+            ...row,
+            quantity: `${payload.remaining.toLocaleString("fa-IR")} ${unit}`,
+          }
+        })
+        .filter((row): row is Holding => row !== null)
+    )
+    setSellHolding(null)
   }
 
   return (
@@ -167,7 +199,7 @@ export function HoldingsCard() {
                             variant={alreadyHeld ? "outline" : "default"}
                             className="h-7 shrink-0 gap-1 px-2 text-xs"
                             disabled={alreadyHeld}
-                            onClick={() => handleAddAsset(asset)}
+                            onClick={() => handleOpenAddTrade(asset)}
                           >
                             <PlusIcon className="size-3.5" aria-hidden />
                             {alreadyHeld ? "افزوده شده" : "افزودن"}
@@ -179,50 +211,6 @@ export function HoldingsCard() {
                 </div>
               ) : null}
             </div>
-            <DropdownMenu>
-              <DropdownMenuTrigger
-                render={
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    className="h-8 gap-1.5"
-                  />
-                }
-              >
-                <PlusIcon className="size-3.5" aria-hidden />
-                افزودن معامله
-                <ChevronDownIcon className="size-3.5 opacity-60" aria-hidden />
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="min-w-44">
-                <DropdownMenuSub>
-                  <DropdownMenuSubTrigger>خرید</DropdownMenuSubTrigger>
-                  <DropdownMenuSubContent className="min-w-44">
-                    {holdings.map((holding) => (
-                      <DropdownMenuItem
-                        key={`buy-${holding.id}`}
-                        onClick={() => setEditHolding(holding)}
-                      >
-                        {holding.name}
-                      </DropdownMenuItem>
-                    ))}
-                  </DropdownMenuSubContent>
-                </DropdownMenuSub>
-                <DropdownMenuSub>
-                  <DropdownMenuSubTrigger>فروش</DropdownMenuSubTrigger>
-                  <DropdownMenuSubContent className="min-w-44">
-                    {holdings.map((holding) => (
-                      <DropdownMenuItem
-                        key={`sell-${holding.id}`}
-                        onClick={() => setEditHolding(holding)}
-                      >
-                        {holding.name}
-                      </DropdownMenuItem>
-                    ))}
-                  </DropdownMenuSubContent>
-                </DropdownMenuSub>
-              </DropdownMenuContent>
-            </DropdownMenu>
             <Button type="button" variant="outline" size="icon-sm">
               <Settings2Icon className="size-3.5" aria-hidden />
               <span className="sr-only">تنظیمات جدول</span>
@@ -240,7 +228,11 @@ export function HoldingsCard() {
       </CardHeader>
       {/* * Table wraps overflow-x-auto — hide that horizontal scrollbar here only */}
       <CardContent className="min-h-0 flex-1 overflow-y-auto p-0 [&_[data-slot=table-container]]:[-ms-overflow-style:none] [&_[data-slot=table-container]]:[scrollbar-width:none] [&_[data-slot=table-container]::-webkit-scrollbar]:hidden">
-        <HoldingsTable rows={holdings} onEdit={setEditHolding} />
+        <HoldingsTable
+          rows={holdings}
+          onEdit={setEditHolding}
+          onSell={setSellHolding}
+        />
       </CardContent>
 
       <ManageTradesDialog
@@ -249,6 +241,24 @@ export function HoldingsCard() {
         onOpenChange={(open) => {
           if (!open) setEditHolding(null)
         }}
+      />
+
+      <SellAssetDialog
+        holding={sellHolding}
+        open={sellHolding !== null}
+        onOpenChange={(open) => {
+          if (!open) setSellHolding(null)
+        }}
+        onSubmit={handleSubmitSell}
+      />
+
+      <AddTradeDialog
+        asset={addAsset}
+        open={addAsset !== null}
+        onOpenChange={(open) => {
+          if (!open) setAddAsset(null)
+        }}
+        onSubmit={handleSubmitTrade}
       />
     </Card>
   )
