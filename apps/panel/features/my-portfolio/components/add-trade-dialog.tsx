@@ -161,15 +161,16 @@ export function AddTradeDialog({
   const insufficientCash = kind === "buy" && balanceAfter < 0
 
   if (!asset) return null
+  const selectedAsset = asset
 
   function handleClose(nextOpen: boolean) {
     onOpenChange(nextOpen)
   }
 
   function handleSubmit() {
-    if (!asset || insufficientCash) return
+    if (insufficientCash) return
     onSubmit({
-      asset,
+      asset: selectedAsset,
       kind,
       quantity,
       unit,
@@ -181,7 +182,7 @@ export function AddTradeDialog({
   }
 
   function applyMarketPrice() {
-    setUnitPrice(formatAmountInput(asset.price))
+    setUnitPrice(formatAmountInput(selectedAsset.price))
   }
 
   return (
@@ -191,7 +192,7 @@ export function AddTradeDialog({
         showCloseButton
       >
         <DialogHeader>
-          <DialogTitle>{`افزودن معامله: ${asset.name}`}</DialogTitle>
+          <DialogTitle>{`افزودن معامله: ${selectedAsset.name}`}</DialogTitle>
         </DialogHeader>
 
         <div className="grid grid-cols-2 gap-2">
@@ -275,7 +276,7 @@ export function AddTradeDialog({
               className="inline-flex items-center gap-1.5 text-xs font-medium text-sky-600 transition-colors hover:text-sky-500 dark:text-sky-400 dark:hover:text-sky-300"
             >
               <RefreshCwIcon className="size-3" aria-hidden />
-              {`قیمت لحظه‌ای بازار: ${formatAmountInput(asset.price)} تومان`}
+              {`قیمت لحظه‌ای بازار: ${formatAmountInput(selectedAsset.price)} تومان`}
             </button>
           </div>
 

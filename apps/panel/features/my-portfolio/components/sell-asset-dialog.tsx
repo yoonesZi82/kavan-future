@@ -162,19 +162,20 @@ export function SellAssetDialog({
   const exceedsHolding = qtyValue > heldDisplayQty && heldDisplayQty > 0
 
   if (!holding) return null
+  const selectedHolding = holding
 
   function handleSellAll() {
     setQuantity(formatQuantityInput(String(heldDisplayQty)))
   }
 
   function applyMarketPrice() {
-    setUnitPrice(formatAmountInput(holding.currentPrice))
+    setUnitPrice(formatAmountInput(selectedHolding.currentPrice))
   }
 
   function handleSubmit() {
-    if (!holding || qtyValue <= 0 || exceedsHolding) return
+    if (qtyValue <= 0 || exceedsHolding) return
     onSubmit({
-      holding,
+      holding: selectedHolding,
       quantity: qtyValue,
       unit,
       unitPrice,
