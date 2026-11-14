@@ -1,18 +1,49 @@
 "use client"
 
-import { useState } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { AnimatePresence, motion } from "framer-motion"
 import { PlusIcon } from "lucide-react"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@workspace/ui/components/popover"
 import { cn } from "@workspace/ui/lib/utils"
 import { navItems, type NavItem } from "@/components/dashboard/nav/nav-items"
 
-const PRIMARY_COUNT = 3
+const DOCK_SIZE = 3
+const DOCK_STORAGE_KEY = "panel:mobile-dock"
 const SPRING = { type: "spring" as const, stiffness: 420, damping: 32 }
 
-const primaryItems = navItems.slice(0, PRIMARY_COUNT)
-const moreItems = navItems.slice(PRIMARY_COUNT)
+const DEFAULT_DOCK = navItems.slice(0, DOCK_SIZE).map((item) => item.title)
+
+function isItemActive(item: NavItem, pathname: string) {
+  if (!item.enabled) return false
+  if (item.href === "/") return pathname === "/"
+  return pathname === item.href || pathname.startsWith(`${item.href}/`)
+}
+
+function findItem(title: string) {
+  return navItems.find((item) => item.title === title)
+}
+
+function readStoredDock(): string[] | null {
+  try {
+    const raw = window.localStorage.getItem(DOCK_STORAGE_KEY)
+    if (!raw) return null
+    const parsed: unknown = JSON.parse(raw)
+    if (!Array.isArray(parsed)) return null
+    const titles = parsed.filter(
+      (title): title is string =>
+        typeof title === "string" && findItem(title)?.enabled === true
+    )
+    return titles.length === DOCK_SIZE ? titles : null
+  } catch {
+    return null
+  }
+}
 
 function DockItem({ item, isActive }: { item: NavItem; isActive: boolean }) {
   const Icon = item.icon
@@ -59,8 +90,51 @@ function DockItem({ item, isActive }: { item: NavItem; isActive: boolean }) {
 
 export function MobileFloatingNav() {
   const pathname = usePathname()
-  const [expanded, setExpanded] = useState(false)
-  const items = expanded ? moreItems : primaryItems
+  const router = useRouter()
+  const [dock, setDock] = useState<string[]>(DEFAULT_DOCK)
+  const [pickerOpen, setPickerOpen] = useState(false)
+
+  useEffect(() => {
+    const stored = readStoredDock()
+    if (stored) setDock(stored)
+  }, [])
+
+  // * Incoming item takes the last slot so the first slots stay stable.
+  const placeInDock = useCallback((title: string) => {
+    setDock((current) => {
+      if (current.includes(title)) return current
+      const next = [...current.slice(0, DOCK_SIZE - 1), title]
+      try {
+        window.localStorage.setItem(DOCK_STORAGE_KEY, JSON.stringify(next))
+      } catch {}
+      return next
+    })
+  }, [])
+
+  useEffect(() => {
+    const active = navItems.find((item) => isItemActive(item, pathname))
+    if (active) placeInDock(active.title)
+  }, [pathname, placeInDock])
+
+  const dockItems = useMemo(
+    () =>
+      dock
+        .map((title) => findItem(title))
+        .filter((item): item is NavItem => item !== undefined),
+    [dock]
+  )
+
+  const pickerItems = useMemo(
+    () => navItems.filter((item) => !dock.includes(item.title)),
+    [dock]
+  )
+
+  function handlePick(item: NavItem) {
+    if (!item.enabled) return
+    placeInDock(item.title)
+    setPickerOpen(false)
+    router.push(item.href)
+  }
 
   return (
     <div
@@ -75,26 +149,18 @@ export function MobileFloatingNav() {
           transition={SPRING}
         >
           <AnimatePresence mode="popLayout" initial={false}>
-            {items.map((item) => {
-              const isActive =
-                item.enabled &&
-                (item.href === "/"
-                  ? pathname === "/"
-                  : pathname === item.href ||
-                    pathname.startsWith(`${item.href}/`))
-              return (
-                <motion.div
-                  key={item.title}
-                  layout
-                  initial={{ opacity: 0, scale: 0.7, y: 8 }}
-                  animate={{ opacity: 1, scale: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.7, y: -8 }}
-                  transition={SPRING}
-                >
-                  <DockItem item={item} isActive={isActive} />
-                </motion.div>
-              )
-            })}
+            {dockItems.map((item) => (
+              <motion.div
+                key={item.title}
+                layout
+                initial={{ opacity: 0, scale: 0.7, y: 8 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.7, y: -8 }}
+                transition={SPRING}
+              >
+                <DockItem item={item} isActive={isItemActive(item, pathname)} />
+              </motion.div>
+            ))}
           </AnimatePresence>
           <div
             className="ms-0.5 flex size-9 shrink-0 items-center justify-center rounded-full bg-muted text-[10px] font-bold text-foreground"
@@ -104,23 +170,60 @@ export function MobileFloatingNav() {
           </div>
         </motion.nav>
 
-        <motion.button
-          type="button"
-          aria-label={expanded ? "بازگشت به منوی اصلی" : "منوی بیشتر"}
-          aria-expanded={expanded}
-          onClick={() => setExpanded((value) => !value)}
-          className="flex size-12 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-[0_8px_24px_rgba(41,157,127,0.35)]"
-          whileTap={{ scale: 0.94 }}
-          transition={SPRING}
-        >
-          <motion.span
-            animate={{ rotate: expanded ? 45 : 0 }}
-            transition={SPRING}
-            className="flex"
+        <Popover open={pickerOpen} onOpenChange={setPickerOpen}>
+          <PopoverTrigger
+            render={
+              <motion.button
+                type="button"
+                aria-label="منوی بیشتر"
+                className="flex size-12 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-[0_8px_24px_rgba(41,157,127,0.35)]"
+                whileTap={{ scale: 0.94 }}
+                transition={SPRING}
+              />
+            }
           >
-            <PlusIcon className="size-6" strokeWidth={2} />
-          </motion.span>
-        </motion.button>
+            <motion.span
+              animate={{ rotate: pickerOpen ? 45 : 0 }}
+              transition={SPRING}
+              className="flex"
+            >
+              <PlusIcon className="size-6" strokeWidth={2} />
+            </motion.span>
+          </PopoverTrigger>
+          <PopoverContent
+            side="top"
+            align="end"
+            sideOffset={10}
+            dir="rtl"
+            className="w-[min(20rem,calc(100vw-1.5rem))] gap-2 rounded-2xl p-2"
+          >
+            <p className="px-1.5 pt-1 text-xs font-medium text-muted-foreground">
+              انتخاب بخش
+            </p>
+            <div className="grid grid-cols-3 gap-1">
+              {pickerItems.map((item) => {
+                const Icon = item.icon
+                return (
+                  <button
+                    key={item.title}
+                    type="button"
+                    disabled={!item.enabled}
+                    onClick={() => handlePick(item)}
+                    className="flex flex-col items-center gap-1.5 rounded-xl px-1 py-2.5 text-center text-[11px] leading-tight text-foreground transition-colors hover:bg-muted disabled:pointer-events-none disabled:opacity-40"
+                  >
+                    <Icon className="size-5 shrink-0" strokeWidth={1.75} />
+                    <span className="line-clamp-2">{item.title}</span>
+                    {!item.enabled ? (
+                      <span className="text-[9px] text-muted-foreground">
+                        به‌زودی
+                      </span>
+                    ) : null}
+                  </button>
+                )
+              })}
+            </div>
+          </PopoverContent>
+        </Popover>
       </div>
     </div>
   )
