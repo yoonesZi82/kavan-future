@@ -1,4 +1,4 @@
-import { CheckCircle2Icon } from "lucide-react"
+import { CheckCircle2Icon, SparklesIcon } from "lucide-react"
 import {
   Card,
   CardContent,
@@ -9,7 +9,7 @@ function GrowthIllustration() {
   return (
     <svg
       viewBox="0 0 160 120"
-      className="mx-auto h-28 w-40 shrink-0 sm:mx-0"
+      className="h-24 w-36 shrink-0 sm:h-28 sm:w-40"
       aria-hidden
     >
       <defs>
@@ -22,11 +22,18 @@ function GrowthIllustration() {
           <stop offset="100%" stopColor="#f59e0b" />
         </linearGradient>
         <linearGradient id="perf-arrow" x1="0" y1="1" x2="1" y2="0">
-          <stop offset="0%" stopColor="#38bdf8" />
-          <stop offset="100%" stopColor="#0ea5e9" />
+          <stop offset="0%" stopColor="#34d399" />
+          <stop offset="100%" stopColor="#0d9488" />
         </linearGradient>
+        <filter id="perf-glow" x="-40%" y="-40%" width="180%" height="180%">
+          <feGaussianBlur stdDeviation="3" result="blur" />
+          <feMerge>
+            <feMergeNode in="blur" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
       </defs>
-      <ellipse cx="80" cy="102" rx="58" ry="10" fill="#0f172a" opacity="0.55" />
+      <ellipse cx="80" cy="102" rx="58" ry="10" fill="#0f172a" opacity="0.45" />
       <path
         d="M28 92h104c4 0 7 2 7 5v4c0 3-3 5-7 5H28c-4 0-7-2-7-5v-4c0-3 3-5 7-5z"
         fill="url(#perf-platform)"
@@ -44,29 +51,51 @@ function GrowthIllustration() {
         stroke="url(#perf-arrow)"
         strokeWidth="5"
         strokeLinecap="round"
+        filter="url(#perf-glow)"
       />
-      <path
-        d="M122 28l12-8-2 14z"
-        fill="#0ea5e9"
-      />
+      <path d="M122 28l12-8-2 14z" fill="#0d9488" filter="url(#perf-glow)" />
     </svg>
   )
 }
 
 export function PerformanceSummary() {
   return (
-    <Card className="gap-0 overflow-hidden py-0 ring-inset">
-      <CardContent className="flex flex-col gap-4 px-4 py-4 sm:flex-row sm:items-center">
-        <GrowthIllustration />
-        <div className="min-w-0 flex-1 space-y-3">
-          <p className="text-sm leading-relaxed text-foreground/85">
-            {SUMMARY_TEXT}
-          </p>
-          <ul className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:gap-x-5 sm:gap-y-2">
+    <Card className="relative gap-0 overflow-hidden py-0 ring-inset">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(120%_80%_at_100%_0%,color-mix(in_oklab,var(--gain)_18%,transparent),transparent_55%),radial-gradient(90%_70%_at_0%_100%,color-mix(in_oklab,var(--chart-4)_12%,transparent),transparent_50%)]"
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-l from-transparent via-gain/50 to-transparent"
+      />
+      <CardContent className="relative flex flex-col gap-4 px-4 py-4 sm:flex-row sm:items-center sm:gap-5 sm:px-5 sm:py-5">
+        <div className="relative shrink-0 self-center sm:self-auto">
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-2 rounded-full bg-gain/20 blur-2xl"
+          />
+          <GrowthIllustration />
+        </div>
+
+        <div className="min-w-0 flex-1 space-y-3.5">
+          <div className="space-y-2">
+            <div className="flex items-center gap-1.5 text-gain">
+              <SparklesIcon className="size-3.5 shrink-0" aria-hidden />
+              <span className="text-xs font-semibold tracking-wide">
+                جمع‌بندی عملکرد
+              </span>
+            </div>
+            <p className="text-sm leading-relaxed text-foreground/90 sm:text-[15px]">
+              {SUMMARY_TEXT}
+            </p>
+          </div>
+
+          <ul className="flex flex-wrap gap-2">
             {SUMMARY_CHECKS.map((item) => (
               <li
                 key={item.id}
-                className="flex items-center gap-2 text-xs font-medium"
+                className="inline-flex items-center gap-1.5 rounded-lg border border-gain/25 bg-gain/10 px-2.5 py-1.5 text-xs font-medium shadow-[0_0_20px_color-mix(in_oklab,var(--gain)_12%,transparent)]"
               >
                 <CheckCircle2Icon
                   className="size-3.5 shrink-0 text-gain"

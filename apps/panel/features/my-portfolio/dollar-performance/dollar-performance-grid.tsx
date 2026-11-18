@@ -14,24 +14,19 @@ export function DollarPerformanceGrid() {
     <div className="flex w-full min-w-0 flex-col gap-4 md:gap-5">
       <PerformanceHeader />
 
-      <div className="grid items-stretch gap-4 xl:grid-cols-[minmax(0,1.7fr)_minmax(280px,1fr)]">
+      <div className="grid items-start gap-4 xl:grid-cols-[minmax(0,1.7fr)_minmax(280px,1fr)]">
         <div className="flex min-w-0 flex-col gap-3">
           <DollarPerformanceChart />
-          <div className="grid gap-3 sm:grid-cols-2">
-            <CrisisPanel />
-            <RiskComparePanel />
-          </div>
+          <CrisisPanel />
+          <PerformanceSummary />
         </div>
 
-        <div className="flex min-h-0 min-w-0 flex-col gap-3">
+        <div className="flex min-w-0 flex-col gap-3">
           <PortfolioStatusPanel />
-          <div className="flex min-h-0 flex-1 flex-col">
-            <KeyLevelsPanel />
-          </div>
+          <KeyLevelsPanel />
+          <RiskComparePanel />
         </div>
       </div>
-
-      <PerformanceSummary />
     </div>
   )
 }
