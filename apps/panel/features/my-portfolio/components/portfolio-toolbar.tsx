@@ -15,7 +15,10 @@ export function PortfolioToolbar() {
   const pathname = usePathname()
   const [cashOpen, setCashOpen] = useState(false)
 
-  if (pathname.startsWith("/my-portfolio/history")) {
+  if (
+    pathname.startsWith("/my-portfolio/history") ||
+    pathname.startsWith("/my-portfolio/performance")
+  ) {
     return null
   }
 
@@ -43,7 +46,14 @@ export function PortfolioToolbar() {
           <WalletIcon className="size-3.5" aria-hidden />
           واریز / برداشت
         </Button>
-        <Button type="button" variant="outline" size="sm" className="gap-1.5">
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          nativeButton={false}
+          className="gap-1.5"
+          render={<Link href="/my-portfolio/performance" />}
+        >
           <LineChartIcon className="size-3.5" aria-hidden />
           عملکرد سبد
         </Button>
